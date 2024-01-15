@@ -12,7 +12,7 @@ const Navbar = () => {
               <div className="w-10 h-10 bg-background rounded-full flex justify-center items-center">
                 <img src={logo} className="w-10" />
               </div>
-              <p className="hidden md:inline text-xl font-medium text-primary">
+              <p className="hidden md:inline text-xl font-medium text-foreground">
                 Briddit
               </p>
             </NavLink>
