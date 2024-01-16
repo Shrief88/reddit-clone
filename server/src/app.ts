@@ -1,10 +1,14 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import passport from "passport";
 
 import env from "./config/validateEnv";
 import allowedOrgins from "./config/allowedOrgins";
 import errorMiddleware from "./middlewares/errorMiddleware";
+import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
+import "./config/passport";
 
 const app = express();
 
@@ -25,10 +29,14 @@ if (env.isDevelopment) {
 }
 
 app.use(express.json());
+app.use(passport.initialize());
 
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
+
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 
 app.use(errorMiddleware);
 

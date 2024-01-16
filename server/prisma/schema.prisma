@@ -11,8 +11,9 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
+  googleId String @unique
   name String
-  email String
-  password String
+  email String @unique
+  image String @unique
 }
