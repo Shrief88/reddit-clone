@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import RequireAuth from "./components/layout/RequireAuth";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="login" element={<Login />} />
+                <Route path="/test" element={<RequireAuth />} />
               </Route>
             </Routes>
           </div>
