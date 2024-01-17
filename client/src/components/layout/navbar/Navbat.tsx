@@ -1,8 +1,16 @@
 import { NavLink } from "react-router-dom";
-import MaxWidthWrapper from "../MaxWidthWrapper";
+import { useCookies } from "react-cookie";
 
 import logo from "../../../assets/logo.png";
+import { Button } from "@/components/ui/button";
+import MaxWidthWrapper from "../MaxWidthWrapper";
+
 const Navbar = () => {
+  const [, , removeCookie] = useCookies(["accessToken"]);
+  const logout = () => {
+    removeCookie("accessToken");
+    window.location.href = "/login";
+  };
   return (
     <div className="bg-background static z-50 top-0 inset-x-0 h-fit py-4">
       <header className="relative bg-background">
@@ -18,6 +26,7 @@ const Navbar = () => {
             </NavLink>
 
             {/* TODO: <Search /> */}
+            <Button onClick={logout}>Logout</Button>
           </div>
         </MaxWidthWrapper>
       </header>

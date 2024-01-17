@@ -13,9 +13,10 @@ function App() {
           <div className="flex-grow flex-1">
             <Routes>
               <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
                 <Route path="login" element={<Login />} />
-                <Route path="/test" element={<RequireAuth />} />
+                <Route element={<RequireAuth />}>
+                  <Route path="/" element={<Home />} />
+                </Route>
               </Route>
             </Routes>
           </div>
