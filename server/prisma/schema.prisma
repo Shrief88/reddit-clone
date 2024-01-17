@@ -16,4 +16,94 @@ model User {
   name String
   email String @unique
   image String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedSubreddits Subreddit[]
+  subreddits Subscription[]
+
+  posts Post[]
+  comments Comment[]
+  votes Vote[]
+  commentsVotes CommentVote[]
+
+  friendId String?
+  friend User? @relation("friends",fields: [friendId], references: [id])
+  friends User[] @relation("friends")
+}
+
+model Subreddit {
+  id String @id @default(uuid())
+  name String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  onwer User @relation(fields: [onwerId], references: [id])
+  onwerId String
+  subscribers Subscription[]
+
+  posts Post[]
+
+  @@index([name])
+}
+
+model Subscription{
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  subreddit Subreddit @relation(fields: [subredditId], references: [id]) 
+  subredditId String
+
+  @@id([userId, subredditId])
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subreddit Subreddit @relation(fields: [subredditId], references: [id])
+  subredditId String
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
+
+  comments Comment[]
+  votes Vote[]
+}
+
+model Comment {
+  id String @id @default(uuid())
+  text String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
+  post Post @relation(fields: [postId], references: [id])
+  postId String
+
+  replyToId String?
+  replyTo   Comment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies   Comment[] @relation("ReplyTo")
+
+  votes CommentVote[]
+}
+
+model Vote {
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  post Post @relation(fields: [postId], references: [id])
+  postId String
+
+  @@id([userId, postId])
+}
+
+model CommentVote {
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  comment Comment @relation(fields: [commentId], references: [id])
+  commentId String
+
+  @@id([userId, commentId])
 }
