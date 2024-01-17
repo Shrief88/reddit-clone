@@ -1,7 +1,9 @@
-const Home = () => {
-  return (
-    <div className="bg-muted flex-1">Home</div>
-  )
-}
+import useAuth from "@/hooks/useAuth";
 
-export default Home
+const Home = () => {
+  const { user, isLoading } = useAuth();
+  console.log(user, isLoading);
+  return <div className="bg-muted flex-1">Home</div>;
+};
+
+export default Home;
