@@ -9,7 +9,7 @@ const useAuth = () => {
   const accessToken = cookies["accessToken"];
   const { data: user,isLoading } = useQuery({
     queryKey: ["user"],
-    queryFn: async () => {
+    queryFn: async () => {  
       if (!accessToken) {
         return null;
       }
