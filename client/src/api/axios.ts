@@ -9,10 +9,12 @@ export const axiosClient = axios.create({
   },
 });
 
-export const axiosClientWithToken = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-type": "application/json",
-  },
-  withCredentials: true,
-});
+export const axiosClientWithToken = (token : string) =>
+  axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  });

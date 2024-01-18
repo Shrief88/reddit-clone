@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
 
 import { formatAvatarFallback } from "@/lib/utils";
@@ -50,7 +50,8 @@ const UserAccountNav = (props: UserAccountNavProps) => {
         <DropdownMenuSeparator />
         <NavLink to={"/"}>
           <DropdownMenuItem className="cursor-pointer">
-            Create Community
+            <Plus className="mr-2 h-4 w-4" />
+            <p>Create Post</p>
           </DropdownMenuItem>
         </NavLink>
         <NavLink to={"/"}>

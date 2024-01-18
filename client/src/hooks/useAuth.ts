@@ -1,15 +1,15 @@
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { axiosClient } from "@/api/axios";
+import { axiosClient, axiosClientWithToken } from "@/api/axios";
 
 import User from "@/models/user";
 
 const useAuth = () => {
   const [cookies] = useCookies(["accessToken"]);
   const accessToken = cookies["accessToken"];
-  const { data: user,isLoading } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ["user"],
-    queryFn: async () => {  
+    queryFn: async () => {
       if (!accessToken) {
         return null;
       }
@@ -22,7 +22,9 @@ const useAuth = () => {
     },
   });
 
-  return {user,isLoading};
+  const axiosClinetWithToken = axiosClientWithToken(accessToken);
+
+  return { user, isLoading, axiosClinetWithToken };
 };
 
 export default useAuth;
