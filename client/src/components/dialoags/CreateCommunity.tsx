@@ -15,13 +15,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 import {
   createCommunitySchema,
   TCreateCommunitySchema,
 } from "@/validators/createCommunitySchema";
 import useAuth from "@/hooks/useAuth";
-import { toast } from "sonner";
+import responseError from "@/models/error";
 
 const CreateCommunity = () => {
   const { axiosClinetWithToken } = useAuth();
@@ -37,14 +38,22 @@ const CreateCommunity = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (newCommunity: TCreateCommunitySchema) => {
       toast.loading("Creating community...");
-      return await axiosClinetWithToken.post("/subriddit", newCommunity);
+      return await axiosClinetWithToken.post("/subreddit", newCommunity);
+    },
+    onSuccess: () => {
+      toast.success("Community created");
+    },
+    onError: (error: responseError) => {
+      if (error.response.status === 409) {
+        toast.error("Community already exists");
+      } else {
+        toast.error("Error creating community: please try again");
+      }
     },
   });
 
   const onSubmit = async (data: TCreateCommunitySchema) => {
     mutate(data);
-    // TODO: Add error handling
-    toast.success("Community created");
   };
 
   return (
@@ -85,7 +94,9 @@ const CreateCommunity = () => {
               </span>
             )}
             <DialogFooter>
-              <Button disabled={isPending} type="submit">Create Community</Button>
+              <Button disabled={isPending} type="submit">
+                Create Community
+              </Button>
             </DialogFooter>
           </form>
         </div>

@@ -9,6 +9,7 @@ import errorMiddleware from "./middlewares/errorMiddleware";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import "./config/passport";
+import subredditRouter from "./routes/subreddit";
 
 const app = express();
 
@@ -20,6 +21,7 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -37,6 +39,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/subreddit", subredditRouter);
 
 app.use(errorMiddleware);
 
