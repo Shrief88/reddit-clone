@@ -8,7 +8,6 @@ export const getLoggedUser: RequestHandler = async (
 ) => {
   try {
     res.status(200).json({ user: req.user });
-    next();
   } catch (err) {
     next(err);
   }

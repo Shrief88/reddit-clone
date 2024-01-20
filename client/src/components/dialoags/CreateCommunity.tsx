@@ -43,7 +43,7 @@ const CreateCommunity = () => {
       toast.loading("Creating community...");
       const response = await axiosClinetWithToken.post(
         "/subreddit",
-        newCommunity
+        newCommunity,
       );
       return response.data.data as ISubreddit;
     },

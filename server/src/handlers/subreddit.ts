@@ -62,6 +62,11 @@ export const createSubreddit: RequestHandler = async (
         onwerId: req.user.id,
         slug: slugify(name),
         description: req.body.description,
+        subscribers: {
+          create: {
+            userId: req.user.id,
+          },
+        },
       },
     });
     res.status(201).json({ data: subreddit });
@@ -81,25 +86,6 @@ export const deleteSubreddit: RequestHandler = async (req, res, next) => {
       },
     });
     res.sendStatus(204);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const joinSubreddit: RequestHandler = async (
-  req: CustomRequest,
-  res,
-  next,
-) => {
-  try {
-    const id = req.params.id;
-    const userId = req.user.id;
-    await prisma.subscription.create({
-      data: {
-        userId,
-        subredditId: id,
-      },
-    });
   } catch (err) {
     next(err);
   }

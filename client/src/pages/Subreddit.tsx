@@ -1,22 +1,67 @@
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { buttonVariants } from "@/components/ui/button";
+import { format } from "date-fns";
+import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { NavLink, useParams } from "react-router-dom";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { CalendarPlus, CircleUserRound } from "lucide-react";
+
+import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper"
 import useAuth from "@/hooks/useAuth";
 import ISubreddit from "@/models/subreddit";
-import { useQuery } from "@tanstack/react-query";
-import { NavLink, useParams } from "react-router-dom";
-import { CalendarPlus, CircleUserRound } from "lucide-react";
-import { format } from "date-fns";
+
+
+enum subscriptionState {
+  SUBSCRIBED = "SUBSCRIBED",
+  NOT_SUBSCRIBED = "NOT_SUBSCRIBED",
+  ONWER = "ONWER",
+}
 
 const Subreddit = () => {
   const { slug } = useParams();
-  const { axiosClinetWithToken } = useAuth();
+  const { axiosClinetWithToken, user } = useAuth();
+  const [subscribeState, setSubscribeState] =
+    useState<subscriptionState | null>(null);
+
   const { data: subreddit, isLoading } = useQuery({
     queryKey: ["subreddit"],
     queryFn: async () => {
       const response = await axiosClinetWithToken.get(`/subreddit/${slug}`);
-      return response.data.data as ISubreddit;
+      const data = response.data.data as ISubreddit;
+      if (data.onwerId === user?.id) {
+        setSubscribeState(subscriptionState.ONWER);
+      } else if (user?.subreddits.some((sub) => sub.id === data.id)) {
+        setSubscribeState(subscriptionState.SUBSCRIBED);
+      } else {
+        setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
+      }
+      return data;
     },
   });
+
+  const { mutate: joinSubreddit } = useMutation({
+    mutationKey: ["joinSubreddit"],
+    mutationFn: async (id: string) => {
+      await axiosClinetWithToken.post(`/subscription/${id}/join`);
+      setSubscribeState(subscriptionState.SUBSCRIBED);
+    },
+  });
+
+  const { mutate: leaveSubreddit } = useMutation({
+    mutationKey: ["leaveSubreddit"],
+    mutationFn: async (id: string) => {
+      await axiosClinetWithToken.post(`/subscription/${id}/join`);
+      setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
+    },
+  });
+
+  const handleSubscribe = async (id: string) => {
+    if (subscribeState === subscriptionState.SUBSCRIBED) {
+      leaveSubreddit(id);
+    } else {
+      joinSubreddit(id);
+    }
+  };
 
   return (
     <div className="bg-muted flex-1">
@@ -49,18 +94,27 @@ const Subreddit = () => {
                     Members: {subreddit?.subscribers.length}
                   </p>
                 </div>
+                {subscribeState === subscriptionState.ONWER && (
+                  <p className="text-sm text-muted-foreground">
+                    You are the owner of this sub
+                  </p>
+                )}
                 <NavLink
                   to={"/post/create"}
-                  className={buttonVariants({ className: "w-full text-lg " })}
+                  className={buttonVariants({ className: "w-full text-xl " })}
                 >
                   Create Post
                 </NavLink>
-                <NavLink
-                  to={"/post/create"}
-                  className={buttonVariants({ className: "w-full text-lg " })}
-                >
-                  Join Subredddit
-                </NavLink>
+                {subscribeState !== subscriptionState.ONWER && (
+                  <Button
+                    onClick={() => handleSubscribe(subreddit?.id as string)}
+                    className={buttonVariants({ className: "w-full text-lg " })}
+                  >
+                    {subscribeState === subscriptionState.SUBSCRIBED
+                      ? "Leave this Sub"
+                      : "Join this Sub"}
+                  </Button>
+                )}
               </div>
             </div>
             {/* TODO: ADD Timeline  */}

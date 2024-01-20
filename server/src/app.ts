@@ -10,6 +10,7 @@ import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import "./config/passport";
 import subredditRouter from "./routes/subreddit";
+import subscriptionRouter from "./routes/subsription";
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/subreddit", subredditRouter);
+app.use("/api/v1/subscription", subscriptionRouter);
 
 app.use(errorMiddleware);
 

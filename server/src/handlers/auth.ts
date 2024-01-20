@@ -54,6 +54,10 @@ export const protectRoute: RequestHandler = async (
           where: {
             id: (decoded as jwtObject).user_id,
           },
+          include: {
+            subreddits: true,
+            ownedSubreddits: true,
+          },
         });
 
         // verify if user exists
