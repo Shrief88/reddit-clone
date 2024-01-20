@@ -3,11 +3,6 @@ import { body, param } from "express-validator";
 import prisma from "../config/prisma";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
-export const getSubreddit = [
-  param("id").isUUID().withMessage("Invalid subreddit ID"),
-  validateMiddleware,
-];
-
 export const createSubreddit = [
   body("name")
     .notEmpty()
@@ -29,6 +24,14 @@ export const createSubreddit = [
         throw new Error("Subreddit already exists");
       }
     }),
+  body("description")
+    .notEmpty()
+    .withMessage("Description is required")
+    .trim()
+    .isLength({ min: 30 })
+    .withMessage("Description must be at least 30 characters long")
+    .isLength({ max: 200 })
+    .withMessage("Description must be at most 200 characters long"),
   validateMiddleware,
 ];
 

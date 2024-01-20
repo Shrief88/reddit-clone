@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,10 +24,11 @@ import {
 } from "@/validators/createCommunitySchema";
 import useAuth from "@/hooks/useAuth";
 import responseError from "@/models/error";
+import ISubreddit from "@/models/subreddit";
 
 const CreateCommunity = () => {
   const { axiosClinetWithToken } = useAuth();
-
+  const navigator = useNavigate();
   const {
     register,
     handleSubmit,
@@ -36,14 +38,21 @@ const CreateCommunity = () => {
   });
 
   const { mutate, isPending } = useMutation({
+    mutationKey: ["createCommunity"],
     mutationFn: async (newCommunity: TCreateCommunitySchema) => {
       toast.loading("Creating community...");
-      return await axiosClinetWithToken.post("/subreddit", newCommunity);
+      const response = await axiosClinetWithToken.post(
+        "/subreddit",
+        newCommunity
+      );
+      return response.data.data as ISubreddit;
     },
-    onSuccess: () => {
-      toast.success("Community created");
+    onSuccess: (data) => {
+      toast.dismiss();
+      navigator(`r/${data.slug}`, { replace: true });
     },
     onError: (error: responseError) => {
+      toast.dismiss();
       if (error.response.status === 409) {
         toast.error("Community already exists");
       } else {
@@ -91,6 +100,21 @@ const CreateCommunity = () => {
             {errors.name && (
               <span className="text-sm text-red-500">
                 {errors.name.message}
+              </span>
+            )}
+            <div className="flex gap-4 items-center">
+              <textarea
+                id="description"
+                placeholder="Add a description"
+                {...register("description")}
+                className={cn({
+                  "focus-visible:ring-red-500": errors.description,
+                }, "w-full border-input border rounded-md p-3")}
+              ></textarea>
+            </div>
+            {errors.description && (
+              <span className="text-sm text-red-500">
+                {errors.description.message}
               </span>
             )}
             <DialogFooter>

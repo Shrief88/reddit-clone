@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import RequireAuth from "./components/layout/RequireAuth";
+import Subreddit from "./pages/Subreddit";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/" element={<Home />} />
+                  <Route path="/r/:slug" element={<Subreddit />} />
                 </Route>
               </Route>
             </Routes>

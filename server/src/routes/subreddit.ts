@@ -10,11 +10,7 @@ subredditRouter.use(authHandler.protectRoute);
 
 subredditRouter.get("/", subredditHandler.getSubreddits);
 
-subredditRouter.get(
-  "/:id",
-  subredditValidator.getSubreddit,
-  subredditHandler.getSubreddit,
-);
+subredditRouter.get("/:slug", subredditHandler.getSubreddit);
 
 subredditRouter.post(
   "/",
