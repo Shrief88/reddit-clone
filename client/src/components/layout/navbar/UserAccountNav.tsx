@@ -9,11 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, Settings, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
-
-import { formatAvatarFallback } from "@/lib/utils";
+import UserAvatar from "@/components/UserAvatar";
 
 interface UserAccountNavProps {
   username: string;
@@ -39,12 +37,7 @@ const UserAccountNav = (props: UserAccountNavProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={props.image} />
-            <AvatarFallback>
-              {formatAvatarFallback(props.username)}{" "}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar />
           {props.username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

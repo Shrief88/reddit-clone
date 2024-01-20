@@ -4,12 +4,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { NavLink, useParams } from "react-router-dom";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { CalendarPlus, CircleUserRound } from "lucide-react";
+import { CalendarPlus, CircleUserRound, Loader2 } from "lucide-react";
 
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper"
+import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
 import ISubreddit from "@/models/subreddit";
+import responseError from "@/models/error";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
+import MinicreatePost from "@/components/MinicreatePost";
 
 enum subscriptionState {
   SUBSCRIBED = "SUBSCRIBED",
@@ -22,15 +26,17 @@ const Subreddit = () => {
   const { axiosClinetWithToken, user } = useAuth();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
+  const [membersCount, setMembersCount] = useState(0);
 
   const { data: subreddit, isLoading } = useQuery({
     queryKey: ["subreddit"],
     queryFn: async () => {
       const response = await axiosClinetWithToken.get(`/subreddit/${slug}`);
       const data = response.data.data as ISubreddit;
+      setMembersCount(data.subscribers.length);
       if (data.onwerId === user?.id) {
         setSubscribeState(subscriptionState.ONWER);
-      } else if (user?.subreddits.some((sub) => sub.id === data.id)) {
+      } else if (user?.subreddits.some((sub) => sub.subredditId === data.id)) {
         setSubscribeState(subscriptionState.SUBSCRIBED);
       } else {
         setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
@@ -39,19 +45,37 @@ const Subreddit = () => {
     },
   });
 
-  const { mutate: joinSubreddit } = useMutation({
+  const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],
     mutationFn: async (id: string) => {
       await axiosClinetWithToken.post(`/subscription/${id}/join`);
       setSubscribeState(subscriptionState.SUBSCRIBED);
+      setMembersCount((prev) => prev + 1);
+    },
+    onError: (error: responseError) => {
+      if (error.response.status === 409) {
+        toast.error("Already subscribed");
+      } else if (error.response.status === 400) {
+        toast.error("Bad request , please try again");
+      } else {
+        toast.error("Something went wrong , please try again");
+      }
     },
   });
 
   const { mutate: leaveSubreddit } = useMutation({
     mutationKey: ["leaveSubreddit"],
     mutationFn: async (id: string) => {
-      await axiosClinetWithToken.post(`/subscription/${id}/join`);
+      await axiosClinetWithToken.delete(`/subscription/${id}/leave`);
       setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
+      setMembersCount((prev) => prev - 1);
+    },
+    onError: (error: responseError) => {
+      if (error.response.status === 400) {
+        toast.error("Bad request , please try again");
+      } else {
+        toast.error("Something went wrong , please try again");
+      }
     },
   });
 
@@ -91,7 +115,7 @@ const Subreddit = () => {
                 <div className="flex items-center gap-3">
                   <CircleUserRound />
                   <p className="text-sm text-muted-foreground">
-                    Members: {subreddit?.subscribers.length}
+                    Members: {membersCount}
                   </p>
                 </div>
                 {subscribeState === subscriptionState.ONWER && (
@@ -108,17 +132,26 @@ const Subreddit = () => {
                 {subscribeState !== subscriptionState.ONWER && (
                   <Button
                     onClick={() => handleSubscribe(subreddit?.id as string)}
-                    className={buttonVariants({ className: "w-full text-lg " })}
+                    className={cn(
+                      buttonVariants({ className: "w-full text-lg " }),
+                      subscribeState === subscriptionState.SUBSCRIBED &&
+                        "bg-green-600"
+                    )}
                   >
+                    {isPending && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {subscribeState === subscriptionState.SUBSCRIBED
-                      ? "Leave this Sub"
+                      ? "Joined"
                       : "Join this Sub"}
                   </Button>
                 )}
               </div>
             </div>
             {/* TODO: ADD Timeline  */}
-            <div className="md:col-span-2">Hello</div>
+            <div className="md:col-span-2">
+              <MinicreatePost />
+            </div>
           </div>
         )}
       </MaxWidthWrapper>

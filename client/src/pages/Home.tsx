@@ -4,6 +4,7 @@ import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 import CreateCommunity from "@/components/dialoags/CreateCommunity";
+import MinicreatePost from "@/components/MinicreatePost";
 
 const Home = () => {
   return (
@@ -35,7 +36,9 @@ const Home = () => {
             </div>
           </div>
           {/* TODO: ADD Timeline  */}
-          <div className="md:col-span-2">Hello</div>
+          <div className="md:col-span-2">
+            <MinicreatePost />
+          </div>
         </div>
       </MaxWidthWrapper>
     </div>

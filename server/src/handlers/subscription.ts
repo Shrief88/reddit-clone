@@ -29,6 +29,7 @@ export const leaveSubreddit: RequestHandler = async (
   next,
 ) => {
   try {
+    console.log("here");
     const id = req.params.id;
     const userId = req.user.id;
     await prisma.subscription.delete({

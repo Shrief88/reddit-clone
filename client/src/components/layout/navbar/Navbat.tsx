@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
-import UserAccountNav from "./UseAccountNav";
+import UserAccountNav from "./UserAccountNav";
 
 const Navbar = () => {
   const { user } = useAuth();

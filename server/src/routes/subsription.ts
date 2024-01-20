@@ -14,7 +14,7 @@ subscriptionRouter.post(
 );
 
 subscriptionRouter.delete(
-  "/:id/delete",
+  "/:id/leave",
   authHandler.protectRoute,
   subsriptionValidator.leaveSubreddit,
   subscriptionHandler.leaveSubreddit,

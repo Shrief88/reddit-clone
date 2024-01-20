@@ -1,14 +1,15 @@
-import { ISubreddit } from "./subreddit";
+import ISubreddit from "./subreddit";
+import ISubscription from "./subscription";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  image : string;
+  image: string;
   googleId: string;
-  subreddits : ISubreddit[];
+  subreddits: ISubscription[];
   createdAt: Date;
-  ownedSubreddits : ISubreddit[];
+  ownedSubreddits: ISubreddit[];
 }
 
 export default User;
