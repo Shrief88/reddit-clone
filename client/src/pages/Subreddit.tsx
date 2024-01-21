@@ -23,7 +23,7 @@ enum subscriptionState {
 
 const Subreddit = () => {
   const { slug } = useParams();
-  const { axiosClinetWithToken, user } = useAuth();
+  const { axiosClientAuth, user } = useAuth();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
@@ -31,7 +31,7 @@ const Subreddit = () => {
   const { data: subreddit, isLoading } = useQuery({
     queryKey: ["subreddit"],
     queryFn: async () => {
-      const response = await axiosClinetWithToken.get(`/subreddit/${slug}`);
+      const response = await axiosClientAuth.get(`/subreddit/${slug}`);
       const data = response.data.data as ISubreddit;
       setMembersCount(data.subscribers.length);
       if (data.onwerId === user?.id) {
@@ -48,7 +48,7 @@ const Subreddit = () => {
   const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],
     mutationFn: async (id: string) => {
-      await axiosClinetWithToken.post(`/subscription/${id}/join`);
+      await axiosClientAuth.post(`/subscription/${id}/join`);
       setSubscribeState(subscriptionState.SUBSCRIBED);
       setMembersCount((prev) => prev + 1);
     },
@@ -66,7 +66,7 @@ const Subreddit = () => {
   const { mutate: leaveSubreddit } = useMutation({
     mutationKey: ["leaveSubreddit"],
     mutationFn: async (id: string) => {
-      await axiosClinetWithToken.delete(`/subscription/${id}/leave`);
+      await axiosClientAuth.delete(`/subscription/${id}/leave`);
       setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
       setMembersCount((prev) => prev - 1);
     },
@@ -93,9 +93,11 @@ const Subreddit = () => {
         {!isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
             <div className="h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
-              <div className="bg-emerald-100 px-6 py-4">
+              <div className="bg-emerald-100 px-2 py-4">
                 <div className="flex items-center gap-3">
-                  <p className="font-semibold text-3xl">r/{subreddit?.slug}</p>
+                  <p className="font-semibold text-xl ">
+                    About r/{subreddit?.slug}
+                  </p>
                 </div>
               </div>
 
@@ -124,8 +126,8 @@ const Subreddit = () => {
                   </p>
                 )}
                 <NavLink
-                  to={"/post/create"}
-                  className={buttonVariants({ className: "w-full text-xl " })}
+                  to={"/post/create/r/" + subreddit?.slug}
+                  className={buttonVariants({ variant: "secondary" })}
                 >
                   Create Post
                 </NavLink>

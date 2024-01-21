@@ -28,8 +28,8 @@ const Home = () => {
               </div>
               <CreateCommunity />
               <NavLink
-                className={buttonVariants({ className: "w-full text-lg " })}
-                to={"/post/create"}
+                className={buttonVariants({ variant: "secondary" })}
+                to={"/post/create/r/"}
               >
                 Create Post
               </NavLink>

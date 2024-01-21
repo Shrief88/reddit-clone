@@ -22,9 +22,9 @@ const useAuth = () => {
     },
   });
 
-  const axiosClinetWithToken = axiosClientWithToken(accessToken);
+  const axiosClientAuth = axiosClientWithToken(accessToken);
 
-  return { user, isLoading, axiosClinetWithToken };
+  return { user, isLoading, axiosClientAuth };
 };
 
 export default useAuth;
