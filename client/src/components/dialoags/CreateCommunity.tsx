@@ -27,7 +27,7 @@ import responseError from "@/models/error";
 import ISubreddit from "@/models/subreddit";
 
 const CreateCommunity = () => {
-  const { axiosClinetWithToken } = useAuth();
+  const { axiosClientAuth } = useAuth();
   const navigator = useNavigate();
   const {
     register,
@@ -41,7 +41,7 @@ const CreateCommunity = () => {
     mutationKey: ["createCommunity"],
     mutationFn: async (newCommunity: TCreateCommunitySchema) => {
       toast.loading("Creating community...");
-      const response = await axiosClinetWithToken.post(
+      const response = await axiosClientAuth.post(
         "/subreddit",
         newCommunity
       );

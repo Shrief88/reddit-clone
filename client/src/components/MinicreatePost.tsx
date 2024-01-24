@@ -14,8 +14,8 @@ const MinicreatePost = () => {
 
   return (
     <div className="overflow-hidden rounded-md bg-white shadow">
-      <div className="h-full px-6 py-4 justify-between grid grid-col-1 md:grid-cols-6 gap-y-3">
-        <div className="col-span-5 flex items-center gap-3">
+      <div className="h-full px-6 py-4 justify-between grid grid-col-1 grid-cols-9 gap-y-3">
+        <div className="col-span-8 flex items-center gap-3">
           <UserAvatar />
           <Input
             readOnly
@@ -24,18 +24,12 @@ const MinicreatePost = () => {
           ></Input>
         </div>
 
-        <div>
+        <div className="flex justify-center">
           <Button
             variant="ghost"
             onClick={() => navigator(`/post/create/r/${slug}`)}
           >
             <ImageIcon className="text-zinc-600" />
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => navigator(`/post/create/r/${slug}`)}
-          >
-            <Link2 className="text-zinc-600" />
           </Button>
         </div>
       </div>

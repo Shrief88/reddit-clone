@@ -1,8 +1,6 @@
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Button } from "@/components/ui/button";
-import ISubreddit from "@/models/subreddit";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "@/hooks/useAuth";
+import { useState } from "react";
 
 import { ChevronsUpDown } from "lucide-react";
 import {
@@ -17,9 +15,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
+
+import ISubreddit from "@/models/subreddit";
+import useAuth from "@/hooks/useAuth";
+import Editor from "@/components/Editor";
 
 const CreatePost = () => {
   const [open, setOpen] = useState(false);
@@ -37,27 +39,35 @@ const CreatePost = () => {
     },
   });
 
+  const RULES = [
+    "1. Remember the human",
+    "2. Behave like you would in real life",
+    "3. Look for the original source of content",
+    "4. Search for duplicates before posting",
+    "5. Read the community’s rules",
+  ];
+
   return (
     <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           <div className="hidden md:block h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
-            <ul className="flex flex-col p-6 bg-background divide-y-2 divide-gray-200 font-medium">
-              <li className="py-3">Posting to Beddit</li>
-              <li className="p-1 text-base">1. Remember the human</li>
-              <li className="p-1">2. Behave like you would in real life</li>
-              <li className="p-1">
-                3. Look for the original source of content
-              </li>
-              <li className="p-1">4. Search for duplicates before posting</li>
-              <li className="p-1">5. Read the community’s rules</li>
+            <ul className="flex flex-col p-6 bg-background font-medium">
+              <li className="py-3 font-semibold text-lg">Posting to Beddit</li>
+              <ol className="divide-y-2 divide-gray-200">
+                {RULES.map((rule, index) => (
+                  <li key={index} className="py-1">
+                    {rule}
+                  </li>
+                ))}
+              </ol>
             </ul>
           </div>
           <div className="md:col-span-2">
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center">
                 <div className="-ml-2 -mt-2 flex flex-wrap items-baseline">
-                  <h3 className="ml-2 mt-2 text-base font-semibold leading-6 text-gray-900">
+                  <h3 className="ml-2 mt-2 text-base font-semibold leading-6 text-gray-900 md:text-2xl">
                     Create Post
                   </h3>
                 </div>
@@ -95,6 +105,18 @@ const CreatePost = () => {
                 )}
               </div>
               <Separator />
+              <Editor
+                subredditId={subreddit?.find((sub) => sub.slug === value.slice(2))?.id}
+              />
+              <div className="w-full flex justify-end">
+                <Button
+                  type="submit"
+                  className="w-[200px] text-lg"
+                  form="create-post"
+                >
+                  Post
+                </Button>
+              </div>
             </div>
           </div>
         </div>
