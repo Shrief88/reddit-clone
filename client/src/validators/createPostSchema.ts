@@ -6,8 +6,9 @@ export const createPostSchema = z.object({
     .trim()
     .min(5, { message: "Title must be at least 5 characters long" })
     .max(120, { message: "Title must be less than 50 characters long" }),
-  subredditId: z.string(),
+  subredditId: z.any(),
   content: z.any(),
+  image : z.any(),
 });
 
 export type TCreatePostSchema = z.infer<typeof createPostSchema>;

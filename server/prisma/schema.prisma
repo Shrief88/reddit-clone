@@ -61,7 +61,8 @@ model Subscription{
 model Post {
   id String @id @default(uuid())
   title String
-  content String
+  content String?
+  image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

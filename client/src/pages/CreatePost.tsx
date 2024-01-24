@@ -26,12 +26,11 @@ import Editor from "@/components/Editor";
 const CreatePost = () => {
   const [open, setOpen] = useState(false);
   const { slug } = useParams();
-  const [value, setValue] = useState(slug ? `r/${slug}` : "Select Subreddit");
-
+  const [value, setValue] = useState(slug ? slug : "Select Subreddit");
   const { axiosClientAuth } = useAuth();
 
   const { data: subreddit, isLoading } = useQuery({
-    queryKey: ["subreddit"],
+    queryKey: ["subreddits"],
     queryFn: async () => {
       const response = await axiosClientAuth.get(`/subreddit/`);
       const data = response.data.data as ISubreddit[];
@@ -78,7 +77,7 @@ const CreatePost = () => {
                         variant="outline"
                         className="w-[200px] justify-between text-sm"
                       >
-                        {value}
+                        {`r/${value}`}
                         <ChevronsUpDown className="h-4 w-4" />
                       </Button>
                     </PopoverTrigger>
@@ -87,17 +86,18 @@ const CreatePost = () => {
                         <CommandInput placeholder="Search..." />
                         <CommandEmpty>No subreddit found.</CommandEmpty>
                         <CommandGroup>
-                          {subreddit?.map((sub) => (
-                            <CommandItem
-                              key={sub.id}
-                              onSelect={() => {
-                                setValue(sub.name);
-                                setOpen(false);
-                              }}
-                            >
-                              r/{sub.name}
-                            </CommandItem>
-                          ))}
+                          {!isLoading &&
+                            subreddit?.map((sub) => (
+                              <CommandItem
+                                key={sub.id}
+                                onSelect={() => {
+                                  setValue(sub.name);
+                                  setOpen(false);
+                                }}
+                              >
+                                r/{sub.name}
+                              </CommandItem>
+                            ))}
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
@@ -105,9 +105,11 @@ const CreatePost = () => {
                 )}
               </div>
               <Separator />
-              <Editor
-                subredditId={subreddit?.find((sub) => sub.slug === value.slice(2))?.id}
-              />
+              {subreddit && (
+                <Editor
+                  subredditId={subreddit?.find((sub) => sub.slug === value)?.id}
+                />
+              )}
               <div className="w-full flex justify-end">
                 <Button
                   type="submit"

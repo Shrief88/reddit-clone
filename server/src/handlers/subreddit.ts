@@ -2,6 +2,7 @@ import { type RequestHandler } from "express";
 import prisma from "../config/prisma";
 import slugify from "slugify";
 import { type CustomRequest } from "./auth";
+import createHttpError from "http-errors";
 
 // @route GET /api/v1/subreddit
 // @access Private
@@ -38,7 +39,7 @@ export const getSubreddit: RequestHandler = async (req, res, next) => {
     });
 
     if (!subreddit) {
-      res.status(404).json({ message: "Subreddit not found" });
+      throw createHttpError(404, "Subreddit not found");
     }
     res.status(200).json({ data: subreddit });
   } catch (err) {
