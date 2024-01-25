@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 import TextareaAutosize from "react-textarea-autosize";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
+import { XCircle } from "lucide-react";
 
 import {
   createPostSchema,
@@ -20,11 +22,13 @@ interface EditorProps {
 
 const Editor = (props: EditorProps) => {
   const { axiosClientAuth } = useAuth();
+  const [selectedFile, setSelectedFile] = useState<null | File>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<TCreatePostSchema>({
     resolver: zodResolver(createPostSchema),
   });
@@ -93,8 +97,32 @@ const Editor = (props: EditorProps) => {
           id="content"
         />
         <div className="w-fit mt-10">
-          <Input {...register("image")} id="picture" type="file" />
+          <Input
+            {...register("image", {
+              onChange: (event) =>
+                setSelectedFile(
+                  event.target.files ? event.target.files[0] : null
+                ),
+            })}
+            id="picture"
+            type="file"
+          />
         </div>
+        {selectedFile && (
+          <div className="mt-4 relative w-fit">
+            <div className="absolute top-0 right-0 m-2 p-1 rounded-full bg-slate-100 flex justify-center ">
+              <XCircle
+                className="cursor-pointer"
+                onClick={() => {
+                  setSelectedFile(null);
+                  reset({ image: "" });
+                }}
+              />
+            </div>
+
+            <img src={URL.createObjectURL(selectedFile)} />
+          </div>
+        )}
       </form>
     </div>
   );
