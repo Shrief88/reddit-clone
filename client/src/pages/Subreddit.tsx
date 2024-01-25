@@ -1,10 +1,9 @@
-import { format } from "date-fns";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { NavLink, useParams } from "react-router-dom";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { CalendarPlus, CircleUserRound, Loader2 } from "lucide-react";
+import { CircleUserRound, Loader2 } from "lucide-react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
@@ -14,6 +13,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 import MinicreatePost from "@/components/MinicreatePost";
+import useSubreddits from "@/hooks/useSubreddits";
 
 enum subscriptionState {
   SUBSCRIBED = "SUBSCRIBED",
@@ -22,16 +22,20 @@ enum subscriptionState {
 }
 
 const Subreddit = () => {
-  const { slug } = useParams();
+  const { subredditSlug } = useParams();
   const { axiosClientAuth, user } = useAuth();
+  const { subreddits } = useSubreddits();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
 
   const { data: subreddit, isLoading } = useQuery({
-    queryKey: ["subreddit"],
+    queryKey: ["subreddit", subredditSlug],
     queryFn: async () => {
-      const response = await axiosClientAuth.get(`/subreddit/${slug}`);
+      const subredditId = subreddits?.find(
+        (sub) => sub.slug === subredditSlug
+      )?.id;
+      const response = await axiosClientAuth.get(`/subreddit/${subredditId}`);
       const data = response.data.data as ISubreddit;
       setMembersCount(data.subscribers.length);
       if (data.onwerId === user?.id) {
@@ -43,6 +47,7 @@ const Subreddit = () => {
       }
       return data;
     },
+    enabled: !!subreddits,
   });
 
   const { mutate: joinSubreddit, isPending } = useMutation({
@@ -105,13 +110,6 @@ const Subreddit = () => {
                 <div className="flex justify-between">
                   <p className="text-sm text-muted-foreground text-left">
                     {subreddit?.description}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CalendarPlus />
-                  <p className="text-sm text-muted-foreground">
-                    Created At:{" "}
-                    {format(subreddit?.createdAt as Date, "dd MMM yyyy")}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">

@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { ChevronsUpDown } from "lucide-react";
@@ -19,24 +18,16 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 
-import ISubreddit from "@/models/subreddit";
-import useAuth from "@/hooks/useAuth";
 import Editor from "@/components/Editor";
+import useSubreddits from "@/hooks/useSubreddits";
 
 const CreatePost = () => {
   const [open, setOpen] = useState(false);
-  const { slug } = useParams();
-  const [value, setValue] = useState(slug ? slug : "Select Subreddit");
-  const { axiosClientAuth } = useAuth();
-
-  const { data: subreddit, isLoading } = useQuery({
-    queryKey: ["subreddits"],
-    queryFn: async () => {
-      const response = await axiosClientAuth.get(`/subreddit/`);
-      const data = response.data.data as ISubreddit[];
-      return data;
-    },
-  });
+  const { subredditSlug } = useParams();
+  const [value, setValue] = useState(
+    subredditSlug ? subredditSlug : "Select Subreddit"
+  );
+  const { subreddits, isLoading } = useSubreddits();
 
   const RULES = [
     "1. Remember the human",
@@ -87,7 +78,7 @@ const CreatePost = () => {
                         <CommandEmpty>No subreddit found.</CommandEmpty>
                         <CommandGroup>
                           {!isLoading &&
-                            subreddit?.map((sub) => (
+                            subreddits?.map((sub) => (
                               <CommandItem
                                 key={sub.id}
                                 onSelect={() => {
@@ -105,9 +96,11 @@ const CreatePost = () => {
                 )}
               </div>
               <Separator />
-              {subreddit && (
+              {subreddits && (
                 <Editor
-                  subredditId={subreddit?.find((sub) => sub.slug === value)?.id}
+                  subredditId={
+                    subreddits?.find((sub) => sub.slug === value)?.id
+                  }
                 />
               )}
               <div className="w-full flex justify-end">

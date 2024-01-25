@@ -6,11 +6,11 @@ import * as subredditValidator from "../validators/subreddit";
 
 const subredditRouter = express.Router();
 
-subredditRouter.use(authHandler.protectRoute);
-
 subredditRouter.get("/", subredditHandler.getSubreddits);
 
-subredditRouter.get("/:slug", subredditHandler.getSubreddit);
+subredditRouter.use(authHandler.protectRoute);
+
+subredditRouter.get("/:id", subredditHandler.getSubreddit);
 
 subredditRouter.post(
   "/",

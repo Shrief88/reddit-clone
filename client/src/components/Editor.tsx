@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import TextareaAutosize from "react-textarea-autosize";
 import { Input } from "./ui/input";
@@ -15,6 +16,7 @@ import {
 import useAuth from "@/hooks/useAuth";
 import { IPost } from "@/models/post";
 import responseError from "@/models/error";
+import useSubreddits from "@/hooks/useSubreddits";
 
 interface EditorProps {
   subredditId: string | undefined;
@@ -23,6 +25,8 @@ interface EditorProps {
 const Editor = (props: EditorProps) => {
   const { axiosClientAuth } = useAuth();
   const [selectedFile, setSelectedFile] = useState<null | File>(null);
+  const navigator = useNavigate();
+  const { subreddits } = useSubreddits();
 
   const {
     register,
@@ -44,9 +48,15 @@ const Editor = (props: EditorProps) => {
       });
       return res.data.data as IPost;
     },
-    onSuccess: () => {
+    onSuccess: (data: IPost) => {
       toast.dismiss();
       toast.success("Post created");
+      const subredditSlug = subreddits?.find(
+        (sub) => sub.id === data.subredditId
+      )?.slug;
+      setTimeout(() => {
+        navigator(`/${subredditSlug}/post/${data.id}`, { replace: true });
+      }, 1000);
     },
     onError: (error: responseError) => {
       toast.dismiss();

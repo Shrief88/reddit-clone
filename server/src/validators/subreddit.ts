@@ -3,6 +3,11 @@ import { body, param } from "express-validator";
 import prisma from "../config/prisma";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
+export const getSubreddit = [
+  param("id").isUUID().withMessage("Invalid subreddit ID"),
+  validateMiddleware,
+];
+
 export const createSubreddit = [
   body("name")
     .notEmpty()

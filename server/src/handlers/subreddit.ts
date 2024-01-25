@@ -15,14 +15,14 @@ export const getSubreddits: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route GET /api/v1/subreddit/:slug
+// @route GET /api/v1/subreddit/:id
 // @access Private
 export const getSubreddit: RequestHandler = async (req, res, next) => {
   try {
-    const slug = req.params.slug;
+    const id = req.params.id;
     const subreddit = await prisma.subreddit.findUnique({
       where: {
-        slug,
+        id,
       },
       include: {
         posts: {

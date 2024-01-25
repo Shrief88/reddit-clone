@@ -4,6 +4,7 @@ import logo from "../../../assets/logo.png";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
 import UserAccountNav from "./UserAccountNav";
+import SideSheet from "../SideSheet";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -25,10 +26,13 @@ const Navbar = () => {
             {/* TODO: <Search /> */}
 
             {user && (
-              <UserAccountNav
-                image={user?.image || ""}
-                username={user?.name || ""}
-              />
+              <div className="flex items-center gap-3">
+                <UserAccountNav
+                  image={user?.image || ""}
+                  username={user?.name || ""}
+                />
+                <SideSheet />
+              </div>
             )}
           </div>
         </MaxWidthWrapper>
