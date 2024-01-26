@@ -20,6 +20,7 @@ export const createSubreddit = [
     .isLength({ max: 22 })
     .withMessage("Subreddit name must be at most 20 characters long")
     .custom(async (name) => {
+      name = name.slice(2, name.length);
       const subreddit = await prisma.subreddit.findUnique({
         where: {
           name,

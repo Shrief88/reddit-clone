@@ -24,11 +24,11 @@ enum subscriptionState {
 const Subreddit = () => {
   const { subredditSlug } = useParams();
   const { axiosClientAuth, user } = useAuth();
-  const { subreddits } = useSubreddits();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
 
+  const { subreddits } = useSubreddits(); 
   const { data: subreddit, isLoading } = useQuery({
     queryKey: ["subreddit", subredditSlug],
     queryFn: async () => {

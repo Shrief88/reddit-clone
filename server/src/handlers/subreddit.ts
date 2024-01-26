@@ -81,13 +81,22 @@ export const createSubreddit: RequestHandler = async (
 export const deleteSubreddit: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await prisma.subreddit.delete({
+    const deleteSubreddit = prisma.subreddit.delete({
       where: {
         id,
       },
     });
+
+    const deleteSubscribers = prisma.subscription.deleteMany({
+      where: {
+        subredditId: id,
+      },
+    });
+
+    await prisma.$transaction([deleteSubscribers, deleteSubreddit]);
     res.sendStatus(204);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

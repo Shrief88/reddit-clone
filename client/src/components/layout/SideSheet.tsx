@@ -15,7 +15,6 @@ import { buttonVariants } from "../ui/button";
 export function SideSheet() {
   const { user } = useAuth();
   const { subreddits } = useSubreddits();
-
   const [userSubDiv, setUserSubDiv] = useState<JSX.Element[] | null>(null);
   const [otherSubDiv, setOtherSubDiv] = useState<JSX.Element[] | null>(null);
 
@@ -26,6 +25,7 @@ export function SideSheet() {
         const subreddit = subreddits?.find((sub) => sub.id === subredditId);
         return (
           <NavLink
+            key={subredditId}
             to={`r/${subreddit?.slug}`}
             className={buttonVariants({ variant: "link" })}
           >
@@ -46,6 +46,7 @@ export function SideSheet() {
       const divs = otherSubs.map((sub) => {
         return (
           <NavLink
+            key={sub.id}
             to={`r/${sub?.slug}`}
             className={buttonVariants({ variant: "link" })}
           >
