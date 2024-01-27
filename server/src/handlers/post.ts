@@ -5,7 +5,18 @@ import { type CustomRequest } from "./auth";
 
 export const getPosts: RequestHandler = async (req, res, next) => {
   try {
-    const posts = await prisma.post.findMany();
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const posts = await prisma.post.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        subreddit: true,
+        author: true,
+        comments: true,
+        votes: true,
+      },
+    });
     res.status(200).json({ data: posts });
   } catch (err) {
     next(err);

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const regexp = /^\S*$/; // a string consisting only of non-whitespaces
+
 export const createCommunitySchema = z.object({
   name: z
     .string()
@@ -10,6 +12,9 @@ export const createCommunitySchema = z.object({
     })
     .startsWith("r/", {
       message: "Community name must start with r/",
+    })
+    .regex(regexp, {
+      message: "Community name cannot contain whitespaces",
     }),
   description: z
     .string()

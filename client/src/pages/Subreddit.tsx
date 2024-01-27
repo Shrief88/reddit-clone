@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 
 import MinicreatePost from "@/components/MinicreatePost";
 import useSubreddits from "@/hooks/useSubreddits";
+import PostFeed from "@/components/PostFeed";
+import { IExtendedPost } from "@/models/post";
 
 enum subscriptionState {
   SUBSCRIBED = "SUBSCRIBED",
@@ -22,18 +24,18 @@ enum subscriptionState {
 }
 
 const Subreddit = () => {
-  const { subredditSlug } = useParams();
+  const { subredditName } = useParams();
   const { axiosClientAuth, user } = useAuth();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
 
-  const { subreddits } = useSubreddits(); 
+  const { subreddits } = useSubreddits();
   const { data: subreddit, isLoading } = useQuery({
-    queryKey: ["subreddit", subredditSlug],
+    queryKey: ["subreddit", subredditName],
     queryFn: async () => {
       const subredditId = subreddits?.find(
-        (sub) => sub.slug === subredditSlug
+        (sub) => sub.name === subredditName
       )?.id;
       const response = await axiosClientAuth.get(`/subreddit/${subredditId}`);
       const data = response.data.data as ISubreddit;
@@ -101,7 +103,7 @@ const Subreddit = () => {
               <div className="bg-emerald-100 px-2 py-4">
                 <div className="flex items-center gap-3">
                   <p className="font-semibold text-xl ">
-                    About r/{subreddit?.slug}
+                    About r/{subreddit?.name}
                   </p>
                 </div>
               </div>
@@ -124,7 +126,7 @@ const Subreddit = () => {
                   </p>
                 )}
                 <NavLink
-                  to={"/post/create/r/" + subreddit?.slug}
+                  to={"/post/create/" + subreddit?.name}
                   className={buttonVariants({ variant: "secondary" })}
                 >
                   Create Post
@@ -148,9 +150,12 @@ const Subreddit = () => {
                 )}
               </div>
             </div>
-            {/* TODO: ADD Timeline  */}
             <div className="md:col-span-2">
               <MinicreatePost />
+              <PostFeed
+                posts={subreddit?.posts as IExtendedPost[]}
+                subredditName={subreddit?.name as string}
+              />
             </div>
           </div>
         )}

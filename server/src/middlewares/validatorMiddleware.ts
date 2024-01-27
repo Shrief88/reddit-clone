@@ -8,6 +8,7 @@ const validateMiddleware = (
   next: NextFunction,
 ): void => {
   const errors = validationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
     const message: string = errors.array()[0].msg;
     if (message.includes("not exist")) {

@@ -1,4 +1,4 @@
-import { ImageIcon, Link2 } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -7,9 +7,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const MinicreatePost = () => {
   const navigator = useNavigate();
-  let { slug } = useParams();
-  if (slug === undefined) {
-    slug = "";
+  let { subredditName } = useParams();
+  if (subredditName === undefined) {
+    subredditName = "";
   }
 
   return (
@@ -20,14 +20,14 @@ const MinicreatePost = () => {
           <Input
             readOnly
             placeholder="Create Post"
-            onClick={() => navigator(`/post/create/r/${slug}`)}
+            onClick={() => navigator(`/post/create/r/${subredditName}`)}
           ></Input>
         </div>
 
         <div className="flex justify-center">
           <Button
             variant="ghost"
-            onClick={() => navigator(`/post/create/r/${slug}`)}
+            onClick={() => navigator(`/post/create/r/r${subredditName}`)}
           >
             <ImageIcon className="text-zinc-600" />
           </Button>

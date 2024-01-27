@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 import CreateCommunity from "@/components/dialoags/CreateCommunity";
 import MinicreatePost from "@/components/MinicreatePost";
+import PostFeed from "@/components/PostFeed";
 
 const Home = () => {
   return (
@@ -35,9 +36,9 @@ const Home = () => {
               </NavLink>
             </div>
           </div>
-          {/* TODO: ADD Timeline  */}
           <div className="md:col-span-2">
             <MinicreatePost />
+            {/* <PostFeed /> */}
           </div>
         </div>
       </MaxWidthWrapper>

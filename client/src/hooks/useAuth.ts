@@ -2,7 +2,7 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
 import { axiosClient, axiosClientWithToken } from "@/api/axios";
 
-import User from "@/models/user";
+import IUser from "@/models/user";
 
 const useAuth = () => {
   const [cookies] = useCookies(["accessToken"]);
@@ -18,7 +18,7 @@ const useAuth = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      return response.data.user as User;
+      return response.data.user as IUser;
     },
   });
 

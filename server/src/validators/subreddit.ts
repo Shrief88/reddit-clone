@@ -19,8 +19,17 @@ export const createSubreddit = [
     .withMessage("Subreddit name must be at least 3 characters long")
     .isLength({ max: 22 })
     .withMessage("Subreddit name must be at most 20 characters long")
+    .custom((name: string) => {
+      if (!name.startsWith("r/")) {
+        throw new Error("Subreddit name must start with 'r/'");
+      }
+      if (name.includes(" ")) {
+        throw new Error("Subreddit name must not contain space");
+      }
+      return true;
+    })
+    .withMessage("Subreddit name must not contain spaces")
     .custom(async (name) => {
-      name = name.slice(2, name.length);
       const subreddit = await prisma.subreddit.findUnique({
         where: {
           name,
@@ -29,6 +38,7 @@ export const createSubreddit = [
       if (subreddit) {
         throw new Error("Subreddit already exists");
       }
+      return true;
     }),
   body("description")
     .notEmpty()
@@ -52,5 +62,6 @@ export const deleteSubreddit = [
       if (subredditOnwer?.onwerId !== req.user.id) {
         throw new Error("Forbidden");
       }
+      return true;
     }),
 ];

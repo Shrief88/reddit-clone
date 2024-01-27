@@ -19,10 +19,10 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/" element={<Home />} />
-                  <Route path="/r/:subredditSlug" element={<Subreddit />} />
-                  <Route path="/post/create/r/:subredditSlug" element={<CreatePost />} />
-                  <Route path="/post/create/r/" element={<CreatePost />} />
-                  <Route path="/:subredditSlug/post/:id" element={<Post />} />
+                  <Route path="/r/:subredditName" element={<Subreddit />} />
+                  <Route path="/post/create/r/:subredditName" element={<CreatePost />} />
+                  <Route path="/post/create/" element={<CreatePost />} />
+                  <Route path="/r/:subredditName/post/:id" element={<Post />} />
                 </Route>
               </Route>
             </Routes>

@@ -1,6 +1,5 @@
 import { type RequestHandler } from "express";
 import prisma from "../config/prisma";
-import slugify from "slugify";
 import { type CustomRequest } from "./auth";
 import createHttpError from "http-errors";
 
@@ -30,7 +29,6 @@ export const getSubreddit: RequestHandler = async (req, res, next) => {
             author: true,
             votes: true,
             comments: true,
-            subreddit: true,
           },
           take: 10,
         },
@@ -61,7 +59,6 @@ export const createSubreddit: RequestHandler = async (
       data: {
         name,
         onwerId: req.user.id,
-        slug: slugify(name),
         description: req.body.description,
         subscribers: {
           create: {

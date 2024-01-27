@@ -23,9 +23,9 @@ import useSubreddits from "@/hooks/useSubreddits";
 
 const CreatePost = () => {
   const [open, setOpen] = useState(false);
-  const { subredditSlug } = useParams();
+  const { subredditName } = useParams();
   const [value, setValue] = useState(
-    subredditSlug ? subredditSlug : "Select Subreddit"
+    subredditName ? subredditName : "Select Subreddit"
   );
   const { subreddits, isLoading } = useSubreddits();
 
@@ -99,7 +99,7 @@ const CreatePost = () => {
               {subreddits && (
                 <Editor
                   subredditId={
-                    subreddits?.find((sub) => sub.slug === value)?.id
+                    subreddits?.find((sub) => sub.name === value)?.id
                   }
                 />
               )}

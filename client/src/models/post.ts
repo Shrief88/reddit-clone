@@ -1,3 +1,6 @@
+import ISubreddit from "./subreddit";
+import IUser from "./user";
+
 export interface IPost {
   id: string;
   title: string;
@@ -6,4 +9,9 @@ export interface IPost {
   authorId: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IExtendedPost extends IPost {
+  subreddit : ISubreddit,
+  user : IUser,
 }

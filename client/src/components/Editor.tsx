@@ -51,11 +51,11 @@ const Editor = (props: EditorProps) => {
     onSuccess: (data: IPost) => {
       toast.dismiss();
       toast.success("Post created");
-      const subredditSlug = subreddits?.find(
+      const subredditName = subreddits?.find(
         (sub) => sub.id === data.subredditId
-      )?.slug;
+      )?.name;
       setTimeout(() => {
-        navigator(`/${subredditSlug}/post/${data.id}`, { replace: true });
+        navigator(`/r/${subredditName}/post/${data.id}`, { replace: true });
       }, 1000);
     },
     onError: (error: responseError) => {

@@ -1,7 +1,7 @@
 import ISubreddit from "./subreddit";
 import ISubscription from "./subscription";
 
-interface User {
+interface IUser {
   id: string;
   name: string;
   email: string;
@@ -12,4 +12,4 @@ interface User {
   ownedSubreddits: ISubreddit[];
 }
 
-export default User;
+export default IUser;
