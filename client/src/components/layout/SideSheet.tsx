@@ -26,10 +26,10 @@ export function SideSheet() {
         return (
           <NavLink
             key={subredditId}
-            to={`${subreddit?.name}`}
+            to={`r/${subreddit?.name}`}
             className={buttonVariants({ variant: "link" })}
           >
-            {subreddit?.name}
+            r/{subreddit?.name}
           </NavLink>
         );
       });
@@ -50,7 +50,7 @@ export function SideSheet() {
             to={`/${sub.name}`}
             className={buttonVariants({ variant: "link" })}
           >
-            {sub?.name}
+            r/{sub?.name}
           </NavLink>
         );
       });

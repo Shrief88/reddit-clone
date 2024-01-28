@@ -7,6 +7,7 @@ export const getPosts: RequestHandler = async (req, res, next) => {
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
+    const filterObject = req.body.filterObject as Record<string, unknown>;
     const posts = await prisma.post.findMany({
       take: limit,
       skip: (page - 1) * limit,
@@ -16,6 +17,7 @@ export const getPosts: RequestHandler = async (req, res, next) => {
         comments: true,
         votes: true,
       },
+      where: filterObject,
     });
     res.status(200).json({ data: posts });
   } catch (err) {

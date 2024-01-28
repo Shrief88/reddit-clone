@@ -7,7 +7,8 @@ import Post from "./Post";
 
 interface PostFeedProps {
   posts: IExtendedPost[];
-  subredditName: string;
+  subredditName?: string;
+  subredditId?: string;
 }
 
 const PostFeed = (props: PostFeedProps) => {
@@ -21,8 +22,11 @@ const PostFeed = (props: PostFeedProps) => {
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["posts"],
     queryFn: async ({ pageParam = 1 }) => {
-      return (await axiosClientAuth.get(`/post?limit=${3}&page=${pageParam}`))
-        .data.data;
+      return (
+        await axiosClientAuth.get(
+          `/post?limit=${4}&page=${pageParam}&subredditId=${props.subredditId}`
+        )
+      ).data.data;
     },
     getNextPageParam: (_, pages) => {
       return pages.length + 1;
@@ -36,6 +40,8 @@ const PostFeed = (props: PostFeedProps) => {
 
   const posts: IExtendedPost[] =
     data?.pages.flatMap((page) => page) ?? props.posts;
+
+ 
   return (
     <ul className="flex flex-col space-y-6">
       {props.posts &&
@@ -43,11 +49,11 @@ const PostFeed = (props: PostFeedProps) => {
           if (index === posts.length - 1) {
             return (
               <div key={post.id} ref={ref}>
-                <Post subredditName={props.subredditName} />
+                <Post key={post.id} post={post} isHome={false} />
               </div>
             );
           } else {
-            return <Post subredditName={post.subreddit.name} key={post.id} />;
+            return <Post key={post.id} post={post} isHome={false} />;
           }
         })}
     </ul>

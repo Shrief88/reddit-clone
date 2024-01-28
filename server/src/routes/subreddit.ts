@@ -3,6 +3,7 @@ import express from "express";
 import * as subredditHandler from "../handlers/subreddit";
 import * as authHandler from "../handlers/auth";
 import * as subredditValidator from "../validators/subreddit";
+import postRouter from "./post";
 
 const subredditRouter = express.Router();
 
@@ -22,6 +23,12 @@ subredditRouter.delete(
   "/:id",
   subredditValidator.deleteSubreddit,
   subredditHandler.deleteSubreddit,
+);
+
+subredditRouter.use(
+  "/:id/posts",
+  subredditValidator.getSubredditPosts,
+  postRouter,
 );
 
 export default subredditRouter;

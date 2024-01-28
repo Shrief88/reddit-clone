@@ -52,6 +52,7 @@ const Subreddit = () => {
     enabled: !!subreddits,
   });
 
+
   const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],
     mutationFn: async (id: string) => {
@@ -126,7 +127,7 @@ const Subreddit = () => {
                   </p>
                 )}
                 <NavLink
-                  to={"/post/create/" + subreddit?.name}
+                  to={"/post/create/r/" + subreddit?.name}
                   className={buttonVariants({ variant: "secondary" })}
                 >
                   Create Post
@@ -150,11 +151,11 @@ const Subreddit = () => {
                 )}
               </div>
             </div>
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 flex flex-col gap-8">
               <MinicreatePost />
               <PostFeed
                 posts={subreddit?.posts as IExtendedPost[]}
-                subredditName={subreddit?.name as string}
+                subredditId={subreddit?.id as string}
               />
             </div>
           </div>

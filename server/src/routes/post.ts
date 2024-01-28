@@ -5,11 +5,13 @@ import * as authHandler from "../handlers/auth";
 import * as postValidator from "../validators/post";
 import { uploadImage } from "../middlewares/uploadImageMiddleware";
 import { resizeImage } from "../middlewares/resizeImagemiddleware";
-import test from "../middlewares/testMiddleware";
+import { setFilterObject } from "../middlewares/subredditToPost";
 
-const postRouter = express.Router();
+const postRouter = express.Router({ mergeParams: true });
 
-postRouter.get("/", authHandler.protectRoute, postHandler.getPosts);
+postRouter.use(authHandler.protectRoute);
+
+postRouter.get("/", setFilterObject, postHandler.getPosts);
 
 postRouter.get(
   "/:id",
@@ -20,7 +22,6 @@ postRouter.get(
 
 postRouter.post(
   "/",
-  authHandler.protectRoute,
   uploadImage("image"),
   postValidator.createPost,
   resizeImage("post", "image"),

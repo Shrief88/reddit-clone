@@ -65,3 +65,20 @@ export const deleteSubreddit = [
       return true;
     }),
 ];
+
+export const getSubredditPosts = [
+  param("id")
+    .isUUID()
+    .withMessage("Invalid subreddit ID")
+    .custom(async (id) => {
+      const subreddit = await prisma.subreddit.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!subreddit) {
+        throw new Error("Subreddit not found");
+      }
+      return true;
+    }),
+];
