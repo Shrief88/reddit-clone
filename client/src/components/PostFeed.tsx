@@ -2,7 +2,7 @@ import useAuth from "@/hooks/useAuth";
 import { IExtendedPost } from "@/models/post";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Post from "./Post";
 
 interface PostFeedProps {
@@ -19,29 +19,37 @@ const PostFeed = (props: PostFeedProps) => {
     threshold: 1,
   });
 
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const getPosts = async (page: number) => {
+    const res = await axiosClientAuth.get(
+      `/post?limit=${3}&page=${page}&subredditId=${props.subredditId}`
+    );
+    return res.data.data as IExtendedPost[];
+  };
+
+  const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ["posts"],
-    queryFn: async ({ pageParam = 1 }) => {
-      return (
-        await axiosClientAuth.get(
-          `/post?limit=${4}&page=${pageParam}&subredditId=${props.subredditId}`
-        )
-      ).data.data;
+    queryFn: async ({
+      pageParam = 1,
+    }: {
+      pageParam: number | undefined;
+    }): Promise<IExtendedPost[]> => {
+      return await getPosts(pageParam);
     },
-    getNextPageParam: (_, pages) => {
-      return pages.length + 1;
-    },
-    initialData: {
-      pages: [props.posts],
-      pageParams: [1],
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length ? allPages.length + 1 : undefined;
     },
     initialPageParam: undefined,
   });
 
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      fetchNextPage(); // Load more posts when the last post comes into view
+    }
+  }, [entry, fetchNextPage]);
+
   const posts: IExtendedPost[] =
     data?.pages.flatMap((page) => page) ?? props.posts;
 
- 
   return (
     <ul className="flex flex-col space-y-6">
       {props.posts &&
@@ -49,7 +57,7 @@ const PostFeed = (props: PostFeedProps) => {
           if (index === posts.length - 1) {
             return (
               <div key={post.id} ref={ref}>
-                <Post key={post.id} post={post} isHome={false} />
+                <Post post={post} isHome={false} />
               </div>
             );
           } else {

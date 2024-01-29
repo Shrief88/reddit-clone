@@ -46,7 +46,7 @@ const Post = ({ post, isHome }: PostProps) => {
             className="relative text-sm max-h-56 w-full overflow-clip"
             ref={pRef}
           >
-            <p className="text-muted-foreground mb-3">{post.content}</p>
+            <p className="text-muted-foreground mb-3 ">{post.content}</p>
 
             {post.image && (
               <div className="relative w-full min-h-[15rem]">
