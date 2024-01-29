@@ -64,15 +64,36 @@ const Vote = (props: VoteProps) => {
     },
   });
 
+  const { mutate: removeVote } = useMutation({
+    mutationKey: ["removeVote"],
+    mutationFn: async (type: VoteType) => {
+      await axiosClientAuth.delete(`/vote/${props.postId}`);
+      return type;
+    },
+    onSuccess: (type: VoteType) => {
+      if (type === VoteType.UPVOTE) {
+        setIsUpVoted(false);
+        setVotesCount((prev) => prev - 1);
+      } else if (type === VoteType.DOWNVOTE) {
+        setIsDownVoted(false);
+        setVotesCount((prev) => prev + 1);
+      }
+    },
+  });
+
   const addUpVote = () => {
     if (!isUpvoted) {
       upVote();
+    } else {
+      removeVote(VoteType.UPVOTE);
     }
   };
 
   const addDownVote = () => {
     if (!isDownVoted) {
       downVote();
+    } else {
+      removeVote(VoteType.DOWNVOTE);
     }
   };
 

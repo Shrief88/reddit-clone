@@ -19,7 +19,10 @@ export const deleteVote: RequestHandler = async (
         },
       },
     });
+
+    res.sendStatus(204);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

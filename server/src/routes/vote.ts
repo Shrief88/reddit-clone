@@ -20,6 +20,6 @@ voteRouter.post(
   voteHandler.addDownVote,
 );
 
-voteRouter.delete("/:id", voteValidator.deleteVote, voteHandler.deleteVote);
+voteRouter.delete("/:postId", voteValidator.deleteVote, voteHandler.deleteVote);
 
 export default voteRouter;
