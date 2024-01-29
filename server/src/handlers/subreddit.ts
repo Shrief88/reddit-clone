@@ -93,7 +93,6 @@ export const deleteSubreddit: RequestHandler = async (req, res, next) => {
     await prisma.$transaction([deleteSubscribers, deleteSubreddit]);
     res.sendStatus(204);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

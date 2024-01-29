@@ -14,6 +14,7 @@ import "./config/passport";
 import subredditRouter from "./routes/subreddit";
 import subscriptionRouter from "./routes/subsription";
 import postRouter from "./routes/post";
+import voteRouter from "./routes/vote";
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/subreddit", subredditRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
 app.use("/api/v1/post", postRouter);
+app.use("/api/v1/vote", voteRouter);
 
 app.use(errorMiddleware);
 

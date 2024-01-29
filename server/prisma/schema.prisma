@@ -92,7 +92,13 @@ model Comment {
   votes CommentVote[]
 }
 
+enum VoteType {
+  upvote
+  downvote
+}
+
 model Vote {
+  type VoteType
   user User @relation(fields: [userId], references: [id])
   userId String
   post Post @relation(fields: [postId], references: [id])

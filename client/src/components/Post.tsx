@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
 import { MessageSquare } from "lucide-react";
+import Vote from "./Vote";
 
 interface PostProps {
   post: IExtendedPost;
@@ -15,9 +16,10 @@ const Post = ({ post, isHome }: PostProps) => {
 
   return (
     <div className="rounded-md bg-background shadow">
-      <div className="px-6 py-4 flex justify-between">
-        <div className="w-0 flex-1">
-          <div className="max-h-40 mt-1 text-xs text-gray-500">
+      <div className="pr-6 flex justify-between">
+        <Vote votes={post.votes} postId={post.id}/>
+        <div className="w-0 flex-1 py-4 pl-3">
+          <div className="max-h-40 mt-1 text-xs text-gray-500 p">
             {isHome ? (
               <NavLink
                 to={"/r/" + post.subreddit.name}

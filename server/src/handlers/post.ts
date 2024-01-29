@@ -48,12 +48,20 @@ export const createPost: RequestHandler = async (
   next,
 ) => {
   try {
-    console.log(req.body);
-    console.log("HERE");
     req.body.authorId = req.user.id;
-    const post = await prisma.post.create({
+    const post = prisma.post.create({
       data: req.body,
     });
+
+    const vote = prisma.vote.create({
+      data: {
+        userId: req.user.id,
+        postId: (await post).id,
+        type: "upvote",
+      },
+    });
+
+    await prisma.$transaction([post, vote]);
     res.status(201).json({ data: post });
   } catch (err) {
     next(err);

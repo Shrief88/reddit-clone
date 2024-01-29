@@ -1,6 +1,7 @@
 import { IComment } from "./comment";
 import ISubreddit from "./subreddit";
 import IUser from "./user";
+import { IVote } from "./vote";
 
 export interface IPost {
   id: string;
@@ -17,4 +18,5 @@ export interface IExtendedPost extends IPost {
   author : IUser,
   comments: IComment[],
   image : string,
+  votes : IVote[]
 }
