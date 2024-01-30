@@ -93,6 +93,12 @@ export const getPost: RequestHandler = async (req, res, next) => {
       where: {
         id,
       },
+      include: {
+        author: true,
+        subreddit: true,
+        comments: true,
+        votes: true,
+      },
     });
     if (!post) {
       throw createHttpError(404, "Post not found");

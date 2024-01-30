@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { NavLink, useParams } from "react-router-dom";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { CircleUserRound, Loader2 } from "lucide-react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
-import ISubreddit from "@/models/subreddit";
 import responseError from "@/models/error";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,7 @@ import { cn } from "@/lib/utils";
 import MinicreatePost from "@/components/MinicreatePost";
 import useSubreddits from "@/hooks/useSubreddits";
 import PostFeed from "@/components/PostFeed";
-import { IExtendedPost } from "@/models/post";
+import ISubreddit from "@/models/subreddit";
 
 enum subscriptionState {
   SUBSCRIBED = "SUBSCRIBED",
@@ -25,32 +24,20 @@ enum subscriptionState {
 
 const Subreddit = () => {
   const { subredditName } = useParams();
-  const { axiosClientAuth, user } = useAuth();
+  const { axiosClientAuth } = useAuth();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
-
-  const { subreddits } = useSubreddits();
-  const { data: subreddit, isLoading } = useQuery({
-    queryKey: ["subreddit", subredditName],
-    queryFn: async () => {
-      const subredditId = subreddits?.find(
-        (sub) => sub.name === subredditName
-      )?.id;
-      const response = await axiosClientAuth.get(`/subreddit/${subredditId}`);
-      const data = response.data.data as ISubreddit;
-      setMembersCount(data.subscribers.length);
-      if (data.onwerId === user?.id) {
-        setSubscribeState(subscriptionState.ONWER);
-      } else if (user?.subreddits.some((sub) => sub.subredditId === data.id)) {
-        setSubscribeState(subscriptionState.SUBSCRIBED);
-      } else {
-        setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
-      }
-      return data;
-    },
-    enabled: !!subreddits,
-  });
+  const [subreddit, setSubreddit] = useState<ISubreddit | null | undefined>(
+    null
+  );
+  const { subreddits, isLoading } = useSubreddits();
+  useEffect(() => {
+    if (!isLoading) {
+      setSubreddit(subreddits?.find((sub) => sub.name === subredditName));
+      setMembersCount(subreddit?.subscribers.length || 0);
+    }
+  },[isLoading,subreddits,subredditName]);
 
   const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],
@@ -152,10 +139,7 @@ const Subreddit = () => {
             </div>
             <div className="md:col-span-2 flex flex-col gap-8">
               <MinicreatePost />
-              <PostFeed
-                subredditId={subreddit?.id as string}
-                isHome={false}
-              />
+              <PostFeed subredditId={subreddit?.id as string} isHome={false} />
             </div>
           </div>
         )}

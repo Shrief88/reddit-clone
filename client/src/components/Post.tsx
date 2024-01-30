@@ -19,7 +19,7 @@ const Post = ({ post, isHome }: PostProps) => {
       <div className="pr-6 flex justify-between">
         <Vote votes={post.votes} postId={post.id}/>
         <div className="w-0 flex-1 py-4 pl-3">
-          <div className="max-h-40 mt-1 text-xs text-gray-500 p">
+        <div className="max-h-40 mt-1 text-xs text-gray-500">
             {isHome ? (
               <NavLink
                 to={"/r/" + post.subreddit.name}

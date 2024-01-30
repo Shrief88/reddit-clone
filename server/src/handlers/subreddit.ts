@@ -7,7 +7,11 @@ import createHttpError from "http-errors";
 // @access Private
 export const getSubreddits: RequestHandler = async (req, res, next) => {
   try {
-    const subreddits = await prisma.subreddit.findMany();
+    const subreddits = await prisma.subreddit.findMany({
+      include: {
+        subscribers: true,
+      },
+    });
     res.status(200).json({ data: subreddits });
   } catch (err) {
     next(err);
