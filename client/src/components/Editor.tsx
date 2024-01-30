@@ -46,7 +46,6 @@ const Editor = (props: EditorProps) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
       return res.data.data as IPost;
     },
     onSuccess: (data: IPost) => {

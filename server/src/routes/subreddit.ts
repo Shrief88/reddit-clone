@@ -26,7 +26,7 @@ subredditRouter.delete(
 );
 
 subredditRouter.use(
-  "/:id/posts",
+  "/:subredditId/posts",
   subredditValidator.getSubredditPosts,
   postRouter,
 );

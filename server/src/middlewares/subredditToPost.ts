@@ -6,9 +6,9 @@ export const setFilterObject = (
   next: NextFunction,
 ): void => {
   let filterObject = {};
-  if (req.params.subredditId) {
+  if (req.query.subredditId) {
     filterObject = {
-      subredditId: req.params.productId,
+      subredditId: req.query.subredditId,
     };
   }
   req.body.filterObject = filterObject;

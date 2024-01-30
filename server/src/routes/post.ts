@@ -13,12 +13,9 @@ postRouter.use(authHandler.protectRoute);
 
 postRouter.get("/", setFilterObject, postHandler.getPosts);
 
-postRouter.get(
-  "/:id",
-  postValidator.getPost,
-  authHandler.protectRoute,
-  postHandler.getPost,
-);
+postRouter.get("/subreddits/me", postHandler.getUserSubredditPosts);
+
+postRouter.get("/:id", postValidator.getPost, postHandler.getPost);
 
 postRouter.post(
   "/",

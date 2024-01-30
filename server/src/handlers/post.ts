@@ -25,6 +25,67 @@ export const getPosts: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getUserPosts: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const posts = await prisma.post.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        subreddit: true,
+        comments: true,
+        votes: true,
+      },
+      where: {
+        authorId: req.user.id,
+      },
+    });
+    res.status(200).json({ data: posts });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserSubredditPosts: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const userSubreddits = await prisma.subscription.findMany({
+      where: {
+        userId: req.user.id,
+      },
+    });
+
+    const posts = await prisma.post.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        author: true,
+        subreddit: true,
+        comments: true,
+        votes: true,
+      },
+      where: {
+        subredditId: { in: userSubreddits.map((sub) => sub.subredditId) },
+      },
+    });
+    res.status(200).json({ data: posts });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 export const getPost: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -49,19 +110,18 @@ export const createPost: RequestHandler = async (
 ) => {
   try {
     req.body.authorId = req.user.id;
-    const post = prisma.post.create({
+    const post = await prisma.post.create({
       data: req.body,
     });
 
-    const vote = prisma.vote.create({
+    await prisma.vote.create({
       data: {
         userId: req.user.id,
-        postId: (await post).id,
+        postId: post.id,
         type: "upvote",
       },
     });
 
-    await prisma.$transaction([post, vote]);
     res.status(201).json({ data: post });
   } catch (err) {
     next(err);

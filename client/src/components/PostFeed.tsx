@@ -6,9 +6,8 @@ import { useEffect, useRef } from "react";
 import Post from "./Post";
 
 interface PostFeedProps {
-  posts: IExtendedPost[];
-  subredditName?: string;
   subredditId?: string;
+  isHome: boolean;
 }
 
 const PostFeed = (props: PostFeedProps) => {
@@ -19,6 +18,7 @@ const PostFeed = (props: PostFeedProps) => {
     threshold: 1,
   });
 
+
   const getPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
       `/post?limit=${3}&page=${page}&subredditId=${props.subredditId}`
@@ -26,13 +26,23 @@ const PostFeed = (props: PostFeedProps) => {
     return res.data.data as IExtendedPost[];
   };
 
+  const getSubredditPosts = async (page: number) => {
+    const res = await axiosClientAuth.get(
+      `/post/subreddits/me?limit=${3}&page=${page}`
+    );
+    return res.data.data as IExtendedPost[];
+  };
+
   const { data, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", props.subredditId || "home"],
     queryFn: async ({
       pageParam = 1,
     }: {
       pageParam: number | undefined;
     }): Promise<IExtendedPost[]> => {
+      if (props.isHome) {
+        return await getSubredditPosts(pageParam);
+      }
       return await getPosts(pageParam);
     },
     getNextPageParam: (lastPage, allPages) => {
@@ -48,20 +58,20 @@ const PostFeed = (props: PostFeedProps) => {
   }, [entry, fetchNextPage]);
 
   const posts: IExtendedPost[] =
-    data?.pages.flatMap((page) => page) ?? props.posts;
+    data?.pages.flatMap((page) => page) || [];
 
   return (
     <ul className="flex flex-col space-y-6">
-      {props.posts &&
+      {posts.length > 0 &&
         posts.map((post, index) => {
           if (index === posts.length - 1) {
             return (
               <div key={post.id} ref={ref}>
-                <Post post={post} isHome={false} />
+                <Post post={post} isHome={props.isHome} />
               </div>
             );
           } else {
-            return <Post key={post.id} post={post} isHome={false} />;
+            return <Post key={post.id} post={post} isHome={props.isHome} />;
           }
         })}
     </ul>

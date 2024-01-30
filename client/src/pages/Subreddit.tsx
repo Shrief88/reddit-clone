@@ -52,7 +52,6 @@ const Subreddit = () => {
     enabled: !!subreddits,
   });
 
-
   const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],
     mutationFn: async (id: string) => {
@@ -154,8 +153,8 @@ const Subreddit = () => {
             <div className="md:col-span-2 flex flex-col gap-8">
               <MinicreatePost />
               <PostFeed
-                posts={subreddit?.posts as IExtendedPost[]}
                 subredditId={subreddit?.id as string}
+                isHome={false}
               />
             </div>
           </div>
