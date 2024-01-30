@@ -34,8 +34,9 @@ const Subreddit = () => {
   const { subreddits, isLoading } = useSubreddits();
   useEffect(() => {
     if (!isLoading) {
-      setSubreddit(subreddits?.find((sub) => sub.name === subredditName));
-      setMembersCount(subreddit?.subscribers.length || 0);
+      const sub = subreddits?.find((sub) => sub.name === subredditName);
+      setSubreddit(sub);
+      setMembersCount(sub?.subscribers.length || 0);
     }
   },[isLoading,subreddits,subredditName]);
 

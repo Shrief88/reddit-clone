@@ -22,8 +22,8 @@ export const createCommunitySchema = z.object({
     .min(30, {
       message: "Community description must be at least 30 characters long",
     })
-    .max(200, {
-      message: "Community description must be less than 200 characters long",
+    .max(300, {
+      message: "Community description must be less than 300 characters long",
     }),
 });
 

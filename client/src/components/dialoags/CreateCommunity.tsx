@@ -41,17 +41,16 @@ const CreateCommunity = () => {
   const { mutate, isPending } = useMutation({
     mutationKey: ["createCommunity"],
     mutationFn: async (newCommunity: TCreateCommunitySchema) => {
-      console.log(newCommunity);
       toast.loading("Creating community...");
       const response = await axiosClientAuth.post("/subreddit", newCommunity);
       return response.data.data as ISubreddit;
     },
     onSuccess: (data) => {
       toast.dismiss();
-      queryClient.invalidateQueries({
-        queryKey: ["subreddits"],
-        refetchType: "all",
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["subreddits"],
+      //   refetchType: "all",
+      // });
       navigator(`/r/${data.name}`, { replace: true });
     },
     onError: (error: responseError) => {

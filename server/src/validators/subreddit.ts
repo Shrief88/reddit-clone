@@ -46,7 +46,7 @@ export const createSubreddit = [
     .trim()
     .isLength({ min: 30 })
     .withMessage("Description must be at least 30 characters long")
-    .isLength({ max: 200 })
+    .isLength({ max: 300 })
     .withMessage("Description must be at most 200 characters long"),
   validateMiddleware,
 ];
