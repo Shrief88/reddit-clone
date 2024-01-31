@@ -1,14 +1,16 @@
-import ISubreddit from "@/models/subreddit";
-import { CircleUserRound, Loader2 } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { Button, buttonVariants } from "./ui/button";
-import useAuth from "@/hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
-import responseError from "@/models/error";
+import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+
+import { CircleUserRound, Loader2 } from "lucide-react";
+import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
+
+import ISubreddit from "@/models/subreddit";
+import responseError from "@/models/error";
 import useToken from "@/hooks/useToken";
+import useAuth from "@/hooks/useAuth";
 
 interface SubriddetInfoProps {
   subreddit: ISubreddit | undefined;

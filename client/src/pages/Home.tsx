@@ -3,11 +3,13 @@ import { NavLink } from "react-router-dom";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
+
+import { IExtendedPost } from "@/models/post";
 import CreateCommunity from "@/components/dialoags/CreateCommunity";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import useToken from "@/hooks/useToken";
-import { IExtendedPost } from "@/models/post";
+
 
 const Home = () => {
   const { axiosClientAuth } = useToken();

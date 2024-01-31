@@ -1,7 +1,8 @@
-import { IExtendedPost } from "@/models/post";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
+
+import { IExtendedPost } from "@/models/post";
 import Post from "./Post";
 
 interface PostFeedProps {

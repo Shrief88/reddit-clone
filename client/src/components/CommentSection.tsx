@@ -1,5 +1,6 @@
-import { IComment } from "@/models/comment";
 import { Separator } from "./ui/separator";
+
+import { IComment } from "@/models/comment";
 import { VoteType } from "@/models/vote";
 import PostComment from "./PostComment";
 

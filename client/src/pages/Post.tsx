@@ -1,16 +1,18 @@
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import useToken from "@/hooks/useToken";
-import { IExtendedPost } from "@/models/post";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Vote from "@/components/Vote";
-import { formatTimeToNow } from "@/lib/utils";
+
+import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { MessageSquare } from "lucide-react";
+
 import SubriddetInfo from "@/components/SubriddetInfo";
-import { useEffect, useState } from "react";
-import useSubreddits from "@/hooks/useSubreddits";
-import ISubreddit from "@/models/subreddit";
 import CommentSection from "@/components/CommentSection";
+import Vote from "@/components/Vote";
+import useSubreddits from "@/hooks/useSubreddits";
+import useToken from "@/hooks/useToken";
+import ISubreddit from "@/models/subreddit";
+import { IExtendedPost } from "@/models/post";
+import { formatTimeToNow } from "@/lib/utils";
 
 const Post = () => {
   const { id } = useParams();

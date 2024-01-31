@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import googleIcon from "../assets/google.svg";
 import { Button } from "@/components/ui/button";
-
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 
 const Login = () => {

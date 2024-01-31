@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import MinicreatePost from "@/components/MinicreatePost";
-import useSubreddits from "@/hooks/useSubreddits";
 import PostFeed from "@/components/PostFeed";
-import ISubreddit from "@/models/subreddit";
 import SubriddetInfo from "@/components/SubriddetInfo";
+import useSubreddits from "@/hooks/useSubreddits";
 import useToken from "@/hooks/useToken";
+import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
 
 const Subreddit = () => {

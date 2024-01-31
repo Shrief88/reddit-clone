@@ -1,10 +1,12 @@
-import { IPostVote } from "@/models/vote";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
-import { VoteType } from "@/models/vote";
-import useAuth from "@/hooks/useAuth";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+import { IPostVote } from "@/models/vote";
+import { VoteType } from "@/models/vote";
+import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
 
 interface VoteProps {

@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { axiosClient } from "@/api/axios";
 import ISubreddit from "@/models/subreddit";
-import { useQuery } from "@tanstack/react-query";
 
 const useSubreddits = () => {
   const { data: subreddits, isLoading } = useQuery({
