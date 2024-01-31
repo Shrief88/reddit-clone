@@ -4,6 +4,7 @@ import UserAvatar from "./UserAvatar";
 
 import { IComment } from "@/models/comment";
 import { formatTimeToNow } from "@/lib/utils";
+import CommentVote from "./CommentVote";
 
 interface PostCommentProps {
   comment: IComment;
@@ -30,6 +31,9 @@ const PostComment = (props: PostCommentProps) => {
         </div>
       </div>
       <p className="text-sm text-zinc-900 mt-2">{props.comment.text}</p>
+      <div className="flex gap-2 items-center">
+        <CommentVote commentId={props.comment.id} votes={props.comment.votes} />
+      </div>
     </div>
   );
 };

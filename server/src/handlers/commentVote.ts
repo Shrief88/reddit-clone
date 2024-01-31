@@ -27,7 +27,7 @@ export const deleteVote: RequestHandler = async (
   }
 };
 
-// @route POST /api/v1/vote/:commentId/upvote
+// @route POST /api/v1/commentVote/:commentId/upvote
 export const addUpVote: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -76,13 +76,14 @@ export const addUpVote: RequestHandler = async (
   }
 };
 
-// @route POST /api/v1/vote/:commentId/downvote
+// @route POST /api/v1/commentVote/:commentId/downvote
 export const addDownVote: RequestHandler = async (
   req: CustomRequest,
   res,
   next,
 ) => {
   try {
+    console.log("here")
     const userId = req.user.id;
     const commentId = req.params.commentId;
 
