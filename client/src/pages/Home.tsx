@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 
 import { IExtendedPost } from "@/models/post";
@@ -9,14 +10,31 @@ import CreateCommunity from "@/components/dialoags/CreateCommunity";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import useToken from "@/hooks/useToken";
+import { cn } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
 
+enum DisplayPostModes {
+  FOLLOWING = "following",
+  ALL = "all",
+}
 
 const Home = () => {
   const { axiosClientAuth } = useToken();
+  const { user } = useAuth();
+
+  const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
+    user?.subreddits.length ? DisplayPostModes.FOLLOWING : DisplayPostModes.ALL
+  );
+
   const getSubredditPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
       `/post/subreddits/me?limit=${3}&page=${page}`
     );
+    return res.data.data as IExtendedPost[];
+  };
+
+  const getAllPosts = async (page: number) => {
+    const res = await axiosClientAuth.get(`/post?limit=${3}&page=${page}`);
     return res.data.data as IExtendedPost[];
   };
 
@@ -50,11 +68,39 @@ const Home = () => {
           </div>
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            <PostFeed
-              isHome={true}
-              queryFn={getSubredditPosts}
-              queryKey="home"
-            />
+            <div className="grid grid-cols-2 justify-center border-b border-b-gray-200 -mb-6">
+              <Button
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "text-muted-foreground text-md bg-slate",
+                  displayMode === "following" &&
+                    "text-blue-900 border-b border-blue-900 rounded-none"
+                )}
+                onClick={() => setDisplayMode(DisplayPostModes.FOLLOWING)}
+              >
+                Following
+              </Button>
+              <Button
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "text-muted-foreground text-md bg-slate",
+                  displayMode === "all" &&
+                    "text-blue-900 border-b border-blue-900 rounded-none"
+                )}
+                onClick={() => setDisplayMode(DisplayPostModes.ALL)}
+              >
+                For you
+              </Button>
+            </div>
+            {displayMode === DisplayPostModes.FOLLOWING ? (
+              <PostFeed
+                isHome={true}
+                queryFn={getSubredditPosts}
+                queryKey="home"
+              />
+            ) : (
+              <PostFeed isHome={true} queryFn={getAllPosts} queryKey="forYou" />
+            )}
           </div>
         </div>
       </MaxWidthWrapper>
