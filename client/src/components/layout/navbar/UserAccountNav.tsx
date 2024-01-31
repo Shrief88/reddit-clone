@@ -33,8 +33,8 @@ const UserAccountNav = (props: UserAccountNavProps) => {
         asChild
         className="overflow-visible font-semiboldbold text-md"
       >
-        <Button variant="ghost" size="lg">
-          My Account
+        <Button variant="ghost" size="sm">
+          <UserAvatar username={user?.name} image={user?.image} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
