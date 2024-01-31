@@ -6,8 +6,18 @@ import { HomeIcon } from "lucide-react";
 import CreateCommunity from "@/components/dialoags/CreateCommunity";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
+import useToken from "@/hooks/useToken";
+import { IExtendedPost } from "@/models/post";
 
 const Home = () => {
+  const { axiosClientAuth } = useToken();
+  const getSubredditPosts = async (page: number) => {
+    const res = await axiosClientAuth.get(
+      `/post/subreddits/me?limit=${3}&page=${page}`
+    );
+    return res.data.data as IExtendedPost[];
+  };
+
   return (
     <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-10">
@@ -38,7 +48,11 @@ const Home = () => {
           </div>
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            <PostFeed isHome={true} />
+            <PostFeed
+              isHome={true}
+              queryFn={getSubredditPosts}
+              queryKey="home"
+            />
           </div>
         </div>
       </MaxWidthWrapper>

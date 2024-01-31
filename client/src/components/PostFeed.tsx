@@ -1,4 +1,3 @@
-import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -6,45 +5,26 @@ import { useEffect, useRef } from "react";
 import Post from "./Post";
 
 interface PostFeedProps {
-  subredditId?: string;
   isHome: boolean;
-  // queryKey : string;
-  // queryFn : (page : number) => Promise<IExtendedPost[]>
+  queryKey: string;
+  queryFn: (page: number) => Promise<IExtendedPost[]>;
 }
 
 const PostFeed = (props: PostFeedProps) => {
-  const { axiosClientAuth } = useToken();
   const lastPostRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
 
-  const getPosts = async (page: number) => {
-    const res = await axiosClientAuth.get(
-      `/post?limit=${3}&page=${page}&subredditId=${props.subredditId}`
-    );
-    return res.data.data as IExtendedPost[];
-  };
-
-  const getSubredditPosts = async (page: number) => {
-    const res = await axiosClientAuth.get(
-      `/post/subreddits/me?limit=${3}&page=${page}`
-    );
-    return res.data.data as IExtendedPost[];
-  };
-
   const { data, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["posts", props.subredditId || "home"],
+    queryKey: ["posts", props.queryKey],
     queryFn: async ({
       pageParam = 1,
     }: {
       pageParam: number | undefined;
     }): Promise<IExtendedPost[]> => {
-      if (props.isHome) {
-        return await getSubredditPosts(pageParam);
-      }
-      return await getPosts(pageParam);
+      return await props.queryFn(pageParam);
     },
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length ? allPages.length + 1 : undefined;

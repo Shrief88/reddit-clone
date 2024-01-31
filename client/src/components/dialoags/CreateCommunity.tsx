@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,6 @@ import ISubreddit from "@/models/subreddit";
 
 const CreateCommunity = () => {
   const { axiosClientAuth } = useToken();
-  const queryClient = useQueryClient();
   const navigator = useNavigate();
   const {
     register,
@@ -47,10 +46,6 @@ const CreateCommunity = () => {
     },
     onSuccess: (data) => {
       toast.dismiss();
-      // queryClient.invalidateQueries({
-      //   queryKey: ["subreddits"],
-      //   refetchType: "all",
-      // });
       navigator(`/r/${data.name}`, { replace: true });
     },
     onError: (error: responseError) => {
