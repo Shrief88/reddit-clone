@@ -8,13 +8,8 @@ import passport from "passport";
 import env from "./config/validateEnv";
 import allowedOrgins from "./config/allowedOrgins";
 import errorMiddleware from "./middlewares/errorMiddleware";
-import authRouter from "./routes/auth";
-import userRouter from "./routes/user";
 import "./config/passport";
-import subredditRouter from "./routes/subreddit";
-import subscriptionRouter from "./routes/subsription";
-import postRouter from "./routes/post";
-import voteRouter from "./routes/vote";
+import mountRoutes from "./routes";
 
 const app = express();
 
@@ -45,12 +40,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/subreddit", subredditRouter);
-app.use("/api/v1/subscription", subscriptionRouter);
-app.use("/api/v1/post", postRouter);
-app.use("/api/v1/vote", voteRouter);
+mountRoutes(app);
 
 app.use(errorMiddleware);
 
