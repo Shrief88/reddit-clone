@@ -96,7 +96,7 @@ export const getPost: RequestHandler = async (req, res, next) => {
       include: {
         author: true,
         subreddit: true,
-        comments: true,
+        comments: { include: { author: true, votes: true } },
         votes: true,
       },
     });

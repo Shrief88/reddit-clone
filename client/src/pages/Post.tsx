@@ -77,7 +77,7 @@ const Post = () => {
                   <span>Comments</span>
                 </div>
 
-                <CommentSection comments={post.comments} />
+                <CommentSection comments={post.comments} postId={post.id}/>
               </div>
             </div>
           </div>

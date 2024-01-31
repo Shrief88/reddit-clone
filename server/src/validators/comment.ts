@@ -12,7 +12,7 @@ export const createComment = [
   body("text")
     .notEmpty()
     .withMessage("Text is required")
-    .isLength({ max: 1000 })
+    .isLength({ max: 2000 })
     .withMessage("Text must be at most 1000 characters long"),
   validateMiddleware,
 ];
