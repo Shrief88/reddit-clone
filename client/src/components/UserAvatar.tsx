@@ -1,15 +1,17 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import useAuth from "@/hooks/useAuth";
 import { formatAvatarFallback } from "@/lib/utils";
 
-const UserAvatar = () => {
-  const { user } = useAuth();
+interface UserAvatarProps {
+  username: string | undefined;
+  image: string | undefined;
+}
 
+const UserAvatar = (props: UserAvatarProps) => {
   return (
     <Avatar className="h-8 w-8">
-      <AvatarImage src={user?.image} />
+      <AvatarImage src={props.image} />
       <AvatarFallback>
-        {formatAvatarFallback(user?.name as string)}
+        {formatAvatarFallback(props.username as string)}
       </AvatarFallback>
     </Avatar>
   );

@@ -12,6 +12,7 @@ import {
 import { LogOut, Settings, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
 import UserAvatar from "@/components/UserAvatar";
+import useAuth from "@/hooks/useAuth";
 
 interface UserAccountNavProps {
   username: string;
@@ -19,6 +20,7 @@ interface UserAccountNavProps {
 }
 
 const UserAccountNav = (props: UserAccountNavProps) => {
+  const { user } = useAuth();
   const [, , removeCookie] = useCookies(["accessToken"]);
   const logout = () => {
     removeCookie("accessToken");
@@ -37,7 +39,7 @@ const UserAccountNav = (props: UserAccountNavProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex items-center gap-2">
-          <UserAvatar />
+          <UserAvatar username={user?.name} image={user?.image} />
           {props.username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

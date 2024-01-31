@@ -4,9 +4,11 @@ import { Input } from "./ui/input";
 
 import UserAvatar from "./UserAvatar";
 import { useNavigate, useParams } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
 
 const MinicreatePost = () => {
   const navigator = useNavigate();
+  const { user } = useAuth();
   let { subredditName } = useParams();
   if (subredditName === undefined) {
     subredditName = "";
@@ -16,7 +18,7 @@ const MinicreatePost = () => {
     <div className="overflow-hidden rounded-md bg-white shadow">
       <div className="h-full px-6 py-4 justify-between grid grid-col-1 grid-cols-9 gap-y-3">
         <div className="col-span-8 flex items-center gap-3">
-          <UserAvatar />
+          <UserAvatar username={user?.name} image={user?.image} />
           <Input
             readOnly
             placeholder="Create Post"
