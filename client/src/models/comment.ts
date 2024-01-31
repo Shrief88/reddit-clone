@@ -9,4 +9,5 @@ export interface IComment {
   author: IUser;
   replyToId: string | null;
   votes: ICommentVote[];
+  postId: string;
 }

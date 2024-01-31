@@ -40,8 +40,9 @@ export const createComment: RequestHandler = async (
         authorId: userId,
         postId,
         text: req.body.text,
+        replyToId: req.body.replyToId || null,
       },
-    });
+    }); 
 
     await prisma.commentVote.create({
       data: {

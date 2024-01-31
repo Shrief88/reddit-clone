@@ -7,7 +7,7 @@ import {
   createCommentSchema,
   TCreateCommentSchema,
 } from "@/validators/createCommentSchema";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useToken from "@/hooks/useToken";
@@ -15,8 +15,9 @@ import { IComment } from "@/models/comment";
 import responseError from "@/models/error";
 
 interface CreateCommentProps {
-  username: string;
+  username?: string;
   postId: string;
+  replyToId?: string;
 }
 
 const CreateComment = (props: CreateCommentProps) => {
@@ -35,6 +36,9 @@ const CreateComment = (props: CreateCommentProps) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ["createComment"],
     mutationFn: async (newComment: TCreateCommentSchema) => {
+      if (props.replyToId) {
+        newComment.replyToId = props.replyToId;
+      }
       toast.loading("Creating comment...");
       const res = await axiosClientAuth.post(
         `/comment/${props.postId}`,
@@ -68,13 +72,15 @@ const CreateComment = (props: CreateCommentProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <p className="text-sm text-gray-600 mb-2">
-          Comment as u/
-          <span className="text-blue-800">{props.username}</span>{" "}
-        </p>
+        {props.username && (
+          <p className="text-sm text-gray-600 mb-2">
+            Comment as u/
+            <span className="text-blue-800">{props.username}</span>{" "}
+          </p>
+        )}
         <TextareaAutosize
           {...register("text")}
-          placeholder="Write a comment..."
+          placeholder={props.replyToId ? "Write a reply ..." : "Write a Comment ..."}
           className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border boreder-gray p-3 "
         />
         {errors.text && (

@@ -83,7 +83,7 @@ export const addDownVote: RequestHandler = async (
   next,
 ) => {
   try {
-    console.log("here")
+    console.log("here");
     const userId = req.user.id;
     const commentId = req.params.commentId;
 

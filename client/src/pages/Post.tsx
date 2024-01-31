@@ -6,7 +6,7 @@ import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { MessageSquare } from "lucide-react";
 
 import SubriddetInfo from "@/components/SubriddetInfo";
-import CommentSection from "@/components/CommentSection";
+import CommentSection from "@/components/comment/CommentSection";
 import Vote from "@/components/Vote";
 import useSubreddits from "@/hooks/useSubreddits";
 import useToken from "@/hooks/useToken";
@@ -71,13 +71,13 @@ const Post = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6 flex gap-2">
+                <div className="text-sm p-2 sm:px-6 flex gap-2 border border-t-gray-200">
                   <MessageSquare />
                   {post.comments.length}
                   <span>Comments</span>
                 </div>
 
-                <CommentSection comments={post.comments} postId={post.id}/>
+                <CommentSection comments={post.comments} postId={post.id} />
               </div>
             </div>
           </div>
