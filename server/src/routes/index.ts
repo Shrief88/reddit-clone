@@ -7,6 +7,7 @@ import subredditRouter from "./subreddit";
 import subscriptionRouter from "./subsription";
 import userRouter from "./user";
 import voteRouter from "./vote";
+import commentVoteRouter from "./commentVote";
 
 const mountRoutes = (app: Express): void => {
   app.use("/api/v1/auth", authRouter);
@@ -16,6 +17,7 @@ const mountRoutes = (app: Express): void => {
   app.use("/api/v1/post", postRouter);
   app.use("/api/v1/vote", voteRouter);
   app.use("/api/v1/comment", commentRouter);
+  app.use("/api/v1/commentVote", commentVoteRouter);
 };
 
 export default mountRoutes;
