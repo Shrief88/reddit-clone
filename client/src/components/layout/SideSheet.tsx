@@ -20,7 +20,7 @@ export function SideSheet() {
 
   useEffect(() => {
     if (user && subreddits) {
-      const divs = user?.subreddits.map((sub) => {
+      const divs = user.subreddits.map((sub) => {
         const subredditId = sub.subredditId;
         const subreddit = subreddits?.find((sub) => sub.id === subredditId);
         return (
@@ -69,14 +69,18 @@ export function SideSheet() {
         <SheetHeader>
           <SheetTitle>Subreddits</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col items-start">
-          <p className="text-sm text-muted-foreground">Your subreddits</p>
-          {userSubDiv}
-        </div>
+        <div className="mt-4">
+          {userSubDiv && userSubDiv.length > 0 && (
+            <div className="flex flex-col items-start">
+              <p className="text-sm text-muted-foreground">Your subreddits</p>
+              {userSubDiv}
+            </div>
+          )}
 
-        <div className="flex flex-col items-start">
-          <p className="text-sm text-muted-foreground">Other Subreddits</p>
-          {otherSubDiv}
+          <div className="flex flex-col items-start">
+            <p className="text-sm text-muted-foreground">Other Subreddits</p>
+            {otherSubDiv}
+          </div>
         </div>
       </SheetContent>
     </Sheet>
