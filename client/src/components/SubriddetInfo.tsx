@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -25,6 +25,7 @@ enum subscriptionState {
 const SubriddetInfo = (props: SubriddetInfoProps) => {
   const { user } = useAuth();
   const { axiosClientAuth } = useToken();
+  const queryClient = useQueryClient();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);
@@ -49,6 +50,9 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
       await axiosClientAuth.post(`/subscription/${id}/join`);
       setSubscribeState(subscriptionState.SUBSCRIBED);
       setMembersCount((prev) => prev + 1);
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
     onError: (error: responseError) => {
       if (error.response.status === 409) {
@@ -67,6 +71,9 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
       await axiosClientAuth.delete(`/subscription/${id}/leave`);
       setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
       setMembersCount((prev) => prev - 1);
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
     onError: (error: responseError) => {
       if (error.response.status === 400) {
