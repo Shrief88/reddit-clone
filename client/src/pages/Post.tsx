@@ -10,6 +10,7 @@ import SubriddetInfo from "@/components/SubriddetInfo";
 import { useEffect, useState } from "react";
 import useSubreddits from "@/hooks/useSubreddits";
 import ISubreddit from "@/models/subreddit";
+import CommentSection from "@/components/CommentSection";
 
 const Post = () => {
   const { id } = useParams();
@@ -73,6 +74,8 @@ const Post = () => {
                   {post.comments.length}
                   <span>Comments</span>
                 </div>
+
+                <CommentSection comments={post.comments} />
               </div>
             </div>
           </div>

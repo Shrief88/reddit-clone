@@ -108,6 +108,7 @@ model Vote {
 }
 
 model CommentVote {
+  type VoteType
   user User @relation(fields: [userId], references: [id])
   userId String
   comment Comment @relation(fields: [commentId], references: [id])

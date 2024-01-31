@@ -3,8 +3,14 @@ export enum VoteType {
   DOWNVOTE = "downVote",
 }
 
-export interface IVote {
+export interface IPostVote {
   userId: string;
   postId: string;
+  type: VoteType;
+}
+
+export interface ICommentVote {
+  userId: string;
+  commentId: string;
   type: VoteType;
 }

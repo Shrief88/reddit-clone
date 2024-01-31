@@ -1,4 +1,4 @@
-import { IVote } from "@/models/vote";
+import { IPostVote } from "@/models/vote";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { VoteType } from "@/models/vote";
 import useAuth from "@/hooks/useAuth";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 interface VoteProps {
-  votes: IVote[];
+  votes: IPostVote[];
   postId: string;
 }
 

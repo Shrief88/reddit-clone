@@ -47,7 +47,7 @@ export function SideSheet() {
         return (
           <NavLink
             key={sub.id}
-            to={`/${sub.name}`}
+            to={`r/${sub.name}`}
             className={buttonVariants({ variant: "link" })}
           >
             r/{sub?.name}
