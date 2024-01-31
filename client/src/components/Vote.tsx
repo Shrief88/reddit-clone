@@ -5,6 +5,7 @@ import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import useToken from "@/hooks/useToken";
 
 interface VoteProps {
   votes: IPostVote[];
@@ -12,7 +13,8 @@ interface VoteProps {
 }
 
 const Vote = (props: VoteProps) => {
-  const { user, axiosClientAuth } = useAuth();
+  const { user } = useAuth();
+  const { axiosClientAuth } = useToken();
   const [isUpvoted, setIsUpVoted] = useState(false);
   const [isDownVoted, setIsDownVoted] = useState(false);
   const [votesCount, setVotesCount] = useState(0);

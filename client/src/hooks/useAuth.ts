@@ -1,30 +1,26 @@
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { axiosClient, axiosClientWithToken } from "@/api/axios";
 
 import IUser from "@/models/user";
+import useToken from "./useToken";
 
 const useAuth = () => {
   const [cookies] = useCookies(["accessToken"]);
   const accessToken = cookies["accessToken"];
+  const { axiosClientAuth } = useToken();
+
   const { data: user, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       if (!accessToken) {
         return null;
       }
-      const response = await axiosClient.get("/users/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axiosClientAuth.get("/users/me");
       return response.data.user as IUser;
     },
   });
 
-  const axiosClientAuth = axiosClientWithToken(accessToken);
-
-  return { user, isLoading, axiosClientAuth };
+  return { user, isLoading };
 };
 
 export default useAuth;

@@ -8,6 +8,7 @@ import responseError from "@/models/error";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import useToken from "@/hooks/useToken";
 
 interface SubriddetInfoProps {
   subreddit: ISubreddit | undefined;
@@ -20,7 +21,8 @@ enum subscriptionState {
 }
 
 const SubriddetInfo = (props: SubriddetInfoProps) => {
-  const { user, axiosClientAuth } = useAuth();
+  const { user } = useAuth();
+  const { axiosClientAuth } = useToken();
   const [subscribeState, setSubscribeState] =
     useState<subscriptionState | null>(null);
   const [membersCount, setMembersCount] = useState(0);

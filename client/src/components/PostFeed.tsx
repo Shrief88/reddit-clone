@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/useAuth";
+import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -8,16 +8,17 @@ import Post from "./Post";
 interface PostFeedProps {
   subredditId?: string;
   isHome: boolean;
+  // queryKey : string;
+  // queryFn : (page : number) => Promise<IExtendedPost[]>
 }
 
 const PostFeed = (props: PostFeedProps) => {
-  const { axiosClientAuth } = useAuth();
+  const { axiosClientAuth } = useToken();
   const lastPostRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
-
 
   const getPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
@@ -57,8 +58,7 @@ const PostFeed = (props: PostFeedProps) => {
     }
   }, [entry, fetchNextPage]);
 
-  const posts: IExtendedPost[] =
-    data?.pages.flatMap((page) => page) || [];
+  const posts: IExtendedPost[] = data?.pages.flatMap((page) => page) || [];
 
   return (
     <ul className="flex flex-col space-y-6">

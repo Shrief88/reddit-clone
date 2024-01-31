@@ -13,7 +13,7 @@ import {
   createPostSchema,
   TCreatePostSchema,
 } from "@/validators/createPostSchema";
-import useAuth from "@/hooks/useAuth";
+import useToken from "@/hooks/useToken";
 import { IPost } from "@/models/post";
 import responseError from "@/models/error";
 import useSubreddits from "@/hooks/useSubreddits";
@@ -23,7 +23,7 @@ interface EditorProps {
 }
 
 const Editor = (props: EditorProps) => {
-  const { axiosClientAuth } = useAuth();
+  const { axiosClientAuth } = useToken();
   const [selectedFile, setSelectedFile] = useState<null | File>(null);
   const navigator = useNavigate();
   const { subreddits } = useSubreddits();

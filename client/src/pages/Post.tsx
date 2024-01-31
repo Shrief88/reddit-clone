@@ -1,5 +1,5 @@
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import useAuth from "@/hooks/useAuth";
+import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ import CommentSection from "@/components/CommentSection";
 
 const Post = () => {
   const { id } = useParams();
-  const { axiosClientAuth } = useAuth();
+  const { axiosClientAuth } = useToken();
 
   const { data: post, isLoading: postLoading } = useQuery({
     queryKey: ["post", id],

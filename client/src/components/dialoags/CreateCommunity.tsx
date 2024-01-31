@@ -22,12 +22,12 @@ import {
   createCommunitySchema,
   TCreateCommunitySchema,
 } from "@/validators/createCommunitySchema";
-import useAuth from "@/hooks/useAuth";
+import useToken from "@/hooks/useToken";
 import responseError from "@/models/error";
 import ISubreddit from "@/models/subreddit";
 
 const CreateCommunity = () => {
-  const { axiosClientAuth } = useAuth();
+  const { axiosClientAuth } = useToken();
   const queryClient = useQueryClient();
   const navigator = useNavigate();
   const {
