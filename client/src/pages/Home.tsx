@@ -6,7 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 
 import { IExtendedPost } from "@/models/post";
-import CreateCommunity from "@/components/dialoags/CreateCommunity";
+import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import useToken from "@/hooks/useToken";
@@ -57,7 +57,7 @@ const Home = () => {
                   your favorite communities.
                 </p>
               </div>
-              <CreateCommunity />
+              <CreateSubreddit />
               <NavLink
                 className={buttonVariants({ variant: "secondary" })}
                 to={"/post/create/r/"}

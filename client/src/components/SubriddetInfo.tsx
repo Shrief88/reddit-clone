@@ -11,6 +11,7 @@ import ISubreddit from "@/models/subreddit";
 import responseError from "@/models/error";
 import useToken from "@/hooks/useToken";
 import useAuth from "@/hooks/useAuth";
+import UpdateSubreddit from "./dialoags/updateSubreddit";
 
 interface SubriddetInfoProps {
   subreddit: ISubreddit | undefined;
@@ -119,6 +120,11 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
             You are the owner of this sub
           </p>
         )}
+
+        {subscribeState === subscriptionState.ONWER && (
+          <UpdateSubreddit subredditId={props.subreddit?.id as string} />
+        )}
+
         <NavLink
           to={"/post/create/r/" + props.subreddit?.name}
           className={buttonVariants({ variant: "secondary" })}

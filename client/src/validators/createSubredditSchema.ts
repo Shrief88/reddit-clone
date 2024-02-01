@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const regexp = /^\S*$/; // a string consisting only of non-whitespaces
 
-export const createCommunitySchema = z.object({
+export const createSubredditSchema = z.object({
   name: z
     .string()
     .trim()
@@ -27,4 +27,4 @@ export const createCommunitySchema = z.object({
     }),
 });
 
-export type TCreateCommunitySchema = z.infer<typeof createCommunitySchema>;
+export type TcreateSubredditSchema = z.infer<typeof createSubredditSchema>;

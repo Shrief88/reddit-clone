@@ -19,29 +19,29 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 import {
-  createCommunitySchema,
-  TCreateCommunitySchema,
-} from "@/validators/createCommunitySchema";
+  createSubredditSchema,
+  TcreateSubredditSchema,
+} from "@/validators/createSubredditSchema";
 import useToken from "@/hooks/useToken";
 import responseError from "@/models/error";
 import ISubreddit from "@/models/subreddit";
 
-const CreateCommunity = () => {
+const CreateSubreddit = () => {
   const { axiosClientAuth } = useToken();
   const navigator = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TCreateCommunitySchema>({
-    resolver: zodResolver(createCommunitySchema),
+  } = useForm<TcreateSubredditSchema>({
+    resolver: zodResolver(createSubredditSchema),
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ["createCommunity"],
-    mutationFn: async (newCommunity: TCreateCommunitySchema) => {
-      toast.loading("Creating community...");
-      const response = await axiosClientAuth.post("/subreddit", newCommunity);
+    mutationKey: ["createSubreddit"],
+    mutationFn: async (newSubreddit: TcreateSubredditSchema) => {
+      toast.loading("Creating Subreddit...");
+      const response = await axiosClientAuth.post("/subreddit", newSubreddit);
       return response.data.data as ISubreddit;
     },
     onSuccess: (data) => {
@@ -51,37 +51,37 @@ const CreateCommunity = () => {
     onError: (error: responseError) => {
       toast.dismiss();
       if (error.response.status === 409) {
-        toast.error("Community already exists");
+        toast.error("Subreddit already exists");
       } else {
-        toast.error("Error creating community: please try again");
+        toast.error("Error creating Subreddit: please try again");
       }
     },
   });
 
-  const onSubmit = async (data: TCreateCommunitySchema) => {
+  const onSubmit = async (data: TcreateSubredditSchema) => {
     mutate(data);
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create Community</Button>
+        <Button>Create Subreddit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Community</DialogTitle>
+          <DialogTitle>Create Subreddit</DialogTitle>
           <DialogDescription>
-            Community names including capitalization cannot be changed.
+            Subreddit names including capitalization cannot be changed.
           </DialogDescription>
         </DialogHeader>
         <div>
           <p className="text-sm text-muted-foreground pb-2">
-            Community name must start with r/
+            Subreddit name must start with r/
           </p>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
-            id="create-community-form"
+            id="create-Subreddit-form"
           >
             <div className="flex gap-4 items-center">
               <Label htmlFor="name">Name</Label>
@@ -124,9 +124,9 @@ const CreateCommunity = () => {
           <Button
             disabled={isPending}
             type="submit"
-            form="create-community-form"
+            form="create-Subreddit-form"
           >
-            Create Community
+            Create Subreddit
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -134,4 +134,4 @@ const CreateCommunity = () => {
   );
 };
 
-export default CreateCommunity;
+export default CreateSubreddit;
