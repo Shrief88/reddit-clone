@@ -18,6 +18,12 @@ subredditRouter.post(
   subredditHandler.createSubreddit,
 );
 
+subredditRouter.put(
+  "/:id",
+  subredditValidator.updateSubreddit,
+  subredditHandler.updateSubreddit,
+);
+
 subredditRouter.delete(
   "/:id",
   subredditValidator.deleteSubreddit,

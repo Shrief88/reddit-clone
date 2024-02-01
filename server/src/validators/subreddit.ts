@@ -28,7 +28,6 @@ export const createSubreddit = [
       }
       return true;
     })
-    .withMessage("Subreddit name must not contain spaces")
     .custom(async (name) => {
       const subreddit = await prisma.subreddit.findUnique({
         where: {
@@ -81,4 +80,33 @@ export const getSubredditPosts = [
       }
       return true;
     }),
+];
+
+export const updateSubreddit = [
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ min: 30 })
+    .withMessage("Description must be at least 30 characters long")
+    .isLength({ max: 300 })
+    .withMessage("Description must be at most 200 characters long"),
+  param("id")
+    .isUUID()
+    .withMessage("Invalid subreddit ID")
+    .custom(async (id, { req }) => {
+      const userId = req.user.id;
+      const subreddit = await prisma.subreddit.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!subreddit) {
+        throw new Error("Subreddit not found");
+      }
+      if (subreddit.onwerId !== userId) {
+        throw new Error("Forbidden");
+      }
+      return true;
+    }),
+  validateMiddleware,
 ];

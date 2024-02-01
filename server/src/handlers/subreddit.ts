@@ -77,6 +77,27 @@ export const createSubreddit: RequestHandler = async (
   }
 };
 
+export const updateSubreddit: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const id = req.params.id;
+    const subreddit = await prisma.subreddit.update({
+      where: {
+        id,
+      },
+      data: {
+        description: req.body.description,
+      },
+    });
+    res.status(200).json({ data: subreddit });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @route DELETE /api/v1/subreddit/:id
 // @access Private
 export const deleteSubreddit: RequestHandler = async (req, res, next) => {
