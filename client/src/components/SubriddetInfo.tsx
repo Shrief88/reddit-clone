@@ -122,7 +122,10 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
         )}
 
         {subscribeState === subscriptionState.ONWER && (
-          <UpdateSubreddit subredditId={props.subreddit?.id as string} />
+          <UpdateSubreddit
+            oldDecription={props.subreddit?.description as string}
+            subredditId={props.subreddit?.id as string}
+          />
         )}
 
         <NavLink

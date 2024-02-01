@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createCommentSchema = z.object({
+export const commentSchema = z.object({
   text: z
     .string()
     .trim()
@@ -9,4 +9,4 @@ export const createCommentSchema = z.object({
   replyToId : z.string().optional(),
 });
 
-export type TCreateCommentSchema = z.infer<typeof createCommentSchema>;
+export type TCommentSchema = z.infer<typeof commentSchema>;

@@ -3,10 +3,7 @@ import { useForm } from "react-hook-form";
 
 import TextareaAutosize from "react-textarea-autosize";
 
-import {
-  createCommentSchema,
-  TCreateCommentSchema,
-} from "@/validators/createCommentSchema";
+import { commentSchema, TCommentSchema } from "@/validators/commentSchema";
 import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -29,13 +26,13 @@ const CreateComment = (props: CreateCommentProps) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<TCreateCommentSchema>({
-    resolver: zodResolver(createCommentSchema),
+  } = useForm<TCommentSchema>({
+    resolver: zodResolver(commentSchema),
   });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createComment"],
-    mutationFn: async (newComment: TCreateCommentSchema) => {
+    mutationFn: async (newComment: TCommentSchema) => {
       if (props.replyToId) {
         newComment.replyToId = props.replyToId;
       }
@@ -65,7 +62,7 @@ const CreateComment = (props: CreateCommentProps) => {
     },
   });
 
-  const onSubmit = async (data: TCreateCommentSchema) => {
+  const onSubmit = async (data: TCommentSchema) => {
     mutate(data);
   };
 
@@ -80,7 +77,9 @@ const CreateComment = (props: CreateCommentProps) => {
         )}
         <TextareaAutosize
           {...register("text")}
-          placeholder={props.replyToId ? "Write a reply ..." : "Write a Comment ..."}
+          placeholder={
+            props.replyToId ? "Write a reply ..." : "Write a Comment ..."
+          }
           className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border boreder-gray p-3 "
         />
         {errors.text && (

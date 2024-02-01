@@ -42,7 +42,7 @@ export const createComment: RequestHandler = async (
         text: req.body.text,
         replyToId: req.body.replyToId || null,
       },
-    }); 
+    });
 
     await prisma.commentVote.create({
       data: {
@@ -53,6 +53,25 @@ export const createComment: RequestHandler = async (
     });
 
     res.status(201).json({ data: comment });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @route PUT /api/v1/comment/:id
+
+export const updateComment: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const comment = await prisma.comment.update({
+      where: {
+        id,
+      },
+      data: {
+        text: req.body.text,
+      },
+    });
+    res.status(200).json({ data: comment });
   } catch (err) {
     next(err);
   }

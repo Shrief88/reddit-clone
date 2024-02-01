@@ -6,18 +6,24 @@ import * as authHandler from "../handlers/auth";
 
 const commentRouter = express.Router();
 
+commentRouter.use(authHandler.protectRoute);
+
 commentRouter.get(
   "/:postId",
-  authHandler.protectRoute,
   commentValidator.getPostComments,
   commentHandler.getPostComments,
 );
 
 commentRouter.post(
   "/:postId",
-  authHandler.protectRoute,
   commentValidator.createComment,
   commentHandler.createComment,
+);
+
+commentRouter.put(
+  "/:id",
+  commentValidator.updateComment,
+  commentHandler.updateComment,
 );
 
 export default commentRouter;

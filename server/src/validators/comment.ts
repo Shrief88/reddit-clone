@@ -43,3 +43,29 @@ export const createComment = [
     }),
   validateMiddleware,
 ];
+
+export const updateComment = [
+  param("id")
+    .isUUID()
+    .withMessage("Invalid comment ID")
+    .custom(async (id, { req }) => {
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+      if (comment.authorId !== req.user.id) {
+        throw new Error("Forbidden");
+      }
+      return true;
+    }),
+  body("text")
+    .notEmpty()
+    .withMessage("Text is required")
+    .isLength({ max: 2000 })
+    .withMessage("Text must be at most 1000 characters long"),
+  validateMiddleware,
+];

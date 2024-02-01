@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,98 +14,98 @@ import {
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "sonner";
 
-import {
-  updateSubredditSchema,
-  TUpdateSubredditSchema,
-} from "@/validators/updateSubredditSchema";
+import { commentSchema, TCommentSchema } from "@/validators/commentSchema";
 import useToken from "@/hooks/useToken";
-import ISubreddit from "@/models/subreddit";
 import { Edit } from "lucide-react";
+import { IComment } from "@/models/comment";
+import { useState } from "react";
 
-interface UpdateSubredditProps {
-  subredditId: string;
-  oldDecription: string;
+interface UpdateCommentProps {
+  commentId: string;
+  postId: string;
+  text: string;
 }
 
-const UpdateSubreddit = (props: UpdateSubredditProps) => {
+const UpdateComment = (props: UpdateCommentProps) => {
+  const [open, setOpen] = useState(false);
+
   const { axiosClientAuth } = useToken();
-  const navigator = useNavigate();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TUpdateSubredditSchema>({
-    resolver: zodResolver(updateSubredditSchema),
+  } = useForm<TCommentSchema>({
+    resolver: zodResolver(commentSchema),
     defaultValues: {
-      description: props.oldDecription,
+      text: props.text,
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ["updateSubreddit", props.subredditId],
-    mutationFn: async (updateDate: TUpdateSubredditSchema) => {
-      toast.loading("updating Subreddit...");
+    mutationKey: ["update comment", props.commentId],
+    mutationFn: async (updateDate: TCommentSchema) => {
+      toast.loading("updating Comment...");
       const response = await axiosClientAuth.put(
-        `/subreddit/${props.subredditId}`,
+        `/comment/${props.commentId}`,
         updateDate
       );
-      return response.data.data as ISubreddit;
+      return response.data.data as IComment;
     },
     onSuccess: () => {
       toast.dismiss();
-      navigator(0);
+      setOpen(false);
+      toast.success("Comment updated");
+      queryClient.invalidateQueries({
+        queryKey: ["post", props.postId],
+      });
     },
     onError: () => {
       toast.dismiss();
-      toast.error("Error updating Subreddit: please try again");
+      toast.error("Error updating comment: please try again");
     },
   });
 
-  const onSubmit = async (data: TUpdateSubredditSchema) => {
+  const onSubmit = async (data: TCommentSchema) => {
     mutate(data);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="flex gap-3 cursor-pointer">
-          <Edit size={20} />
-          <p className="text-muted-foreground">Edit Description</p>
+          <Edit size={18} className="text-muted-foreground" />
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Subreddit</DialogTitle>
+          <DialogTitle>Update Comment</DialogTitle>
         </DialogHeader>
         <div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
-            id="update-Subreddit-form"
+            id="update-Comment-form"
           >
             <div className="flex gap-4 items-center">
               <TextareaAutosize
-                {...register("description")}
+                {...register("text")}
                 className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-none"
-                placeholder="write a new description..."
+                placeholder="update comment..."
                 id="description"
                 minRows={3}
               />
             </div>
-            {errors.description && (
+            {errors.text && (
               <span className="text-sm text-red-500">
-                {errors.description.message}
+                {errors.text.message}
               </span>
             )}
           </form>
         </div>
         <DialogFooter>
-          <Button
-            disabled={isPending}
-            type="submit"
-            form="update-Subreddit-form"
-          >
-            Update Subreddit
+          <Button disabled={isPending} type="submit" form="update-Comment-form">
+            Update Comment
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -114,4 +113,4 @@ const UpdateSubreddit = (props: UpdateSubredditProps) => {
   );
 };
 
-export default UpdateSubreddit;
+export default UpdateComment;
