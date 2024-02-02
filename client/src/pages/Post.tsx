@@ -64,7 +64,7 @@ const Post = () => {
                       {post.content}
                     </p>
                     {post.image && (
-                      <div className="relative w-full">
+                      <div className="relative w-full pr-3">
                         <img src={"http://localhost:3000/post/" + post.image} />
                       </div>
                     )}
@@ -77,7 +77,11 @@ const Post = () => {
                   <span>Comments</span>
                 </div>
 
-                <CommentSection comments={post.comments} postId={post.id} />
+                <CommentSection
+                  comments={post.comments}
+                  postId={post.id}
+                  subredditOnwerId={post.subreddit.onwerId}
+                />
               </div>
             </div>
           </div>

@@ -59,7 +59,6 @@ export const createComment: RequestHandler = async (
 };
 
 // @route PUT /api/v1/comment/:id
-
 export const updateComment: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -73,6 +72,21 @@ export const updateComment: RequestHandler = async (req, res, next) => {
     });
     res.status(200).json({ data: comment });
   } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteComment: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await prisma.comment.delete({
+      where: {
+        id,
+      },
+    });
+    res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 };

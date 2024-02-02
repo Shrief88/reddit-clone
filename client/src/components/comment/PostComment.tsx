@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 import UserAvatar from "../UserAvatar";
-import { MessageCircleReply, XCircle } from "lucide-react";
+import { MessageCircleReply, Trash2, XCircle } from "lucide-react";
 
 import { IComment } from "@/models/comment";
 import { formatTimeToNow } from "@/lib/utils";
@@ -10,16 +10,45 @@ import { Button } from "../ui/button";
 import CreateComment from "./CreateComment";
 import useAuth from "@/hooks/useAuth";
 import UpdateComment from "../dialoags/UpdateComment";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useToken from "@/hooks/useToken";
+import { toast } from "sonner";
 
 interface PostCommentProps {
   comment: IComment;
   replies: IComment[];
+  subredditOnwerId: string;
 }
 
 const PostComment = (props: PostCommentProps) => {
   const { user } = useAuth();
+  const { axiosClientAuth } = useToken();
   const commentRef = useRef<HTMLDivElement>(null);
   const [isReplying, setIsReplying] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationKey: ["deleteComment", props.comment.id],
+    mutationFn: async () => {
+      toast.loading("Deleting comment...");
+      await axiosClientAuth.delete(`/comment/${props.comment.id}`);
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("Comment deleted");
+      queryClient.invalidateQueries({
+        queryKey: ["post", props.comment.postId],
+      });
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Something went wrong");
+    },
+  });
+
+  const handleDelete = () => {
+    mutate();
+  };
 
   return (
     <div ref={commentRef} className="flex flex-col">
@@ -38,12 +67,21 @@ const PostComment = (props: PostCommentProps) => {
             </p>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           {user?.id === props.comment.author.id && (
             <UpdateComment
               commentId={props.comment.id}
               postId={props.comment.postId}
               text={props.comment.text}
+            />
+          )}
+
+          {(user?.id === props.comment.author.id ||
+            user?.id === props.subredditOnwerId) && (
+            <Trash2
+              className="cursor-pointer text-muted-foreground"
+              size={18}
+              onClick={handleDelete}
             />
           )}
         </div>
@@ -74,7 +112,14 @@ const PostComment = (props: PostCommentProps) => {
       {props.replies.length > 0 && isReplying && (
         <div className="ml-2 pl-4 border-l-2 border-zinc-200">
           {props.replies.map((reply) => {
-            return <PostComment key={reply.id} comment={reply} replies={[]} />;
+            return (
+              <PostComment
+                key={reply.id}
+                comment={reply}
+                replies={[]}
+                subredditOnwerId={props.subredditOnwerId}
+              />
+            );
           })}
         </div>
       )}

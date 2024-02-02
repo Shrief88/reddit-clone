@@ -69,3 +69,36 @@ export const updateComment = [
     .withMessage("Text must be at most 1000 characters long"),
   validateMiddleware,
 ];
+
+export const deleteComment = [
+  param("id")
+    .isUUID()
+    .withMessage("Invalid comment ID")
+    .custom(async (id, { req }) => {
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+
+      const post = await prisma.post.findUnique({
+        where: {
+          id: comment.postId,
+        },
+        include: {
+          subreddit: true,
+        },
+      });
+
+      if (
+        comment.authorId !== req.user.id &&
+        post?.subreddit.onwerId !== req.user.id
+      ) {
+        throw new Error("Forbidden");
+      }
+      return true;
+    }),
+];

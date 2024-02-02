@@ -74,7 +74,7 @@ const Home = () => {
                   buttonVariants({ variant: "ghost" }),
                   "text-muted-foreground text-md bg-slate",
                   displayMode === "following" &&
-                    "text-blue-900 border-b border-blue-900 rounded-none"
+                    "text-blue-900 border-b border-blue-900 rounded-none font-bold"
                 )}
                 onClick={() => setDisplayMode(DisplayPostModes.FOLLOWING)}
               >
@@ -85,7 +85,7 @@ const Home = () => {
                   buttonVariants({ variant: "ghost" }),
                   "text-muted-foreground text-md bg-slate",
                   displayMode === "all" &&
-                    "text-blue-900 border-b border-blue-900 rounded-none"
+                    "text-blue-900 border-b border-blue-900 rounded-none font-bold"
                 )}
                 onClick={() => setDisplayMode(DisplayPostModes.ALL)}
               >

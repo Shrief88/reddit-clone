@@ -26,4 +26,10 @@ commentRouter.put(
   commentHandler.updateComment,
 );
 
+commentRouter.delete(
+  "/:id",
+  commentValidator.deleteComment,
+  commentHandler.deleteComment,
+);
+
 export default commentRouter;

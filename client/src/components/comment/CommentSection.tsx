@@ -8,6 +8,7 @@ import useAuth from "@/hooks/useAuth";
 interface CommentSectionProps {
   comments: IComment[];
   postId: string;
+  subredditOnwerId: string;
 }
 
 const CommentSection = (props: CommentSectionProps) => {
@@ -28,7 +29,11 @@ const CommentSection = (props: CommentSectionProps) => {
 
             return (
               <div key={topLevelcomment.id} className="flex flex-col px-3 py-2">
-                <PostComment comment={topLevelcomment} replies={replyies} />
+                <PostComment
+                  comment={topLevelcomment}
+                  replies={replyies}
+                  subredditOnwerId={props.subredditOnwerId}
+                />
               </div>
             );
           })}
