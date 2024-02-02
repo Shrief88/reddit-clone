@@ -11,7 +11,7 @@ const Navbar = () => {
   const { user } = useAuth();
 
   return (
-    <div className="static z-50 top-0 inset-x-0 h-fit py-4">
+    <div className="sticky z-50 top-0 inset-x-0 h-fit py-4 bg-background">
       <header className="relative">
         <MaxWidthWrapper className="pl-5">
           <div className="grid grid-cols-4 md:grid-cols-3 items-center">

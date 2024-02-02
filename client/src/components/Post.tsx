@@ -43,18 +43,20 @@ const Post = ({ post, isHome }: PostProps) => {
           </NavLink>
 
           <div
-            className="relative text-sm max-h-56 w-full overflow-clip"
+            className="relative text-sm max-h-72 w-full overflow-clip"
             ref={pRef}
           >
             <p className="text-muted-foreground mb-3 ">{post.content}</p>
 
             {post.image && (
-              <div className="relative w-full min-h-[15rem]">
-                <img src={"http://localhost:3000/post/" + post.image} />
-              </div>
+              <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
+                <div className="relative w-full min-h-[15rem]">
+                  <img src={"http://localhost:3000/post/" + post.image} />
+                </div>
+              </NavLink>
             )}
 
-            {pRef.current?.clientHeight === 224 ? (
+            {pRef.current?.clientHeight === 288 ? (
               <div className="absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
             ) : null}
           </div>

@@ -43,7 +43,7 @@ const PostFeed = (props: PostFeedProps) => {
 
   return (
     <ul className="flex flex-col space-y-6">
-      {posts.length > 0 &&
+      {posts.length > 0 ? (
         posts.map((post, index) => {
           if (index === posts.length - 1) {
             return (
@@ -54,7 +54,12 @@ const PostFeed = (props: PostFeedProps) => {
           } else {
             return <Post key={post.id} post={post} isHome={props.isHome} />;
           }
-        })}
+        })
+      ) : (
+        <div className="flex justify-center">
+          <p className="text-muted-foreground">No posts to show</p>
+        </div>
+      )}
     </ul>
   );
 };

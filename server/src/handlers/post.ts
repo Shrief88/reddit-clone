@@ -25,32 +25,6 @@ export const getPosts: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getUserPosts: RequestHandler = async (
-  req: CustomRequest,
-  res,
-  next,
-) => {
-  try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const posts = await prisma.post.findMany({
-      take: limit,
-      skip: (page - 1) * limit,
-      include: {
-        subreddit: true,
-        comments: true,
-        votes: true,
-      },
-      where: {
-        authorId: req.user.id,
-      },
-    });
-    res.status(200).json({ data: posts });
-  } catch (err) {
-    next(err);
-  }
-};
-
 export const getUserSubredditPosts: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -67,6 +41,9 @@ export const getUserSubredditPosts: RequestHandler = async (
     });
 
     const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
       take: limit,
       skip: (page - 1) * limit,
       include: {
@@ -79,6 +56,7 @@ export const getUserSubredditPosts: RequestHandler = async (
         subredditId: { in: userSubreddits.map((sub) => sub.subredditId) },
       },
     });
+
     res.status(200).json({ data: posts });
   } catch (err) {
     console.log(err);
