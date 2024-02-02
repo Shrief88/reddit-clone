@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, Settings, Plus } from "lucide-react";
+import { LogOut, Settings, Plus, UserCircle2Icon } from "lucide-react";
 import { Button } from "../../ui/button";
 import UserAvatar from "@/components/UserAvatar";
 import useAuth from "@/hooks/useAuth";
@@ -43,7 +43,13 @@ const UserAccountNav = (props: UserAccountNavProps) => {
           {props.username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <NavLink to={"/"}>
+        <NavLink to={"/me"}>
+          <DropdownMenuItem className="cursor-pointer">
+            <UserCircle2Icon className="mr-2 h-4 w-4" />
+            <p>Profile</p>
+          </DropdownMenuItem>
+        </NavLink>
+        <NavLink to={"/post/create/r"}>
           <DropdownMenuItem className="cursor-pointer">
             <Plus className="mr-2 h-4 w-4" />
             <p>Create Post</p>

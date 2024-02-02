@@ -7,6 +7,7 @@ import RequireAuth from "./components/layout/RequireAuth";
 import Subreddit from "./pages/Subreddit";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -20,9 +21,13 @@ function App() {
                 <Route element={<RequireAuth />}>
                   <Route path="/" element={<Home />} />
                   <Route path="/r/:subredditName" element={<Subreddit />} />
-                  <Route path="/post/create/r/:subredditName" element={<CreatePost />} />
+                  <Route
+                    path="/post/create/r/:subredditName"
+                    element={<CreatePost />}
+                  />
                   <Route path="/post/create/r/" element={<CreatePost />} />
                   <Route path="/r/:subredditName/post/:id" element={<Post />} />
+                  <Route path="/me" element={<Profile />} />
                 </Route>
               </Route>
             </Routes>

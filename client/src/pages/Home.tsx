@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <div className="bg-muted flex-1">
-      <MaxWidthWrapper className="py-10">
+      <MaxWidthWrapper className="py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           <div className="h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
             <div className="bg-emerald-100 px-6 py-4">
@@ -60,7 +60,7 @@ const Home = () => {
               <CreateSubreddit />
               <NavLink
                 className={buttonVariants({ variant: "secondary" })}
-                to={"/post/create/r/"}
+                to={"/post/create/r"}
               >
                 Create Post
               </NavLink>

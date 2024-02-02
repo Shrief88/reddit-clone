@@ -7,7 +7,20 @@ export const getPosts: RequestHandler = async (req, res, next) => {
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
-    const filterObject = req.body.filterObject as Record<string, unknown>;
+
+    let filterObject = {};
+    if (req.query.subredditId) {
+      filterObject = {
+        subredditId: req.query.subredditId,
+      };
+    }
+
+    if (req.query.authorId) {
+      filterObject = {
+        authorId: req.query.authorId,
+      };
+    }
+
     const posts = await prisma.post.findMany({
       take: limit,
       skip: (page - 1) * limit,
