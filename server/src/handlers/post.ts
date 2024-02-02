@@ -18,6 +18,9 @@ export const getPosts: RequestHandler = async (req, res, next) => {
         votes: true,
       },
       where: filterObject,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     res.status(200).json({ data: posts });
   } catch (err) {
@@ -107,6 +110,20 @@ export const createPost: RequestHandler = async (
     });
 
     res.status(201).json({ data: post });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deletePost: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await prisma.post.delete({
+      where: {
+        id,
+      },
+    });
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }

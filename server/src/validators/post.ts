@@ -35,3 +35,30 @@ export const createPost = [
     }),
   validateMiddleware,
 ];
+
+export const deletePost = [
+  param("id")
+    .isUUID()
+    .withMessage("Invalid post ID")
+    .custom(async (id, { req }) => {
+      const post = await prisma.post.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          subreddit: true,
+        },
+      });
+      if (!post) {
+        throw new Error("Comment not found");
+      }
+
+      if (
+        post.authorId !== req.user.id &&
+        post.subreddit.onwerId !== req.user.id
+      ) {
+        throw new Error("Forbidden");
+      }
+      return true;
+    }),
+];

@@ -28,13 +28,13 @@ const Home = () => {
 
   const getSubredditPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
-      `/post/subreddits/me?limit=${3}&page=${page}`
+      `/post/subreddits/me?limit=${5}&page=${page}`
     );
     return res.data.data as IExtendedPost[];
   };
 
   const getAllPosts = async (page: number) => {
-    const res = await axiosClientAuth.get(`/post?limit=${3}&page=${page}`);
+    const res = await axiosClientAuth.get(`/post?limit=${5}&page=${page}`);
     return res.data.data as IExtendedPost[];
   };
 
@@ -99,7 +99,11 @@ const Home = () => {
                 queryKey="home"
               />
             ) : (
-              <PostFeed isHome={true} queryFn={getAllPosts} queryKey="forYou" />
+              <PostFeed
+                isHome={true}
+                queryFn={getAllPosts}
+                queryKey="forYou"
+              />
             )}
           </div>
         </div>

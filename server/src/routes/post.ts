@@ -25,4 +25,6 @@ postRouter.post(
   postHandler.createPost,
 );
 
+postRouter.delete("/:id", postValidator.deletePost, postHandler.deletePost);
+
 export default postRouter;

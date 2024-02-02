@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { MessageSquare } from "lucide-react";
+import { Edit, MessageSquare, Trash2 } from "lucide-react";
 
 import SubriddetInfo from "@/components/SubriddetInfo";
 import CommentSection from "@/components/comment/CommentSection";
@@ -13,10 +13,16 @@ import useToken from "@/hooks/useToken";
 import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const Post = () => {
   const { id } = useParams();
   const { axiosClientAuth } = useToken();
+  const { user } = useAuth();
+  const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
+  const { subreddits, isLoading } = useSubreddits();
+  const navigator = useNavigate();
 
   const { data: post, isLoading: postLoading } = useQuery({
     queryKey: ["post", id],
@@ -26,15 +32,33 @@ const Post = () => {
     },
   });
 
-  const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
-  const { subreddits, isLoading } = useSubreddits();
-
   useEffect(() => {
     if (!isLoading && !postLoading) {
       const sub = subreddits?.find((sub) => sub.name === post?.subreddit.name);
       setSubreddit(sub);
     }
   }, [isLoading, subreddits, postLoading]);
+
+  const { mutate } = useMutation({
+    mutationKey: ["deletePost", id],
+    mutationFn: async () => {
+      toast.loading("Deleting post...");
+      await axiosClientAuth.delete(`/post/${id}`);
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("post deleted");
+      navigator("/");
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Something went wrong");
+    },
+  });
+
+  const deletePost = () => {
+    mutate();
+  };
 
   return (
     <div className="flex-1 bg-muted">
@@ -46,16 +70,31 @@ const Post = () => {
             </div>
 
             <div className="md:col-span-2 flex flex-col gap-8">
-              <div className="rounded-md bg-background shadow">
+              <div className="rounded-md bg-background shadow pb-3">
                 <div className="flex">
                   <Vote postId={post.id} votes={post.votes} />
                   <div className="w-0 flex-1 py-4 pl-3">
-                    <div className="max-h-40 mt-1 text-xs text-gray-500">
-                      <span className="px-1">•</span>
-                      <span>Posted by u/{post.author.name}</span>
-                      <span className="px-2">
-                        {formatTimeToNow(new Date(post.createdAt))}
-                      </span>
+                    <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between pr-4">
+                      <div className="flex">
+                        <span className="px-1">•</span>
+                        <span>Posted by u/{post.author.name}</span>
+                        <span className="px-2">
+                          {formatTimeToNow(new Date(post.createdAt))}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        {user?.id === post.author.id && (
+                          <Edit size={18} className="cursor-pointer" />
+                        )}
+                        {(user?.id === post.author.id ||
+                          user?.id === post.subreddit.onwerId) && (
+                          <Trash2
+                            size={18}
+                            className="cursor-pointer"
+                            onClick={deletePost}
+                          />
+                        )}
+                      </div>
                     </div>
                     <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
                       {post.title}

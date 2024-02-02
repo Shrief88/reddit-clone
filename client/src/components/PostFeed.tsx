@@ -57,7 +57,7 @@ const PostFeed = (props: PostFeedProps) => {
         })
       ) : (
         <div className="flex justify-center">
-          <p className="text-muted-foreground">No posts to show</p>
+          <p className="text-muted-foreground pt-4">No posts to show</p>
         </div>
       )}
     </ul>
