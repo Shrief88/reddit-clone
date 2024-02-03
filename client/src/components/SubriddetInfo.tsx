@@ -49,6 +49,8 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
     mutationKey: ["joinSubreddit"],
     mutationFn: async (id: string) => {
       await axiosClientAuth.post(`/subscription/${id}/join`);
+    },
+    onSuccess: () => {
       setSubscribeState(subscriptionState.SUBSCRIBED);
       setMembersCount((prev) => prev + 1);
       queryClient.invalidateQueries({
@@ -70,6 +72,8 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
     mutationKey: ["leaveSubreddit"],
     mutationFn: async (id: string) => {
       await axiosClientAuth.delete(`/subscription/${id}/leave`);
+    },
+    onSuccess: () => {
       setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
       setMembersCount((prev) => prev - 1);
       queryClient.invalidateQueries({

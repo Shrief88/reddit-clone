@@ -4,7 +4,16 @@ import prisma from "../config/prisma";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
 export const getSubreddit = [
-  param("id").isUUID().withMessage("Invalid subreddit ID"),
+  param("name").custom(async (name) => {
+    const subreddit = await prisma.subreddit.findUnique({
+      where: {
+        name,
+      },
+    });
+    if (!subreddit) {
+      throw new Error("Subreddit not found");
+    }
+  }),
   validateMiddleware,
 ];
 

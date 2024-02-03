@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import SubriddetInfo from "@/components/SubriddetInfo";
-import useSubreddits from "@/hooks/useSubreddits";
 import useToken from "@/hooks/useToken";
 import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
+import { useQuery } from "@tanstack/react-query";
 
 const Subreddit = () => {
   const { subredditName } = useParams();
-  const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
-  const { subreddits, isLoading } = useSubreddits();
   const { axiosClientAuth } = useToken();
-  useEffect(() => {
-    if (!isLoading) {
-      const sub = subreddits?.find((sub) => sub.name === subredditName);
-      setSubreddit(sub);
-    }
-  }, [isLoading, subreddits, subredditName]);
+
+  const { data: subreddit, isLoading } = useQuery({
+    queryKey: ["subreddit", subredditName],
+    queryFn: async () => {
+      const res = await axiosClientAuth.get(`/subreddit/${subredditName}`);
+      return res.data.data as ISubreddit;
+    },
+  });
 
   const getPosts = async (page: number) => {
     const res = await axiosClientAuth.get(

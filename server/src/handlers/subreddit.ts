@@ -18,24 +18,16 @@ export const getSubreddits: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route GET /api/v1/subreddit/:id
+// @route GET /api/v1/subreddit/:name
 // @access Private
 export const getSubreddit: RequestHandler = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const name = req.params.name;
     const subreddit = await prisma.subreddit.findUnique({
       where: {
-        id,
+        name,
       },
       include: {
-        posts: {
-          include: {
-            author: true,
-            votes: true,
-            comments: true,
-          },
-          take: 10,
-        },
         subscribers: true,
       },
     });

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -31,7 +31,7 @@ const Home = () => {
   const getFollowingPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
       `/post/following/me?limit=${5}&page=${page}`
-    ); 
+    );
     return res.data.data as IExtendedPost[];
   };
 
