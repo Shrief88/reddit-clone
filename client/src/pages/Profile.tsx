@@ -49,7 +49,7 @@ const Profile = () => {
 
       isfollowing
         ? setFollowState(followingState.FOLLOWING)
-        : setFollowState(null);
+        : setFollowState(followingState.NOT_FOLLOWING);
     }
   }, [user]);
 
@@ -62,8 +62,10 @@ const Profile = () => {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Followed");
-      setFollowState(followingState.FOLLOWING);
       queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
   });
 
@@ -76,8 +78,10 @@ const Profile = () => {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Unfollowed");
-      setFollowState(followingState.NOT_FOLLOWING);
       queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
   });
 

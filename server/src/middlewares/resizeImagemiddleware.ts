@@ -11,7 +11,6 @@ export const resizeImage = (
       const fileName = `${modelName}-${uuidv4()}-${Date.now()}.jpg`;
       try {
         await sharp(req.file?.buffer)
-          .resize(1280, 720)
           .jpeg({ quality: 95 })
           .toFile(`uploads/${modelName}/${fileName}`);
         req.body[path] = fileName;

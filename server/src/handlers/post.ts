@@ -41,7 +41,7 @@ export const getPosts: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getUserSubredditPosts: RequestHandler = async (
+export const getUserFollowingPosts: RequestHandler = async (
   req: CustomRequest,
   res,
   next,
@@ -50,9 +50,15 @@ export const getUserSubredditPosts: RequestHandler = async (
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
-    const userSubreddits = await prisma.subscription.findMany({
+    const followingSubreddits = await prisma.subscription.findMany({
       where: {
         userId: req.user.id,
+      },
+    });
+
+    const followingUsers = await prisma.follows.findMany({
+      where: {
+        followerId: req.user.id,
       },
     });
 
@@ -68,8 +74,20 @@ export const getUserSubredditPosts: RequestHandler = async (
         comments: true,
         votes: true,
       },
+
       where: {
-        subredditId: { in: userSubreddits.map((sub) => sub.subredditId) },
+        OR: [
+          {
+            subredditId: {
+              in: followingSubreddits.map((sub) => sub.subredditId),
+            },
+          },
+          {
+            authorId: {
+              in: followingUsers.map((user) => user.followingId),
+            },
+          },
+        ],
       },
     });
 

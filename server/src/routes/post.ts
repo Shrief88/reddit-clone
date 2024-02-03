@@ -12,7 +12,7 @@ postRouter.use(authHandler.protectRoute);
 
 postRouter.get("/", postHandler.getPosts);
 
-postRouter.get("/subreddits/me", postHandler.getUserSubredditPosts);
+postRouter.get("/following/me", postHandler.getUserFollowingPosts);
 
 postRouter.get("/:id", postValidator.getPost, postHandler.getPost);
 

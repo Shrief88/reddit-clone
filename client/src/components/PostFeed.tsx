@@ -30,7 +30,7 @@ const PostFeed = (props: PostFeedProps) => {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length ? allPages.length + 1 : undefined;
     },
-    initialPageParam: undefined,
+    initialPageParam: 1,
   });
 
   useEffect(() => {

@@ -101,11 +101,11 @@ const Post = () => {
                     <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
                       {post.title}
                     </h1>
-                    <p className="text-muted-foreground mb-3 text-lg mr-2 ">
+                    <p className="text-muted-foreground mb-3 text-lg mr-2">
                       {post.content}
                     </p>
                     {post.image && (
-                      <div className="relative w-full pr-3">
+                      <div className="relative w-full pr-3 flex justify-center">
                         <img src={"http://localhost:3000/post/" + post.image} />
                       </div>
                     )}

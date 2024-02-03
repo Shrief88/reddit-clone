@@ -55,7 +55,7 @@ const Post = ({ post, isHome }: PostProps) => {
 
             {post.image && (
               <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
-                <div className="relative w-full">
+                <div className="relative w-full flex justify-center">
                   <img src={"http://localhost:3000/post/" + post.image} />
                 </div>
               </NavLink>
