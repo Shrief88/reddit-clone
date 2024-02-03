@@ -25,10 +25,15 @@ passport.use(
           return;
         }
 
+        const atIndex: number =
+          profile.emails?.at(0)?.value?.indexOf("@") ?? -1;
+
         const newUser = await prisma.user.create({
           data: {
             googleId: profile.id,
-            name: profile.displayName,
+            username: profile.emails
+              ?.at(0)
+              ?.value.substring(0, atIndex) as unknown as string,
             email: profile.emails?.at(0)?.value ?? "",
             image: profile.photos?.at(0)?.value ?? "",
           },

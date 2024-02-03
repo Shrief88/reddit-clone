@@ -13,7 +13,7 @@ datasource db {
 model User {
   id String @id @default(uuid())
   googleId String @unique
-  name String
+  username String @unique
   email String @unique
   image String @unique
   createdAt DateTime @default(now())
@@ -26,10 +26,6 @@ model User {
   comments Comment[]
   votes Vote[]
   commentsVotes CommentVote[]
-
-  friendId String?
-  friend User? @relation("friends",fields: [friendId], references: [id])
-  friends User[] @relation("friends")
 }
 
 model Subreddit {

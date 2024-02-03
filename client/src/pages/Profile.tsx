@@ -3,22 +3,30 @@ import PostFeed from "@/components/PostFeed";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
-import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
+import IUser from "@/models/user";
 import { useQuery } from "@tanstack/react-query";
 import { CircleUserRound, Calendar, Flower } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 const Profile = () => {
-  const { user } = useAuth();
   const { axiosClientAuth } = useToken();
+  const { username } = useParams();
 
   const { data: karma } = useQuery({
-    queryKey: ["karma", user?.id],
+    queryKey: ["karma", username],
     queryFn: async () => {
-      const res = await axiosClientAuth.get(`users/karma`);
+      const res = await axiosClientAuth.get(`users/karma/${username}`);
       return res.data.karma as number;
+    },
+  });
+
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["user", username],
+    queryFn: async () => {
+      const res = await axiosClientAuth.get(`users/${username}`); 
+      return res.data.data as IUser;
     },
   });
 
@@ -37,11 +45,13 @@ const Profile = () => {
             <div className="bg-emerald-100 px-6 py-4">
               <div className="flex items-center gap-3">
                 <CircleUserRound size={30} />
-                <p className="font-semibold text-2xl">{user?.name}</p>
+                <p className="font-semibold text-2xl">u/{user?.username}</p>
               </div>
             </div>
             <div className="flex flex-col gap-3 px-6 py-6 bg-background text-muted-foreground">
-              <p className="text-center font-bold">your personal Breddit frontpage.</p>
+              <p className="text-center font-bold">
+                your personal Breddit frontpage.
+              </p>
               <div className="text-sm flex items-center gap-2">
                 <Calendar />
                 <p className="text-sm">
@@ -62,11 +72,13 @@ const Profile = () => {
           </div>
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            <PostFeed
-              isHome={true}
-              queryFn={getUserPosts}
-              queryKey={["profile", user?.id as string]}
-            />
+            {!isLoading && user && (
+              <PostFeed
+                isHome={true}
+                queryFn={getUserPosts}
+                queryKey={user?.id as string}
+              />
+            )}
           </div>
         </div>
       </MaxWidthWrapper>

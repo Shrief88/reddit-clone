@@ -34,16 +34,16 @@ const UserAccountNav = (props: UserAccountNavProps) => {
         className="overflow-visible font-semiboldbold text-md"
       >
         <Button variant="ghost" size="sm" className="px-0">
-          <UserAvatar username={user?.name} image={user?.image} />
+          <UserAvatar username={user?.username} image={user?.image} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex items-center gap-2">
-          <UserAvatar username={user?.name} image={user?.image} />
+          <UserAvatar username={user?.username} image={user?.image} />
           {props.username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <NavLink to={"/me"}>
+        <NavLink to={`/u/${user?.username}`}>
           <DropdownMenuItem className="cursor-pointer">
             <UserCircle2Icon className="mr-2 h-4 w-4" />
             <p>Profile</p>

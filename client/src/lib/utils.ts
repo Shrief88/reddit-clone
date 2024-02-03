@@ -8,12 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatAvatarFallback = (name: string) => {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  return name.slice(0, 2).toUpperCase();
 };
 
 const formatDistanceLocale = {

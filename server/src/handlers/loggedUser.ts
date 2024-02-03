@@ -1,6 +1,7 @@
 import { type RequestHandler } from "express";
 import { type CustomRequest } from "./auth";
 import prisma from "../config/prisma";
+import createHttpError from "http-errors";
 
 export const getLoggedUser: RequestHandler = async (
   req: CustomRequest,
@@ -14,6 +15,26 @@ export const getLoggedUser: RequestHandler = async (
   }
 };
 
+// @GET /api/v1/users/:username
+export const getUser: RequestHandler = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const user = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+    res.status(200).json({ data: user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @GET /api/v1/users/karma/:username
 export const getUserKarma: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -22,13 +43,17 @@ export const getUserKarma: RequestHandler = async (
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: req.user.id,
+        username: req.params.username,
       },
       include: {
         votes: true,
         commentsVotes: true,
       },
     });
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
 
     let karma = 0;
 

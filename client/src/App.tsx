@@ -27,7 +27,7 @@ function App() {
                   />
                   <Route path="/post/create/r/" element={<CreatePost />} />
                   <Route path="/r/:subredditName/post/:id" element={<Post />} />
-                  <Route path="/me" element={<Profile />} />
+                  <Route path="/u/:username" element={<Profile />} />
                 </Route>
               </Route>
             </Routes>

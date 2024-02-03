@@ -7,7 +7,7 @@ import Post from "./Post";
 
 interface PostFeedProps {
   isHome: boolean;
-  queryKey: string | string[];
+  queryKey: string;
   queryFn: (page: number) => Promise<IExtendedPost[]>;
 }
 

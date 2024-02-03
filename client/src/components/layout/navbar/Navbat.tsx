@@ -33,7 +33,7 @@ const Navbar = () => {
               <div className="flex items-center justify-end gap-2 md:gap-4">
                 <UserAccountNav
                   image={user?.image || ""}
-                  username={user?.name || ""}
+                  username={user?.username || ""}
                 />
                 <Bell className="h-5 w-5" />
                 <SideSheet />

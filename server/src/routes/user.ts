@@ -12,9 +12,11 @@ userRouter.get(
 );
 
 userRouter.get(
-  "/karma",
+  "/karma/:username",
   authHandler.protectRoute,
   loggedUserHandler.getUserKarma,
 );
+
+userRouter.get("/:username", loggedUserHandler.getUser);
 
 export default userRouter;

@@ -3,7 +3,7 @@ import ISubscription from "./subscription";
 
 interface IUser {
   id: string;
-  name: string;
+  username: string;
   email: string;
   image: string;
   googleId: string;

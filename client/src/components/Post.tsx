@@ -30,7 +30,10 @@ const Post = ({ post, isHome }: PostProps) => {
             ) : null}
 
             <span className="px-1">•</span>
-            <span>Posted by u/{post.author.name}</span>
+            <NavLink to={"/u/" + post.author.username}>
+              <span>Posted by u/{post.author.username}</span>
+            </NavLink>
+
             <span className="px-2">
               {formatTimeToNow(new Date(post.createdAt))}
             </span>

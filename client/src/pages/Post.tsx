@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Edit, MessageSquare, Trash2 } from "lucide-react";
@@ -77,7 +77,9 @@ const Post = () => {
                     <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between pr-4">
                       <div className="flex">
                         <span className="px-1">•</span>
-                        <span>Posted by u/{post.author.name}</span>
+                        <NavLink to={"/u/" + post.author.username}>
+                          <span>Posted by u/{post.author.username}</span>
+                        </NavLink>
                         <span className="px-2">
                           {formatTimeToNow(new Date(post.createdAt))}
                         </span>
