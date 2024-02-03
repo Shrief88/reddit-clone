@@ -55,12 +55,12 @@ const PostComment = (props: PostCommentProps) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <UserAvatar
-            username={props.comment.author.name}
+            username={props.comment.author.username}
             image={props.comment.author.image}
           />
           <div className="ml-2 flex items-center gap-x-2">
             <p className="text-sm font-medium text-gray-900">
-              u/{props.comment.author.name}
+              u/{props.comment.author.username}
             </p>
             <p className="max-h-40 truncate text-sm text-muted-foreground">
               {formatTimeToNow(new Date(props.comment.createdAt))}

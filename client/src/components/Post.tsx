@@ -49,7 +49,9 @@ const Post = ({ post, isHome }: PostProps) => {
             className="relative text-sm max-h-72 w-full overflow-clip"
             ref={pRef}
           >
-            <p className="text-muted-foreground mb-3 ">{post.content}</p>
+            <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
+              <p className="text-muted-foreground mb-3 ">{post.content}</p>
+            </NavLink>
 
             {post.image && (
               <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>

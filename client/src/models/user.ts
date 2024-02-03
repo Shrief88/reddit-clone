@@ -10,6 +10,13 @@ interface IUser {
   subreddits: ISubscription[];
   createdAt: Date;
   ownedSubreddits: ISubreddit[];
+  followers: IFollows[];
+  following: IFollows[];
+}
+
+interface IFollows {
+  followerId: string;
+  followingId: string;
 }
 
 export default IUser;

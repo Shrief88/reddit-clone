@@ -101,7 +101,7 @@ const Post = () => {
                     <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
                       {post.title}
                     </h1>
-                    <p className="text-muted-foreground mb-3 text-lg">
+                    <p className="text-muted-foreground mb-3 text-lg mr-2 ">
                       {post.content}
                     </p>
                     {post.image && (
