@@ -31,11 +31,11 @@ export const SearchBar = () => {
   }, [input, subreddits]);
 
   return (
-    <Command className="relative rounded-lg border max-w-lg z-50 overflow-visible">
+    <Command className="relative rounded-lg border max-w-lg z-50 overflow-visible ">
       <CommandInput
         value={input}
         onValueChange={(value) => setInput(value)}
-        className="outline-none border-none focus:border-none focus:outline-none ring-0"
+        className="outline-none border-none focus:border-none focus:outline-none ring-0 "
         placeholder="Search Subreddits..."
       />
 
