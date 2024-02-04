@@ -22,17 +22,17 @@ const Vote = (props: VoteProps) => {
   const [votesCount, setVotesCount] = useState(0);
 
   useEffect(() => {
+    let count = 0;
     props.votes.map((vote) => {
-      vote.type === VoteType.UPVOTE
-        ? setVotesCount((prev) => prev + 1)
-        : setVotesCount((prev) => prev - 1);
+      vote.type === VoteType.UPVOTE ? count++ : count--;
       if (vote.userId === user?.id) {
         vote.type === VoteType.UPVOTE
           ? setIsUpVoted(true)
           : setIsDownVoted(true);
       }
     });
-  }, []);
+    setVotesCount(count);
+  }, [props.votes]);
 
   const { mutate: upVote } = useMutation({
     mutationKey: ["addUpVote"],
