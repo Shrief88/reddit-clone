@@ -78,3 +78,38 @@ export const getUserKarma: RequestHandler = async (
     next(err);
   }
 };
+
+// @PUT /api/v1/users/me/username
+export const updateUsername: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const userId = req.user.id;
+    const username = req.body.username;
+
+    const userExists = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (userExists) {
+      throw createHttpError(409, "User already exists");
+    }
+
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        username,
+      },
+    });
+
+    res.status(200).json({ user });
+  } catch (err) {
+    next(err);
+  }
+};

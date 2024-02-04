@@ -5,18 +5,14 @@ import * as authHandler from "../handlers/auth";
 
 const userRouter = express.Router();
 
-userRouter.get(
-  "/me",
-  authHandler.protectRoute,
-  loggedUserHandler.getLoggedUser,
-);
+userRouter.use(authHandler.protectRoute);
 
-userRouter.get(
-  "/karma/:username",
-  authHandler.protectRoute,
-  loggedUserHandler.getUserKarma,
-);
+userRouter.get("/me", loggedUserHandler.getLoggedUser);
+
+userRouter.get("/karma/:username", loggedUserHandler.getUserKarma);
 
 userRouter.get("/:username", loggedUserHandler.getUser);
+
+userRouter.put("/me/username", loggedUserHandler.updateUsername);
 
 export default userRouter;
