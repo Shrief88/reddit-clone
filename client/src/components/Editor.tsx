@@ -16,6 +16,8 @@ import {
 import { IPost } from "@/models/post";
 import responseError from "@/models/error";
 import useSubreddits from "@/hooks/useSubreddits";
+import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
 interface EditorProps {
   subredditId?: string;
@@ -37,6 +39,7 @@ const Editor = (props: EditorProps) => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<TCreatePostSchema>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
@@ -89,6 +92,10 @@ const Editor = (props: EditorProps) => {
     }
   };
 
+  const onEditorStateChange = (editorState: string) => {
+    setValue("content", editorState);
+  };
+
   return (
     <div className="w-full p-4 bg-background rounded-lg border border-zinc-200">
       <form
@@ -104,13 +111,13 @@ const Editor = (props: EditorProps) => {
         {errors.title && (
           <span className="text-red-500 text-sm">{errors.title.message}</span>
         )}
-        <TextareaAutosize
-          {...register("content")}
-          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-none"
+        <ReactQuill
+          theme="snow"
+          onChange={onEditorStateChange}
+          className="my-4"
           placeholder="What's on your mind? (optional)"
-          id="content"
         />
-        <div className="w-fit mt-10">
+        <div className="w-fit">
           <Input
             {...register("image", {
               onChange: (event) =>
