@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import TextareaAutosize from "react-textarea-autosize";
@@ -12,20 +12,27 @@ import { XCircle } from "lucide-react";
 import { postSchema, TPostSchema } from "@/validators/postSchema";
 import { IExtendedPost, IPost } from "@/models/post";
 import responseError from "@/models/error";
-import useSubreddits from "@/hooks/useSubreddits";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import useToken from "@/hooks/useToken";
 
-interface EditorProps {
-  subredditId?: string;
+interface UpdateEditorProps {
+  subredditName: string;
+  postId: string;
+  title: string;
+  content?: string;
+  imageFile?: File | null;
 }
 
-const Editor = (props: EditorProps) => {
-  const [selectedFile, setSelectedFile] = useState<null | File>(null);
+const UpdateEditor = (props: UpdateEditorProps) => {
+  const [newFile, setNewFile] = useState<null | File>(null);
+  const [isImage, setIsImage] = useState(false);
   const navigator = useNavigate();
-  const { subreddits } = useSubreddits();
   const { axiosClientAuth } = useToken();
+
+  useEffect(() => {
+    props.imageFile ? setIsImage(true) : setIsImage(false);
+  }, [props.imageFile]);
 
   const {
     register,
@@ -37,15 +44,17 @@ const Editor = (props: EditorProps) => {
   } = useForm<TPostSchema>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      content: "",
+      title: props.title,
+      content: props.content,
+      image: props.imageFile,
     },
   });
 
   const { mutate } = useMutation({
     mutationKey: ["createPost"],
     mutationFn: async (post: FormData) => {
-      toast.loading("Creating post...");
-      const res = await axiosClientAuth.post(`/post/`, post, {
+      toast.loading("Updating post...");
+      const res = await axiosClientAuth.put(`/post/${[props.postId]}`, post, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -54,12 +63,11 @@ const Editor = (props: EditorProps) => {
     },
     onSuccess: (data: IPost) => {
       toast.dismiss();
-      toast.success("Post created");
-      const subredditName = subreddits?.find(
-        (sub) => sub.id === data.subredditId
-      )?.name;
+      toast.success("Post updated");
       setTimeout(() => {
-        navigator(`/r/${subredditName}/post/${data.id}`, { replace: true });
+        navigator(`/r/${props.subredditName}/post/${data.id}`, {
+          replace: true,
+        });
       }, 1000);
     },
     onError: (error: responseError) => {
@@ -75,18 +83,19 @@ const Editor = (props: EditorProps) => {
   const onSubmit = async (data: TPostSchema) => {
     const formData = new FormData();
 
-    if (data.image.length > 0) {
+    // user has selected a new image
+    if (newFile) {
       formData.append("image", data.image[0]);
     }
-    console.log(formData.get("image"));
+
+    // user has deleted the image without selecting a new one
+    if (!isImage && !newFile) {
+      formData.append("image", "");
+    }
+
     formData.append("title", data.title);
     formData.append("content", data.content);
-    if (!props.subredditId) {
-      toast.error("Please select a subreddit");
-    } else {
-      formData.append("subredditId", props.subredditId);
-      mutate(formData);
-    }
+    mutate(formData);
   };
 
   const onEditorStateChange = (editorState: string) => {
@@ -111,35 +120,44 @@ const Editor = (props: EditorProps) => {
         <ReactQuill
           theme="snow"
           onChange={onEditorStateChange}
+          defaultValue={props.content}
           className="my-4"
           placeholder="What's on your mind? (optional)"
         />
         <div className="w-fit">
           <Input
             {...register("image", {
-              onChange: (event) =>
-                setSelectedFile(
-                  event.target.files ? event.target.files[0] : null
-                ),
+              onChange: (event) => {
+                setNewFile(event.target.files ? event.target.files[0] : null);
+                setIsImage(true);
+              },
             })}
             id="picture"
             type="file"
           />
         </div>
-        {selectedFile && (
+        {isImage && (
           <div className="mt-4 relative w-fit">
             <div className="absolute top-0 right-0 m-2 p-1 rounded-full bg-slate-100 flex justify-center ">
               <XCircle
                 className="cursor-pointer"
                 onClick={() => {
-                  setSelectedFile(null);
+                  setIsImage(false);
+                  setNewFile(null);
                   const values = getValues();
                   reset({ ...values, image: "" });
                 }}
               />
             </div>
-
-            <img src={URL.createObjectURL(selectedFile)} />
+            {newFile ? (
+              <img src={URL.createObjectURL(newFile)} />
+            ) : (
+              props.imageFile && (
+                <img
+                  src={"http://localhost:3000/post/" + props.imageFile.name}
+                />
+              )
+            )}
           </div>
         )}
       </form>
@@ -147,4 +165,4 @@ const Editor = (props: EditorProps) => {
   );
 };
 
-export default Editor;
+export default UpdateEditor;

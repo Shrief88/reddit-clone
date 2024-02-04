@@ -5,6 +5,7 @@ import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
 import { MessageSquare } from "lucide-react";
 import Vote from "./Vote";
+import { Interweave } from 'interweave';
 
 interface PostProps {
   post: IExtendedPost;
@@ -50,12 +51,12 @@ const Post = ({ post, isHome }: PostProps) => {
             ref={pRef}
           >
             <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
-              <p className="text-muted-foreground mb-3 ">{post.content}</p>
+              <Interweave content={post.content} className="text-muted-foreground"/>
             </NavLink>
 
             {post.image && (
               <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
-                <div className="relative w-full flex justify-center">
+                <div className="relative w-full flex justify-center mt-3">
                   <img src={"http://localhost:3000/post/" + post.image} />
                 </div>
               </NavLink>

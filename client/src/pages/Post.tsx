@@ -15,6 +15,7 @@ import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { Interweave } from "interweave";
 
 const Post = () => {
   const { id } = useParams();
@@ -73,8 +74,8 @@ const Post = () => {
               <div className="rounded-md bg-background shadow pb-3">
                 <div className="flex">
                   <Vote postId={post.id} votes={post.votes} />
-                  <div className="w-0 flex-1 py-4 pl-3">
-                    <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between pr-4">
+                  <div className="w-0 flex-1 py-4 pl-3 pr-3">
+                    <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between">
                       <div className="flex">
                         <span className="px-1">•</span>
                         <NavLink to={"/u/" + post.author.username}>
@@ -107,11 +108,13 @@ const Post = () => {
                     <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
                       {post.title}
                     </h1>
-                    <p className="text-muted-foreground mb-3 text-lg mr-2">
-                      {post.content}
-                    </p>
+
+                    <Interweave
+                      content={post.content}
+                      className="text-muted-foreground text-lg mr-2"
+                    />
                     {post.image && (
-                      <div className="relative w-full pr-3 flex justify-center">
+                      <div className="relative w-full flex justify-center mt-3">
                         <img src={"http://localhost:3000/post/" + post.image} />
                       </div>
                     )}

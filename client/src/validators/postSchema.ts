@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createPostSchema = z.object({
+export const postSchema = z.object({
   title: z
     .string()
     .trim()
@@ -8,7 +8,7 @@ export const createPostSchema = z.object({
     .max(120, { message: "Title must be less than 50 characters long" }),
   subredditId: z.any(),
   content: z.any(),
-  image : z.any(),
+  image: z.any(),
 });
 
-export type TCreatePostSchema = z.infer<typeof createPostSchema>;
+export type TPostSchema = z.infer<typeof postSchema>;

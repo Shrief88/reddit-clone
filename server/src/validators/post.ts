@@ -46,21 +46,6 @@ export const updatePost = [
     .isLength({ max: 120 })
     .withMessage("Title must be at most 120 characters long"),
   body("content").optional(),
-  body("subredditId")
-    .notEmpty()
-    .withMessage("Subreddit ID is required")
-    .isUUID()
-    .withMessage("Invalid subreddit ID")
-    .custom(async (id) => {
-      const subreddit = await prisma.subreddit.findUnique({
-        where: {
-          id,
-        },
-      });
-      if (!subreddit) {
-        throw new Error("Subreddit not found");
-      }
-    }),
   param("id")
     .isUUID()
     .withMessage("Invalid post ID")
