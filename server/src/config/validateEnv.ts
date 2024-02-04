@@ -15,6 +15,10 @@ const env = cleanEnv(process.env, {
   ACCESS_TOKEN_SECRET: str(),
 
   CLIENT_URL: str(),
+
+  CLOUD_NAME: str(),
+  API_KEY: str(),
+  API_SECRET: str(),
 });
 
 export default env;
