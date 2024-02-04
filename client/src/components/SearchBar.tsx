@@ -51,7 +51,7 @@ export const SearchBar = () => {
                     key={subreddit.id}
                     value={subreddit.name}
                     onSelect={() => {
-                      navigator(`/r/${subreddit.name}`, { replace: true });
+                      navigator(`/r/${subreddit.name}`);
                       setInput("");
                       setFilteredSubreddits([]);
                     }}

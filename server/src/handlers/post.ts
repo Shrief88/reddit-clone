@@ -146,6 +146,28 @@ export const createPost: RequestHandler = async (
   }
 };
 
+export const updatePost: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const id = req.params.id;
+    if (req.body.image === "") {
+      req.body.image = null;
+    }
+    const post = await prisma.post.update({
+      where: {
+        id,
+      },
+      data: req.body,
+    });
+    res.status(200).json({ data: post });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const deletePost: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;

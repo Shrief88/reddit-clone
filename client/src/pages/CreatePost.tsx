@@ -20,22 +20,36 @@ import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 
 import Editor from "@/components/Editor";
 import useSubreddits from "@/hooks/useSubreddits";
+import useToken from "@/hooks/useToken";
+import { toast } from "sonner";
+import { IExtendedPost } from "@/models/post";
+
+const RULES = [
+  "1. Remember the human",
+  "2. Behave like you would in real life",
+  "3. Look for the original source of content",
+  "4. Search for duplicates before posting",
+  "5. Read the community’s rules",
+];
 
 const CreatePost = () => {
   const [open, setOpen] = useState(false);
   const { subredditName } = useParams();
+  const { axiosClientAuth } = useToken();
   const [value, setValue] = useState(
     subredditName ? subredditName : "Select Subreddit"
   );
   const { subreddits, isLoading } = useSubreddits();
 
-  const RULES = [
-    "1. Remember the human",
-    "2. Behave like you would in real life",
-    "3. Look for the original source of content",
-    "4. Search for duplicates before posting",
-    "5. Read the community’s rules",
-  ];
+  const createPost = async (post: FormData) => {
+    toast.loading("Creating post...");
+    const res = await axiosClientAuth.post(`/post/`, post, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data.data as IExtendedPost;
+  };
 
   return (
     <div className="bg-muted flex-1">
@@ -101,6 +115,7 @@ const CreatePost = () => {
                   subredditId={
                     subreddits?.find((sub) => sub.name === value)?.id
                   }
+                  mutatationFn={createPost}
                 />
               )}
               <div className="w-full flex justify-end">

@@ -69,9 +69,10 @@ const UpdatePost = () => {
                   title={post?.title}
                   content={post?.content}
                   mutatationFn={updatePost}
+                  imageFile={post?.image ? new File([], post.image) : null}
+                  subredditId={post?.subreddit.id}
                 />
               )}
-
               <div className="w-full flex justify-end">
                 <Button
                   type="submit"

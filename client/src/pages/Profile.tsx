@@ -12,6 +12,7 @@ import { CircleUserRound, Calendar, Flower } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import UpdateUsername from "@/components/dialoags/UpdateUsername";
 
 enum followingState {
   FOLLOWING = "FOLLOWING",
@@ -148,6 +149,10 @@ const Profile = () => {
                       ? "Unfollow"
                       : "Follow"}
                   </Button>
+                )}
+
+                {currentUser?.id === user?.id && (
+                  <UpdateUsername username={user?.username as string} />
                 )}
               </div>
             </div>

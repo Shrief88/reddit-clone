@@ -86,7 +86,13 @@ const Post = () => {
                       </div>
                       <div className="flex gap-2">
                         {user?.id === post.author.id && (
-                          <Edit size={18} className="cursor-pointer" />
+                          <Edit
+                            size={18}
+                            className="cursor-pointer"
+                            onClick={() =>
+                              navigator(`/post/update/r/${post.id}`)
+                            }
+                          />
                         )}
                         {(user?.id === post.author.id ||
                           user?.id === post.subreddit.onwerId) && (

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,6 @@ import {
   TUpdateUsernameSchema,
 } from "@/validators/updateUsernameSchema";
 import useToken from "@/hooks/useToken";
-import { IComment } from "@/models/comment";
 import { useState } from "react";
 import responseError from "@/models/error";
 import { useNavigate } from "react-router-dom";

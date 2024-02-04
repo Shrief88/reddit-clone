@@ -13,18 +13,22 @@ import {
   createPostSchema,
   TCreatePostSchema,
 } from "@/validators/createPostSchema";
-import useToken from "@/hooks/useToken";
 import { IPost } from "@/models/post";
 import responseError from "@/models/error";
 import useSubreddits from "@/hooks/useSubreddits";
 
 interface EditorProps {
-  subredditId: string | undefined;
+  subredditId?: string;
+  title?: string;
+  content?: string;
+  imageFile?: File | null;
+  mutatationFn: (newPost: FormData) => Promise<IPost>;
 }
 
 const Editor = (props: EditorProps) => {
-  const { axiosClientAuth } = useToken();
-  const [selectedFile, setSelectedFile] = useState<null | File>(null);
+  const [selectedFile, setSelectedFile] = useState<null | File | undefined>(
+    props.imageFile
+  );
   const navigator = useNavigate();
   const { subreddits } = useSubreddits();
 
@@ -35,22 +39,19 @@ const Editor = (props: EditorProps) => {
     reset,
   } = useForm<TCreatePostSchema>({
     resolver: zodResolver(createPostSchema),
+    defaultValues: {
+      title: props.title,
+      content: props.content,
+      image: props.imageFile,
+    },
   });
 
   const { mutate } = useMutation({
     mutationKey: ["createPost"],
-    mutationFn: async (newPost: FormData) => {
-      toast.loading("Creating post...");
-      const res = await axiosClientAuth.post("/post", newPost, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return res.data.data as IPost;
-    },
+    mutationFn: props.mutatationFn,
     onSuccess: (data: IPost) => {
       toast.dismiss();
-      toast.success("Post created");
+      toast.success(props.title ? "Post updated" : "Post created");
       const subredditName = subreddits?.find(
         (sub) => sub.id === data.subredditId
       )?.name;
@@ -73,14 +74,17 @@ const Editor = (props: EditorProps) => {
     if (data.image.length > 0) {
       formData.append("image", data.image[0]);
     }
+
+    if (props.imageFile) {
+      formData.append("image", data.image);
+    }
+
     formData.append("title", data.title);
     formData.append("content", data.content);
-
     if (!props.subredditId) {
       toast.error("Please select a subreddit");
     } else {
       formData.append("subredditId", props.subredditId);
-      toast.loading("Creating post...");
       mutate(formData);
     }
   };
@@ -129,8 +133,11 @@ const Editor = (props: EditorProps) => {
                 }}
               />
             </div>
-
-            <img src={URL.createObjectURL(selectedFile)} />
+            {props.imageFile ? (
+              <img src={"http://localhost:3000/post/" + props.imageFile.name} />
+            ) : (
+              <img src={URL.createObjectURL(selectedFile)} />
+            )}
           </div>
         )}
       </form>

@@ -9,6 +9,7 @@ export const resizeImage = (
   return async (req, res, next) => {
     if (req.file) {
       const fileName = `${modelName}-${uuidv4()}-${Date.now()}.jpg`;
+      console.log(fileName);
       try {
         await sharp(req.file?.buffer)
           .jpeg({ quality: 95 })

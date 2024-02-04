@@ -24,6 +24,14 @@ postRouter.post(
   postHandler.createPost,
 );
 
+postRouter.put(
+  "/:id",
+  uploadImage("image"),
+  postValidator.updatePost,
+  resizeImage("post", "image"),
+  postHandler.updatePost,
+);
+
 postRouter.delete("/:id", postValidator.deletePost, postHandler.deletePost);
 
 export default postRouter;
