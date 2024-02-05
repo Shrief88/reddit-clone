@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -25,11 +24,6 @@ const Home = () => {
   const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
     DisplayPostModes.FOLLOWING
   );
-
-  useEffect(() => {
-    const socket = io(import.meta.env.VITE_SOCKET_URI);
-    console.log(socket);
-  },[])
 
   useEffect(() => {
     user?.subreddits.length || user?.following.length
