@@ -30,6 +30,7 @@ if (env.isDevelopment) {
   app.use(morgan("dev"));
 }
 
+// Routes
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());

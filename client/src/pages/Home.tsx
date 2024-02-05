@@ -1,16 +1,17 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { IExtendedPost } from "@/models/post";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import useToken from "@/hooks/useToken";
-import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 
 enum DisplayPostModes {
@@ -21,10 +22,14 @@ enum DisplayPostModes {
 const Home = () => {
   const { axiosClientAuth } = useToken();
   const { user } = useAuth();
-
   const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
     DisplayPostModes.FOLLOWING
   );
+
+  useEffect(() => {
+    const socket = io(import.meta.env.VITE_SOCKET_URI);
+    console.log(socket);
+  },[])
 
   useEffect(() => {
     user?.subreddits.length || user?.following.length
