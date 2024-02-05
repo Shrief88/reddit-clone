@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -23,10 +23,14 @@ const Home = () => {
   const { user } = useAuth();
 
   const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
-    user?.subreddits.length || user?.following.length
-      ? DisplayPostModes.FOLLOWING
-      : DisplayPostModes.ALL
+    DisplayPostModes.FOLLOWING
   );
+
+  useEffect(() => {
+    user?.subreddits.length || user?.following.length
+      ? setDisplayMode(DisplayPostModes.FOLLOWING)
+      : setDisplayMode(DisplayPostModes.ALL);
+  }, [user]);
 
   const getFollowingPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
