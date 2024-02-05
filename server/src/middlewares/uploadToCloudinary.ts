@@ -2,7 +2,7 @@ import { type RequestHandler } from "express";
 import { v4 as uuidv4 } from "uuid";
 import cloudinary from "../config/cloudinary";
 
-export const resizeImage = (
+export const uploadToCloudinary = (
   modelName: string,
   path: string,
 ): RequestHandler => {

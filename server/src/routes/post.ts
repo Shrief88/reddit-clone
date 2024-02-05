@@ -4,7 +4,7 @@ import * as postHandler from "../handlers/post";
 import * as authHandler from "../handlers/auth";
 import * as postValidator from "../validators/post";
 import { uploadImage } from "../middlewares/uploadImageMiddleware";
-import { resizeImage } from "../middlewares/resizeImagemiddleware";
+import { uploadToCloudinary } from "../middlewares/uploadToCloudinary";
 
 const postRouter = express.Router({ mergeParams: true });
 
@@ -20,7 +20,7 @@ postRouter.post(
   "/",
   uploadImage("image"),
   postValidator.createPost,
-  resizeImage("post", "image"),
+  uploadToCloudinary("post", "image"),
   postHandler.createPost,
 );
 
@@ -28,7 +28,7 @@ postRouter.put(
   "/:id",
   uploadImage("image"),
   postValidator.updatePost,
-  resizeImage("post", "image"),
+  uploadToCloudinary("post", "image"),
   postHandler.updatePost,
 );
 
