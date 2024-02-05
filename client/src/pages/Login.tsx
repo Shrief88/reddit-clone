@@ -23,7 +23,7 @@ const Login = () => {
                 asChild
               >
                 <Link
-                  to="http://localhost:3000/api/v1/auth/google"
+                  to={import.meta.env.VITE_API_URI + "/auth/google"}
                   className="flex justify-center gap-2"
                 >
                   <img src={googleIcon} className="w-5" />

@@ -154,7 +154,9 @@ const UpdateEditor = (props: UpdateEditorProps) => {
             ) : (
               props.imageFile && (
                 <img
-                  src={"http://localhost:3000/post/" + props.imageFile.name}
+                  src={
+                    import.meta.env.VITE_CLOUDINARY_URL + props.imageFile.name
+                  }
                 />
               )
             )}

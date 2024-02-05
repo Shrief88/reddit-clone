@@ -115,7 +115,9 @@ const Post = () => {
                     />
                     {post.image && (
                       <div className="relative w-full flex justify-center mt-3">
-                        <img src={"http://localhost:3000/post/" + post.image} />
+                        <img
+                          src={import.meta.env.VITE_CLOUDINARY_URL + post.image}
+                        />
                       </div>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/api/v1";
+const BASE_URL = import.meta.env.VITE_API_URI;
 
 export const axiosClient = axios.create({
   baseURL: BASE_URL,
@@ -9,7 +9,7 @@ export const axiosClient = axios.create({
   },
 });
 
-export const axiosClientWithToken = (token : string) =>
+export const axiosClientWithToken = (token: string) =>
   axios.create({
     baseURL: BASE_URL,
     headers: {
