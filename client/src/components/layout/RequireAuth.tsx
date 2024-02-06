@@ -1,8 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 
-import SocketProvider from "@/context/Socket";
-
 const RequireAuth = () => {
   const { user, isLoading } = useAuth();
 
@@ -10,13 +8,7 @@ const RequireAuth = () => {
     return null;
   }
 
-  return user ? (
-    <SocketProvider>
-      <Outlet />
-    </SocketProvider>
-  ) : (
-    <Navigate to="/login" replace={true} />
-  );
+  return user ? <Outlet /> : <Navigate to="/login" replace={true} />;
 };
 
 export default RequireAuth;

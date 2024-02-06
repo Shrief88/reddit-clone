@@ -6,11 +6,12 @@ import useAuth from "@/hooks/useAuth";
 import UserAccountNav from "./UserAccountNav";
 import SideSheet from "../SideSheet";
 import SearchBar from "@/components/SearchBar";
-import { Bell } from "lucide-react";
+import { Notification } from "./Notification";
+
 
 const Navbar = () => {
   const { user } = useAuth();
-
+ 
   return (
     <div className="sticky z-50 top-0 inset-x-0 h-fit py-4 bg-background">
       <header className="relative">
@@ -35,7 +36,7 @@ const Navbar = () => {
                   image={user?.image || ""}
                   username={user?.username || ""}
                 />
-                <Bell className="h-5 w-5" />
+                <Notification />
                 <SideSheet />
               </div>
             )}

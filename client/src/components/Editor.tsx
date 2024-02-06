@@ -78,7 +78,6 @@ const Editor = (props: EditorProps) => {
     if (data.image.length > 0) {
       formData.append("image", data.image[0]);
     }
-    console.log(formData.get("image"));
     formData.append("title", data.title);
     formData.append("content", data.content);
     if (!props.subredditId) {

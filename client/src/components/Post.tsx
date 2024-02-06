@@ -18,7 +18,7 @@ const Post = ({ post, isHome }: PostProps) => {
   return (
     <div className="rounded-md bg-background shadow">
       <div className="pr-6 flex justify-between">
-        <Vote votes={post.votes} postId={post.id} />
+        <Vote votes={post.votes} postId={post.id} postAuthor={post.author.username}/>
         <div className="w-0 flex-1 py-4 pl-3">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
             {isHome ? (

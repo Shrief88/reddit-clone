@@ -1,3 +1,4 @@
+import useAuth from "@/hooks/useAuth";
 import React, {
   ReactNode,
   createContext,
@@ -13,21 +14,25 @@ interface SocketProviderProps {
 
 const SocketContext = createContext<Socket | null>(null);
 
-export const useSocket = () => {
-  return useContext(SocketContext);
-};
-
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_SOCKET_URI);
-    setSocket(newSocket);
+    if (user) {
+      setSocket(io(import.meta.env.VITE_SOCKET_URI));
 
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+      return () => {
+        socket?.close();
+      };
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (socket && user) {
+      socket?.emit("newUser", user?.username as string);
+    }
+  }, [socket, user]);
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
@@ -35,3 +40,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 };
 
 export default SocketProvider;
+
+export const useSocket = () => {
+  return useContext(SocketContext);
+};

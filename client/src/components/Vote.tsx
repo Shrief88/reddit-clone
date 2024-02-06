@@ -8,10 +8,12 @@ import { IPostVote } from "@/models/vote";
 import { VoteType } from "@/models/vote";
 import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
+import { useSocket } from "@/context/Socket";
 
 interface VoteProps {
   votes: IPostVote[];
   postId: string;
+  postAuthor: string;
 }
 
 const Vote = (props: VoteProps) => {
@@ -20,6 +22,7 @@ const Vote = (props: VoteProps) => {
   const [isUpvoted, setIsUpVoted] = useState(false);
   const [isDownVoted, setIsDownVoted] = useState(false);
   const [votesCount, setVotesCount] = useState(0);
+  const socket = useSocket();
 
   useEffect(() => {
     let count = 0;
@@ -41,6 +44,7 @@ const Vote = (props: VoteProps) => {
       return res.data.data;
     },
     onSuccess: () => {
+      socket?.emit("notification", user?.username, props.postAuthor);
       setIsUpVoted(true);
       if (isDownVoted) {
         setIsDownVoted(false);
