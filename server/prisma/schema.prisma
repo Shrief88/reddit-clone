@@ -23,6 +23,7 @@ model User {
   subreddits Subscription[]
 
   posts Post[]
+  savedPosts SavedPost[]
   comments Comment[]
   votes Vote[]
   commentsVotes CommentVote[]
@@ -80,7 +81,17 @@ model Post {
 
   comments Comment[]
   votes Vote[]
-  
+
+  savedBy SavedPost[]
+}
+
+model SavedPost {
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@id([userId, postId])
 }
 
 model Comment {
