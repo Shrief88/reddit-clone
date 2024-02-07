@@ -1,18 +1,21 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import SocketProvider from "@/context/Socket";
+import { ThemeProvider } from "@/context/Theme";
 
-import Navbar from "./navbar/Navbat";
+import Navbar from "./navbar/Navbar";
 
 const Layout = () => {
   return (
-    <SocketProvider>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <Outlet />
-        <Toaster />
-      </div>
-    </SocketProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <SocketProvider>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <Outlet />
+          <Toaster />
+        </div>
+      </SocketProvider>
+    </ThemeProvider>
   );
 };
 
