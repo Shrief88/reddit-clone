@@ -2,7 +2,7 @@ import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/PostFeed";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
@@ -13,10 +13,16 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import UpdateUsername from "@/components/dialoags/UpdateUsername";
+import { cn } from "@/lib/utils";
 
 enum followingState {
   FOLLOWING = "FOLLOWING",
   NOT_FOLLOWING = "NOT_FOLLOWING",
+}
+
+enum DisplayPostModes {
+  SAVED = "saved",
+  ALL = "all",
 }
 
 const Profile = () => {
@@ -24,6 +30,9 @@ const Profile = () => {
   const { username } = useParams();
   const { user: currentUser } = useAuth();
   const [followState, setFollowState] = useState<followingState | null>(null);
+  const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
+    DisplayPostModes.ALL
+  );
   const queryClient = useQueryClient();
 
   const { data: karma } = useQuery({
@@ -101,6 +110,11 @@ const Profile = () => {
     return res.data.data as IExtendedPost[];
   };
 
+  const getUserSavedPosts = async (page: number) => {
+    const res = await axiosClientAuth.get(`post/saved/me?limit=${5}&page=${page}`);
+    return res.data.data as IExtendedPost[];
+  };
+
   return (
     <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-6">
@@ -160,13 +174,47 @@ const Profile = () => {
 
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            {!isLoading && user && (
-              <PostFeed
-                isHome={true}
-                queryFn={getUserPosts}
-                queryKey={user?.id as string}
-              />
+            {username === currentUser?.username && (
+              <div className="grid grid-cols-2 justify-center border-b border-b-gray-200 -mb-6">
+                <Button
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "text-muted-foreground text-md bg-slate",
+                    displayMode === "all" &&
+                      "text-blue-900 border-b border-blue-900 rounded-none font-bold"
+                  )}
+                  onClick={() => setDisplayMode(DisplayPostModes.ALL)}
+                >
+                  Your Posts
+                </Button>
+                <Button
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "text-muted-foreground text-md bg-slate",
+                    displayMode === "saved" &&
+                      "text-blue-900 border-b border-blue-900 rounded-none font-bold"
+                  )}
+                  onClick={() => setDisplayMode(DisplayPostModes.SAVED)}
+                >
+                  Saved
+                </Button>
+              </div>
             )}
+            {!isLoading &&
+              user &&
+              (displayMode === DisplayPostModes.SAVED ? (
+                <PostFeed
+                  isHome={true}
+                  queryFn={getUserSavedPosts}
+                  queryKey="saved"
+                />
+              ) : (
+                <PostFeed
+                  isHome={true}
+                  queryFn={getUserPosts}
+                  queryKey={user?.id as string}
+                />
+              ))}
           </div>
         </div>
       </MaxWidthWrapper>

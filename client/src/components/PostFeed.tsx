@@ -45,7 +45,8 @@ const PostFeed = (props: PostFeedProps) => {
     <ul className="flex flex-col space-y-6">
       {posts.length > 0 ? (
         posts.map((post, index) => {
-          if (index === posts.length - 1) {
+          // I added posts.length > 1 to fix bug with last post when there is only 1 post
+          if (index === posts.length - 1 && posts.length > 1) {
             return (
               <div key={post.id} ref={ref}>
                 <Post post={post} isHome={props.isHome} />

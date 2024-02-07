@@ -6,12 +6,6 @@ import * as savedPostValidator from "../validators/savedPosts";
 
 const savedPostRouter = express.Router();
 
-savedPostRouter.get(
-  "/",
-  authHandler.protectRoute,
-  savedPostHandler.getUserSavedPosts,
-);
-
 savedPostRouter.post(
   "/:postId",
   authHandler.protectRoute,

@@ -59,6 +59,7 @@ export const protectRoute: RequestHandler = async (
             ownedSubreddits: true,
             followers: true,
             following: true,
+            savedPosts: true,
           },
         });
 

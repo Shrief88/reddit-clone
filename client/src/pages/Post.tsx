@@ -3,7 +3,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Edit, MessageSquare, Trash2 } from "lucide-react";
+import {
+  Edit,
+  MessageSquare,
+  Trash2,
+  Bookmark,
+  BookmarkCheck,
+} from "lucide-react";
 
 import SubriddetInfo from "@/components/SubriddetInfo";
 import CommentSection from "@/components/comment/CommentSection";
@@ -16,12 +22,14 @@ import { formatTimeToNow } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Interweave } from "interweave";
+import responseError from "@/models/error";
 
 const Post = () => {
   const { id } = useParams();
   const { axiosClientAuth } = useToken();
   const { user } = useAuth();
   const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
+  const [isSaved, setIsSaved] = useState(false);
   const { subreddits, isLoading } = useSubreddits();
   const navigator = useNavigate();
 
@@ -39,6 +47,15 @@ const Post = () => {
       setSubreddit(sub);
     }
   }, [isLoading, subreddits, postLoading]);
+
+  useEffect(() => {
+    if (!postLoading) {
+      const hasSaved = user?.savedPosts.find((post) => post.postId === id);
+      if(hasSaved) {
+        setIsSaved(true);
+      }
+    }
+  }, [postLoading,user]);
 
   const { mutate } = useMutation({
     mutationKey: ["deletePost", id],
@@ -59,6 +76,46 @@ const Post = () => {
 
   const deletePost = () => {
     mutate();
+  };
+
+  const { mutate: savePost } = useMutation({
+    mutationKey: ["savePost", id],
+    mutationFn: async () => {
+      await axiosClientAuth.post(`savedPost/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Post saved");
+      setIsSaved(true);
+    },
+    onError: (err: responseError) => {
+      if (err.response.status === 409) {
+        toast.error("Already saved");
+      } else {
+        toast.error("Something went wrong");
+      }
+    },
+  });
+
+  const { mutate: unSavePost } = useMutation({
+    mutationKey: ["unSavePost", id],
+    mutationFn: async () => {
+      await axiosClientAuth.delete(`savedPost/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Post unsaved");
+      setIsSaved(false);
+    },
+    onError: (err: responseError) => {
+      if (err.response.status === 409) {
+        toast.error("Already unsaved");
+      } else {
+        toast.error("Something went wrong");
+      }
+    },
+  });
+
+  const handleSaving = () => {
+    isSaved ? unSavePost() : savePost();
   };
 
   return (
@@ -86,6 +143,19 @@ const Post = () => {
                         </span>
                       </div>
                       <div className="flex gap-2">
+                        {isSaved ? (
+                          <BookmarkCheck
+                            size={18}
+                            className="cursor-pointer"
+                            onClick={handleSaving}
+                          />
+                        ) : (
+                          <Bookmark
+                            size={18}
+                            className="cursor-pointer"
+                            onClick={handleSaving}
+                          />
+                        )}
                         {user?.id === post.author.id && (
                           <Edit
                             size={18}

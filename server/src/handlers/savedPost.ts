@@ -2,26 +2,6 @@ import { type RequestHandler } from "express";
 import prisma from "../config/prisma";
 import { type CustomRequest } from "./auth";
 
-export const getUserSavedPosts: RequestHandler = async (
-  req: CustomRequest,
-  res,
-  next,
-) => {
-  try {
-    const userId = req.user.id;
-
-    const posts = await prisma.savedPost.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    res.status(200).json({ data: posts });
-  } catch (err) {
-    next(err);
-  }
-};
-
 export const savePost: RequestHandler = async (
   req: CustomRequest,
   res,

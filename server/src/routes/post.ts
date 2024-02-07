@@ -14,6 +14,8 @@ postRouter.get("/", postHandler.getPosts);
 
 postRouter.get("/following/me", postHandler.getUserFollowingPosts);
 
+postRouter.get("/saved/me", postHandler.getUserSavedPosts);
+
 postRouter.get("/:id", postValidator.getPost, postHandler.getPost);
 
 postRouter.post(

@@ -1,6 +1,11 @@
 import ISubreddit from "./subreddit";
 import ISubscription from "./subscription";
 
+interface SavedPosts {
+  userId: string;
+  postId: string;
+}
+
 interface IUser {
   id: string;
   username: string;
@@ -12,6 +17,7 @@ interface IUser {
   ownedSubreddits: ISubreddit[];
   followers: IFollows[];
   following: IFollows[];
+  savedPosts: SavedPosts[];
 }
 
 interface IFollows {
