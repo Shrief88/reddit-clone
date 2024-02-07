@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { IExtendedPost } from "@/models/post";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MinicreatePost from "@/components/MinicreatePost";
-import PostFeed from "@/components/PostFeed";
+import PostFeed from "@/components/post/PostFeed";
 import useToken from "@/hooks/useToken";
 import useAuth from "@/hooks/useAuth";
 

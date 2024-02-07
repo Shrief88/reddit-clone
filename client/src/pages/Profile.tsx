@@ -1,5 +1,5 @@
 import MinicreatePost from "@/components/MinicreatePost";
-import PostFeed from "@/components/PostFeed";
+import PostFeed from "@/components/post/PostFeed";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";

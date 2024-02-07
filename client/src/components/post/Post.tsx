@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
 import { MessageSquare } from "lucide-react";
-import Vote from "./Vote";
+import Vote from "../Vote";
 import { Interweave } from "interweave";
 
 interface PostProps {

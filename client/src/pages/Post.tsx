@@ -1,35 +1,29 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { Interweave } from "interweave";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import {
-  Edit,
-  MessageSquare,
-  Trash2,
-  Bookmark,
-  BookmarkCheck,
-} from "lucide-react";
+import { Edit, MessageSquare } from "lucide-react";
+
+import useSubreddits from "@/hooks/useSubreddits";
+import useToken from "@/hooks/useToken";
+import useAuth from "@/hooks/useAuth";
 
 import SubriddetInfo from "@/components/SubriddetInfo";
 import CommentSection from "@/components/comment/CommentSection";
 import Vote from "@/components/Vote";
-import useSubreddits from "@/hooks/useSubreddits";
-import useToken from "@/hooks/useToken";
+import DeletePost from "@/components/post/DeletePost";
+import SavePost from "@/components/post/SavePost";
 import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
-import useAuth from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { Interweave } from "interweave";
-import responseError from "@/models/error";
 
 const Post = () => {
   const { id } = useParams();
   const { axiosClientAuth } = useToken();
   const { user } = useAuth();
   const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
-  const [isSaved, setIsSaved] = useState(false);
   const { subreddits, isLoading } = useSubreddits();
   const navigator = useNavigate();
 
@@ -47,76 +41,6 @@ const Post = () => {
       setSubreddit(sub);
     }
   }, [isLoading, subreddits, postLoading]);
-
-  useEffect(() => {
-    if (!postLoading) {
-      const hasSaved = user?.savedPosts.find((post) => post.postId === id);
-      if(hasSaved) {
-        setIsSaved(true);
-      }
-    }
-  }, [postLoading,user]);
-
-  const { mutate } = useMutation({
-    mutationKey: ["deletePost", id],
-    mutationFn: async () => {
-      toast.loading("Deleting post...");
-      await axiosClientAuth.delete(`/post/${id}`);
-    },
-    onSuccess: () => {
-      toast.dismiss();
-      toast.success("post deleted");
-      navigator("/");
-    },
-    onError: () => {
-      toast.dismiss();
-      toast.error("Something went wrong");
-    },
-  });
-
-  const deletePost = () => {
-    mutate();
-  };
-
-  const { mutate: savePost } = useMutation({
-    mutationKey: ["savePost", id],
-    mutationFn: async () => {
-      await axiosClientAuth.post(`savedPost/${id}`);
-    },
-    onSuccess: () => {
-      toast.success("Post saved");
-      setIsSaved(true);
-    },
-    onError: (err: responseError) => {
-      if (err.response.status === 409) {
-        toast.error("Already saved");
-      } else {
-        toast.error("Something went wrong");
-      }
-    },
-  });
-
-  const { mutate: unSavePost } = useMutation({
-    mutationKey: ["unSavePost", id],
-    mutationFn: async () => {
-      await axiosClientAuth.delete(`savedPost/${id}`);
-    },
-    onSuccess: () => {
-      toast.success("Post unsaved");
-      setIsSaved(false);
-    },
-    onError: (err: responseError) => {
-      if (err.response.status === 409) {
-        toast.error("Already unsaved");
-      } else {
-        toast.error("Something went wrong");
-      }
-    },
-  });
-
-  const handleSaving = () => {
-    isSaved ? unSavePost() : savePost();
-  };
 
   return (
     <div className="flex-1 bg-muted">
@@ -143,19 +67,7 @@ const Post = () => {
                         </span>
                       </div>
                       <div className="flex gap-2">
-                        {isSaved ? (
-                          <BookmarkCheck
-                            size={18}
-                            className="cursor-pointer"
-                            onClick={handleSaving}
-                          />
-                        ) : (
-                          <Bookmark
-                            size={18}
-                            className="cursor-pointer"
-                            onClick={handleSaving}
-                          />
-                        )}
+                        <SavePost id={id as string} />
                         {user?.id === post.author.id && (
                           <Edit
                             size={18}
@@ -167,11 +79,7 @@ const Post = () => {
                         )}
                         {(user?.id === post.author.id ||
                           user?.id === post.subreddit.onwerId) && (
-                          <Trash2
-                            size={18}
-                            className="cursor-pointer"
-                            onClick={deletePost}
-                          />
+                          <DeletePost id={id as string} />
                         )}
                       </div>
                     </div>

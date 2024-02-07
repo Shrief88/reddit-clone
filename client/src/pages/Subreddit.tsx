@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import MinicreatePost from "@/components/MinicreatePost";
-import PostFeed from "@/components/PostFeed";
+import PostFeed from "@/components/post/PostFeed";
 import SubriddetInfo from "@/components/SubriddetInfo";
 import useToken from "@/hooks/useToken";
 import ISubreddit from "@/models/subreddit";
