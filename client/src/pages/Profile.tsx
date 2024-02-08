@@ -4,7 +4,8 @@ import { NavLink, useParams } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CircleUserRound, Calendar, Flower } from "lucide-react";
 import { toast } from "sonner";
 
@@ -23,19 +24,11 @@ enum followingState {
   NOT_FOLLOWING = "NOT_FOLLOWING",
 }
 
-enum DisplayPostModes {
-  SAVED = "saved",
-  ALL = "all",
-}
-
 const Profile = () => {
   const { axiosClientAuth } = useToken();
   const { username } = useParams();
   const { user: currentUser } = useAuth();
   const [followState, setFollowState] = useState<followingState | null>(null);
-  const [displayMode, setDisplayMode] = useState<DisplayPostModes>(
-    DisplayPostModes.ALL
-  );
   const queryClient = useQueryClient();
 
   const { data: karma } = useQuery({
@@ -182,46 +175,36 @@ const Profile = () => {
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
             {username === currentUser?.username && (
-              <div className="grid grid-cols-2 justify-center border-b border-b-gray-200 -mb-6">
-                <Button
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "text-muted-foreground text-md bg-slate",
-                    displayMode === "all" &&
-                      "text-blue-900 border-b border-blue-900 rounded-none font-bold"
-                  )}
-                  onClick={() => setDisplayMode(DisplayPostModes.ALL)}
-                >
-                  Your Posts
-                </Button>
-                <Button
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "text-muted-foreground text-md bg-slate",
-                    displayMode === "saved" &&
-                      "text-blue-900 border-b border-blue-900 rounded-none font-bold"
-                  )}
-                  onClick={() => setDisplayMode(DisplayPostModes.SAVED)}
-                >
-                  Saved
-                </Button>
-              </div>
+              <Tabs defaultValue="all">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="all" className="text-md rounded-md">
+                    Your posts
+                  </TabsTrigger>
+                  <TabsTrigger value="saved" className="text-md rounded-md">
+                    Saved
+                  </TabsTrigger>
+                </TabsList>
+                {!isLoading && user && (
+                  <>
+                    <TabsContent value="all">
+                      <PostFeed
+                        isHome={true}
+                        queryFn={getUserPosts}
+                        queryKey={user?.id as string}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="saved">
+                      <PostFeed
+                        isHome={true}
+                        queryFn={getUserSavedPosts}
+                        queryKey="saved"
+                      />
+                    </TabsContent>
+                  </>
+                )}
+              </Tabs>
             )}
-            {!isLoading &&
-              user &&
-              (displayMode === DisplayPostModes.SAVED ? (
-                <PostFeed
-                  isHome={true}
-                  queryFn={getUserSavedPosts}
-                  queryKey="saved"
-                />
-              ) : (
-                <PostFeed
-                  isHome={true}
-                  queryFn={getUserPosts}
-                  queryKey={user?.id as string}
-                />
-              ))}
           </div>
         </div>
       </MaxWidthWrapper>

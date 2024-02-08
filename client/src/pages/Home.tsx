@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { IExtendedPost } from "@/models/post";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
@@ -76,39 +76,31 @@ const Home = () => {
           </div>
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            <div className="grid grid-cols-2 justify-center border-b border-b-gray-200 -mb-6">
-              <Button
-                className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "text-muted-foreground text-md bg-slate",
-                  displayMode === "following" &&
-                    "text-blue-900 border-b border-blue-900 rounded-none font-bold"
-                )}
-                onClick={() => setDisplayMode(DisplayPostModes.FOLLOWING)}
-              >
-                Following
-              </Button>
-              <Button
-                className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "text-muted-foreground text-md bg-slate",
-                  displayMode === "all" &&
-                    "text-blue-900 border-b border-blue-900 rounded-none font-bold"
-                )}
-                onClick={() => setDisplayMode(DisplayPostModes.ALL)}
-              >
-                For you
-              </Button>
-            </div>
-            {displayMode === DisplayPostModes.FOLLOWING ? (
-              <PostFeed
-                isHome={true}
-                queryFn={getFollowingPosts}
-                queryKey="home"
-              />
-            ) : (
-              <PostFeed isHome={true} queryFn={getAllPosts} queryKey="forYou" />
-            )}
+            <Tabs defaultValue={displayMode}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="following" className="text-md rounded-md">
+                  Following
+                </TabsTrigger>
+                <TabsTrigger value="all" className="text-md rounded-md">
+                  For you
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="following">
+                <PostFeed
+                  isHome={true}
+                  queryFn={getFollowingPosts}
+                  queryKey="home"
+                />
+              </TabsContent>
+
+              <TabsContent value="all">
+                <PostFeed
+                  isHome={true}
+                  queryFn={getAllPosts}
+                  queryKey="forYou"
+                />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </MaxWidthWrapper>
