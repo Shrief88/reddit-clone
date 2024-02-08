@@ -42,7 +42,7 @@ const Post = () => {
       const sub = subreddits?.find((sub) => sub.name === post?.subreddit.name);
       setSubreddit(sub);
     }
-  }, [isLoading, subreddits, postLoading]);
+  }, [isLoading, subreddits, postLoading, post]);
 
   return (
     <div className="flex-1 bg-muted">

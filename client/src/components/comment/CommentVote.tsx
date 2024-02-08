@@ -34,7 +34,7 @@ const CommentVote = (props: CommentVoteProps) => {
       }
     });
     setVotesCount(count);
-  }, [props.votes]);
+  }, [props.votes, user?.id]);
 
   const { mutate: upVote } = useMutation({
     mutationKey: ["addUpVote"],

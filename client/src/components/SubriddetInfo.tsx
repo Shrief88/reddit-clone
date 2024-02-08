@@ -44,7 +44,7 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
         setSubscribeState(subscriptionState.NOT_SUBSCRIBED);
       }
     }
-  }, [props.subreddit]);
+  }, [props.subreddit, user?.id]);
 
   const { mutate: joinSubreddit, isPending } = useMutation({
     mutationKey: ["joinSubreddit"],

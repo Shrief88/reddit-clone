@@ -21,7 +21,7 @@ const SavePost = (props: SavePostProps) => {
     if (user?.savedPosts.some((post) => post.postId === props.id)) {
       setIsSaved(true);
     }
-  }, [user]);
+  }, [user, props.id]);
 
   const { mutate: savePost } = useMutation({
     mutationKey: ["savePost", props.id],
