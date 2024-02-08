@@ -111,12 +111,14 @@ const PostComment = (props: PostCommentProps) => {
       </div>
       {isReplying && (
         <CreateComment
+          username={user?.username}
           postId={props.comment.postId}
           replyToId={props.comment.id}
+          author={props.comment.author.username}
         />
       )}
       {props.replies.length > 0 && isReplying && (
-        <div className="ml-2 pl-4 border-l-2 border-zinc-200">
+        <div className="ml-2 pl-4 border-l-2 border-input">
           {props.replies.map((reply) => {
             return (
               <PostComment

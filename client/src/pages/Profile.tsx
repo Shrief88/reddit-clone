@@ -1,12 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { NavLink, useParams } from "react-router-dom";
 
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CircleUserRound, Calendar, Flower } from "lucide-react";
-import { toast } from "sonner";
 
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/post/PostFeed";
@@ -18,20 +16,12 @@ import IUser from "@/models/user";
 import UpdateUsername from "@/components/dialoags/UpdateUsername";
 import { Separator } from "@/components/ui/separator";
 import InfoSkeleton from "@/components/skeleton/InfoSkeleton";
-import { useSocket } from "@/context/Socket";
-
-enum followingState {
-  FOLLOWING = "FOLLOWING",
-  NOT_FOLLOWING = "NOT_FOLLOWING",
-}
+import Follow from "@/components/Follow";
 
 const Profile = () => {
   const { axiosClientAuth } = useToken();
   const { username } = useParams();
   const { user: currentUser } = useAuth();
-  const [followState, setFollowState] = useState<followingState | null>(null);
-  const queryClient = useQueryClient();
-  const socket = useSocket();
 
   const { data: karma } = useQuery({
     queryKey: ["karma", username],
@@ -48,64 +38,6 @@ const Profile = () => {
       return res.data.data as IUser;
     },
   });
-
-  useEffect(() => {
-    if (user) {
-      const isfollowing = user?.followers.some(
-        (follower) => follower.followingId === user?.id
-      );
-
-      isfollowing
-        ? setFollowState(followingState.FOLLOWING)
-        : setFollowState(followingState.NOT_FOLLOWING);
-    }
-  }, [user]);
-
-  const { mutate: follow } = useMutation({
-    mutationKey: ["follow", user?.username],
-    mutationFn: async () => {
-      toast.loading("Following...");
-      await axiosClientAuth.post(`follow/${user?.id}`);
-    },
-    onSuccess: () => {
-      socket?.emit(
-        "notification",
-        currentUser?.username,
-        user?.username,
-        "account_follow"
-      );
-      toast.dismiss();
-      toast.success("Followed");
-      queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
-      queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
-    },
-  });
-
-  const { mutate: unfollow } = useMutation({
-    mutationKey: ["unfollow", user?.username],
-    mutationFn: async () => {
-      toast.loading("Unfollowing...");
-      await axiosClientAuth.delete(`follow/${user?.id}`);
-    },
-    onSuccess: () => {
-      toast.dismiss();
-      toast.success("Unfollowed");
-      queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
-      queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
-    },
-  });
-
-  const handleFollowing = () => {
-    if (followState === followingState.FOLLOWING) {
-      unfollow();
-    } else {
-      follow();
-    }
-  };
 
   const getUserPosts = async (page: number) => {
     const res = await axiosClientAuth.get(
@@ -159,23 +91,20 @@ const Profile = () => {
 
                 <div className="text-sm flex items-center gap-2">
                   <CircleUserRound />
-                  <p className="text-sm">
-                    {" "}
-                    Followers: {user?.followers.length}
-                  </p>
+                  <p className="text-sm">Followers: {user?.followers.length}</p>
                 </div>
 
-                <CreateSubreddit />
-                <Button variant="outline">
-                  <NavLink to="/post/create/r/">Create Post</NavLink>
-                </Button>
+                {currentUser?.id === user?.id && (
+                  <>
+                    <CreateSubreddit />
+                    <Button variant="outline">
+                      <NavLink to="/post/create/r/">Create Post</NavLink>
+                    </Button>
+                  </>
+                )}
 
                 {currentUser?.id !== user?.id && (
-                  <Button onClick={handleFollowing} variant={"outline"}>
-                    {followState === followingState.FOLLOWING
-                      ? "Unfollow"
-                      : "Follow"}
-                  </Button>
+                  <Follow user={user as IUser} />
                 )}
 
                 {currentUser?.id === user?.id && (
@@ -187,7 +116,7 @@ const Profile = () => {
 
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            {username === currentUser?.username && (
+            {username === currentUser?.username ? (
               <Tabs defaultValue="all">
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="all" className="text-md rounded-md">
@@ -217,6 +146,12 @@ const Profile = () => {
                   </>
                 )}
               </Tabs>
+            ) : (
+              <PostFeed
+                isHome={true}
+                queryFn={getUserPosts}
+                queryKey={user?.id as string}
+              />
             )}
           </div>
         </div>

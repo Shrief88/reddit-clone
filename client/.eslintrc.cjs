@@ -14,6 +14,6 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
-    "@typescript-eslint/no-unused-vars": "1",
+    "@typescript-eslint/no-unused-vars": 1,
   },
 };

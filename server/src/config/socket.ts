@@ -12,10 +12,6 @@ const io = new Server(server, {
   cors: {
     origin: allowedOrgins,
   },
-  connectionStateRecovery: {
-    // @ts-expect-error
-    ignoreKeepAlive: true,
-  },
 });
 
 type OnlineUser = Record<string, string>;
@@ -55,7 +51,7 @@ io.on("connection", (socket) => {
           name: notificationType,
         },
       });
-
+      console.log(senderName, recieverName, notificationType);
       let message = "";
       if (notification) {
         message = notification.message;

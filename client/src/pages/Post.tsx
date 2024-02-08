@@ -132,6 +132,7 @@ const Post = () => {
                 </div>
 
                 <CommentSection
+                  postAuthor={post.author.username}
                   comments={post.comments}
                   postId={post.id}
                   subredditOnwerId={post.subreddit.onwerId}

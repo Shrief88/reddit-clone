@@ -10,16 +10,19 @@ import { toast } from "sonner";
 import useToken from "@/hooks/useToken";
 import { IComment } from "@/models/comment";
 import responseError from "@/models/error";
+import { useSocket } from "@/context/Socket";
 
 interface CreateCommentProps {
   username?: string;
   postId: string;
   replyToId?: string;
+  author: string;
 }
 
 const CreateComment = (props: CreateCommentProps) => {
   const { axiosClientAuth } = useToken();
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const {
     register,
@@ -44,6 +47,22 @@ const CreateComment = (props: CreateCommentProps) => {
       return res.data.data as IComment;
     },
     onSuccess: () => {
+      if (props.replyToId) {
+        socket?.emit(
+          "notification",
+          props.username,
+          props.author,
+          "comment_reply"
+        );
+      } else {
+        socket?.emit(
+          "notification",
+          props.username,
+          props.author,
+          "post_comment"
+        );
+      }
+
       toast.dismiss();
       toast.success("Comment created");
       reset({ text: "" });

@@ -7,6 +7,7 @@ interface CommentSectionProps {
   comments: IComment[];
   postId: string;
   subredditOnwerId: string;
+  postAuthor: string;
 }
 
 const CommentSection = (props: CommentSectionProps) => {
@@ -14,8 +15,11 @@ const CommentSection = (props: CommentSectionProps) => {
 
   return (
     <div className="flex flex-col px-2 md:px-4">
-      
-      <CreateComment username={user?.username as string} postId={props.postId} />
+      <CreateComment
+        username={user?.username as string}
+        postId={props.postId}
+        author={props.postAuthor}
+      />
       <div className="flex flex-col divide-y divide-input">
         {props.comments
           .filter((comment) => comment.replyToId === null)
@@ -26,7 +30,10 @@ const CommentSection = (props: CommentSectionProps) => {
               .sort((a, b) => b.votes.length - a.votes.length);
 
             return (
-              <div key={topLevelcomment.id} className="flex flex-col px-1 md:px-3 py-2">
+              <div
+                key={topLevelcomment.id}
+                className="flex flex-col px-1 md:px-3 py-2"
+              >
                 <PostComment
                   comment={topLevelcomment}
                   replies={replyies}
