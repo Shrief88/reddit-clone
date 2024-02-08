@@ -14,6 +14,7 @@ interface VoteProps {
   votes: IPostVote[];
   postId: string;
   postAuthor: string;
+  className?: string;
 }
 
 const Vote = (props: VoteProps) => {
@@ -106,7 +107,12 @@ const Vote = (props: VoteProps) => {
   };
 
   return (
-    <div className="flex flex-col z-20 p-3 items-center border-input border-r ">
+    <div
+      className={cn(
+        "flex p-2 gap-1 items-center",
+        props.className
+      )}
+    >
       <ArrowBigUp
         onClick={addUpVote}
         className={cn(

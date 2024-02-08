@@ -62,12 +62,12 @@ const PostComment = (props: PostCommentProps) => {
             <p className="text-sm font-medium text-foreground">
               u/{props.comment.author.username}
             </p>
-            <p className="max-h-40 truncate   -sm text-muted-foreground">
+            <p className="max-h-40 truncate text-sm text-muted-foreground">
               {formatTimeToNow(new Date(props.comment.createdAt))}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           {user?.id === props.comment.author.id && (
             <UpdateComment
               commentId={props.comment.id}
@@ -87,7 +87,7 @@ const PostComment = (props: PostCommentProps) => {
         </div>
       </div>
       <p className="text-sm text-foreground mt-2">{props.comment.text}</p>
-      <div className="flex gap-2 justify-end items-center">
+      <div className="flex  justify-end items-center">
         <Button
           variant={"ghost"}
           className="flex gap-1"
@@ -99,7 +99,9 @@ const PostComment = (props: PostCommentProps) => {
             <MessageCircleReply size={20} />
           )}
           <p className="text-bold">{isReplying ? "Cancel" : "Reply"}</p>
-          <p>{props.replies.length > 0 ? props.replies.length : ""} </p>
+          {!isReplying && (
+            <p>{props.replies.length > 0 ? props.replies.length : ""} </p>
+          )}
         </Button>
         <CommentVote commentId={props.comment.id} votes={props.comment.votes} />
       </div>

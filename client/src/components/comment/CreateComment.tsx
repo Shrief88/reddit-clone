@@ -80,7 +80,7 @@ const CreateComment = (props: CreateCommentProps) => {
           placeholder={
             props.replyToId ? "Write a reply ..." : "Write a Comment ..."
           }
-          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border boreder-border p-3 mb-3"
+          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border border-input p-3 mb-3"
         />
         {errors.text && (
           <span className="text-red-500 text-sm">{errors.text.message}</span>

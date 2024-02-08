@@ -54,7 +54,12 @@ const Post = () => {
             <div className="md:col-span-2 flex flex-col gap-8">
               <div className="rounded-md bg-background shadow pb-6">
                 <div className="flex">
-                  <Vote postId={post.id} votes={post.votes} />
+                  <Vote
+                    votes={post.votes}
+                    postId={post.id}
+                    postAuthor={post.author.username}
+                    className="flex-col hidden md:flex border border-r-input"
+                  />
                   <div className="w-0 flex-1 py-4 pl-3 pr-3">
                     <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between">
                       <div className="flex">
@@ -101,7 +106,14 @@ const Post = () => {
                   </div>
                 </div>
 
-                <div className="text-sm p-2 sm:px-6 flex gap-2 border-t border-input">
+                <div className="text-sm flex items-center gap-2 border-t border-input md:p-3">
+                  <Vote
+                    votes={post.votes}
+                    postId={post.id}
+                    postAuthor={post.author.username}
+                    className="md:hidden"
+                  />
+
                   <MessageSquare />
                   {post.comments.length}
                   <span>Comments</span>
