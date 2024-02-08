@@ -69,3 +69,24 @@ ul {
   list-style-type: disc;
   list-style-position: inside;
 }
+
+
+.ql-editor.ql-blank::before{
+  @apply dark:text-input
+}
+
+.ql-toolbar.ql-snow{
+  @apply border-input
+}
+
+.ql-container.ql-snow{
+  @apply border-input
+}
+
+.ql-snow .ql-fill{
+  @apply fill-foreground
+}
+
+.ql-snow .ql-stroke{
+  @apply stroke-foreground
+}

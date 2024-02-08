@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import TextareaAutosize from "react-textarea-autosize";
@@ -15,6 +15,7 @@ import responseError from "@/models/error";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import useToken from "@/hooks/useToken";
+import { Button } from "./ui/button";
 
 interface UpdateEditorProps {
   subredditName: string;
@@ -29,6 +30,7 @@ const UpdateEditor = (props: UpdateEditorProps) => {
   const [isImage, setIsImage] = useState(false);
   const navigator = useNavigate();
   const { axiosClientAuth } = useToken();
+  const inputFileRef = createRef<HTMLInputElement>();
 
   useEffect(() => {
     props.imageFile ? setIsImage(true) : setIsImage(false);
@@ -102,6 +104,12 @@ const UpdateEditor = (props: UpdateEditorProps) => {
     setValue("content", editorState);
   };
 
+  const handleButtonClick = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click();
+    }
+  };
+
   return (
     <div className="w-full p-4 bg-background rounded-lg border">
       <form
@@ -132,10 +140,14 @@ const UpdateEditor = (props: UpdateEditorProps) => {
                 setIsImage(true);
               },
             })}
-            className="file:text-foreground"
+            className="hidden"
             id="picture"
             type="file"
+            ref={inputFileRef}
           />
+          <Button onClick={handleButtonClick} variant="outline" type="button">
+            {isImage ? "Change Image" : "Upload Image"}
+          </Button>
         </div>
         {isImage && (
           <div className="mt-4 relative w-fit">
@@ -145,6 +157,7 @@ const UpdateEditor = (props: UpdateEditorProps) => {
                 onClick={() => {
                   setIsImage(false);
                   setNewFile(null);
+                  inputFileRef.current && (inputFileRef.current.value = "");
                   const values = getValues();
                   reset({ ...values, image: "" });
                 }}

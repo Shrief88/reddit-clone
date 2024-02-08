@@ -9,7 +9,6 @@ export const Notification = () => {
 
   useEffect(() => {
     if (socket) {
-      console.log(socket.connected);
       socket.on("notification", () => {
         toast.success("notification has been sent");
       });

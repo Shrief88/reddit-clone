@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 
-import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

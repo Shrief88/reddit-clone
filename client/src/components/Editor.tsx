@@ -110,7 +110,7 @@ const Editor = (props: EditorProps) => {
         <ReactQuill
           theme="snow"
           onChange={onEditorStateChange}
-          className="my-4"
+          className="my-4 placeholder-red"
           placeholder="What's on your mind? (optional)"
         />
         <div className="w-fit">
@@ -128,7 +128,7 @@ const Editor = (props: EditorProps) => {
         </div>
         {selectedFile && (
           <div className="mt-4 relative w-fit">
-            <div className="absolute top-0 right-0 m-2 p-1 rounded-full bg-slate-100 flex justify-center ">
+            <div className="absolute top-0 right-0 m-2 p-0.5 rounded-full bg-background flex justify-center  ">
               <XCircle
                 className="cursor-pointer"
                 onClick={() => {
