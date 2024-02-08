@@ -7,7 +7,7 @@ import {
   CommandList,
   CommandGroup,
   CommandItem,
-} from "./ui/command";
+} from "../../ui/command";
 import useSubreddits from "@/hooks/useSubreddits";
 import ISubreddit from "@/models/subreddit";
 import { useNavigate } from "react-router-dom";

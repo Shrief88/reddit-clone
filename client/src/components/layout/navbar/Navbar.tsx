@@ -5,7 +5,7 @@ import MaxWidthWrapper from "../MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
 import UserAccountNav from "./UserAccountNav";
 import SideSheet from "../SideSheet";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/layout/navbar/SearchBar";
 import { Notification } from "./Notification";
 import { ModeToggle } from "../mode-toggle";
 
