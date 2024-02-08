@@ -9,4 +9,6 @@ authRouter.get("/google", authHandler.googleLogin);
 
 authRouter.get("/google/callback", authHandler.googleLoginCallback);
 
+authRouter.get("/demoUser", authHandler.loginAsDemoUser);
+
 export default authRouter;

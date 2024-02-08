@@ -82,3 +82,23 @@ export const protectRoute: RequestHandler = async (
     next(err);
   }
 };
+
+export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: "demoUser",
+      },
+    });
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    const token = createToken({ user_id: user.id as string });
+    res.cookie("accessToken", token);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};

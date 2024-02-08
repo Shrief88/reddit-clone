@@ -76,12 +76,20 @@ const Home = () => {
           </div>
           <div className="md:col-span-2 flex flex-col gap-8">
             <MinicreatePost />
-            <Tabs defaultValue={displayMode}>
+            <Tabs value={displayMode}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="following" className="text-md rounded-md">
+                <TabsTrigger
+                  value="following"
+                  onClick={() => setDisplayMode(DisplayPostModes.FOLLOWING)}
+                  className="text-md rounded-md"
+                >
                   Following
                 </TabsTrigger>
-                <TabsTrigger value="all" className="text-md rounded-md">
+                <TabsTrigger
+                  value="all"
+                  onClick={() => setDisplayMode(DisplayPostModes.ALL)}
+                  className="text-md rounded-md"
+                >
                   For you
                 </TabsTrigger>
               </TabsList>
