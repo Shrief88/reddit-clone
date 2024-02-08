@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo.svg";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import useAuth from "@/hooks/useAuth";
 import UserAccountNav from "./UserAccountNav";
@@ -30,19 +30,20 @@ const Navbar = () => {
               {user && <SearchBar />}
             </div>
 
-            {user && (
-              <div className="flex items-center justify-end gap-2 md:gap-4 col-span-2 md:col-span-1">
-                <UserAccountNav
-                  image={user?.image || ""}
-                  username={user?.username || ""}
-                />
-                <Notification />
+            <div className="flex items-center justify-end gap-2 md:gap-4 col-span-2 md:col-span-1">
+              {user && (
+                <div className="flex items-center gap-2 md:gap-4">
+                  <UserAccountNav
+                    image={user?.image || ""}
+                    username={user?.username || ""}
+                  />
+                  <Notification />
+                  <SideSheet />
+                </div>
+              )}
 
-                <SideSheet />
-
-                <ModeToggle />
-              </div>
-            )}
+              <ModeToggle />
+            </div>
           </div>
         </MaxWidthWrapper>
       </header>

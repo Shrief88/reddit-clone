@@ -41,7 +41,7 @@ const CreatePost = () => {
     <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-          <div className="hidden md:block h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
+          <div className="hidden md:block h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
             <div className="flex flex-col p-6 bg-background font-medium">
               <p className="py-3 font-semibold text-lg">Posting to Beddit</p>
               <ol className="divide-y-2 divide-gray-200">
@@ -57,7 +57,7 @@ const CreatePost = () => {
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center">
                 <div className="-ml-2 -mt-2 flex flex-wrap items-baseline">
-                  <h3 className="ml-2 mt-2 text-base font-semibold leading-6 text-gray-900 md:text-2xl">
+                  <h3 className="ml-2 mt-2 text-base font-semibold leading-6 text-foreground md:text-2xl">
                     Create Post
                   </h3>
                 </div>
@@ -65,7 +65,7 @@ const CreatePost = () => {
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                       <Button
-                        variant="outline"
+                        variant="default"
                         className="w-[200px] justify-between text-sm"
                       >
                         {`r/${value}`}

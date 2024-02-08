@@ -12,6 +12,7 @@ import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/post/PostFeed";
 import useToken from "@/hooks/useToken";
 import useAuth from "@/hooks/useAuth";
+import { Separator } from "@/components/ui/separator";
 
 enum DisplayPostModes {
   FOLLOWING = "following",
@@ -47,13 +48,15 @@ const Home = () => {
     <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-          <div className="h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
-            <div className="bg-emerald-100 px-6 py-4">
+          <div className="h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
+            <div className="bg-background px-6 py-4">
               <div className="flex items-center gap-3">
                 <HomeIcon />
                 <p className="font-semibold text-3xl">Home</p>
               </div>
             </div>
+
+            <Separator />
 
             <div className="flex flex-col gap-3 px-6 py-6 bg-background ">
               <div className="flex justify-between py-2">
@@ -64,7 +67,7 @@ const Home = () => {
               </div>
               <CreateSubreddit />
               <NavLink
-                className={buttonVariants({ variant: "secondary" })}
+                className={buttonVariants({ variant: "outline" })}
                 to={"/post/create/r"}
               >
                 Create Post

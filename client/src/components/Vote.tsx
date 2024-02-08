@@ -106,7 +106,7 @@ const Vote = (props: VoteProps) => {
   };
 
   return (
-    <div className="flex flex-col z-20 p-3 items-center border-r-blue-100 border-r ">
+    <div className="flex flex-col z-20 p-3 items-center border-input border-r ">
       <ArrowBigUp
         onClick={addUpVote}
         className={cn(

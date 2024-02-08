@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import googleIcon from "../assets/google.svg";
 import { Button } from "@/components/ui/button";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
@@ -18,8 +18,8 @@ const Login = () => {
                 our User Agreement and Privacy Policy.
               </p>
               <Button
-                className="w-full hover:bg-slate-600"
-                variant="default"
+                className="w-full"
+                variant="outline"
                 asChild
               >
                 <Link

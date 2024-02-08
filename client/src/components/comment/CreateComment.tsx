@@ -80,13 +80,13 @@ const CreateComment = (props: CreateCommentProps) => {
           placeholder={
             props.replyToId ? "Write a reply ..." : "Write a Comment ..."
           }
-          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border boreder-gray p-3 "
+          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-base md:lg focus:outline-gray-600 rounded-md border boreder-border p-3 mb-3"
         />
         {errors.text && (
           <span className="text-red-500 text-sm">{errors.text.message}</span>
         )}
         <div className="flex justify-end">
-          <Button disabled={isPending} type="submit" variant="destructive">
+          <Button disabled={isPending} type="submit">
             Submit
           </Button>
         </div>

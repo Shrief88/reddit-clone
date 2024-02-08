@@ -41,7 +41,7 @@ const Post = ({ post, isHome }: PostProps) => {
           </div>
 
           <NavLink to={"/r/" + post.subreddit?.name + "/post/" + post.id}>
-            <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
+            <h1 className="text-lg font-semibold py-2 leading-6 text-foreground">
               {post.title}
             </h1>
           </NavLink>
@@ -66,7 +66,7 @@ const Post = ({ post, isHome }: PostProps) => {
             )}
 
             {pRef.current?.clientHeight === 288 ? (
-              <div className="absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+              <div className="absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-secondary to-transparent" />
             ) : null}
           </div>
         </div>

@@ -27,7 +27,7 @@ export function SideSheet() {
           <NavLink
             key={subredditId}
             to={`r/${subreddit?.name}`}
-            className={buttonVariants({ variant: "link" })}
+            className={buttonVariants({ variant: "ghost" })}
           >
             r/{subreddit?.name}
           </NavLink>
@@ -48,7 +48,7 @@ export function SideSheet() {
           <NavLink
             key={sub.id}
             to={`r/${sub.name}`}
-            className={buttonVariants({ variant: "link" })}
+            className={buttonVariants({ variant: "ghost" })}
           >
             r/{sub?.name}
           </NavLink>

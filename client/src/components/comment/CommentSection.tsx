@@ -16,7 +16,7 @@ const CommentSection = (props: CommentSectionProps) => {
 
   return (
     <div className="flex flex-col  px-4">
-      <Separator className="mb-4" />
+      
       <CreateComment username={user?.username as string} postId={props.postId} />
       <div className="flex flex-col divide-y divide-gray-200">
         {props.comments

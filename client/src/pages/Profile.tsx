@@ -1,19 +1,22 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+
+import { cn } from "@/lib/utils";
+import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { CircleUserRound, Calendar, Flower } from "lucide-react";
+import { toast } from "sonner";
+
 import MinicreatePost from "@/components/MinicreatePost";
 import PostFeed from "@/components/post/PostFeed";
 import CreateSubreddit from "@/components/dialoags/CreateSubreddit";
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
-import { Button, buttonVariants } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
 import { IExtendedPost } from "@/models/post";
 import IUser from "@/models/user";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CircleUserRound, Calendar, Flower } from "lucide-react";
-import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import { toast } from "sonner";
 import UpdateUsername from "@/components/dialoags/UpdateUsername";
-import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 enum followingState {
   FOLLOWING = "FOLLOWING",
@@ -111,7 +114,9 @@ const Profile = () => {
   };
 
   const getUserSavedPosts = async (page: number) => {
-    const res = await axiosClientAuth.get(`post/saved/me?limit=${5}&page=${page}`);
+    const res = await axiosClientAuth.get(
+      `post/saved/me?limit=${5}&page=${page}`
+    );
     return res.data.data as IExtendedPost[];
   };
 
@@ -120,13 +125,15 @@ const Profile = () => {
       <MaxWidthWrapper className="py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           {!isLoading && (
-            <div className="h-fit rounded-lg border border-gray-200 shadow-md md:col-span-1 md:order-last">
-              <div className="bg-emerald-100 px-6 py-4">
+            <div className="h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
+              <div className="bg-background px-6 py-4">
                 <div className="flex items-center gap-3">
                   <CircleUserRound size={30} />
                   <p className="font-semibold text-2xl">u/{user?.username}</p>
                 </div>
               </div>
+
+              <Separator />
               <div className="flex flex-col gap-3 px-6 py-6 bg-background text-muted-foreground">
                 <p className="text-center font-bold">
                   your personal Breddit frontpage.

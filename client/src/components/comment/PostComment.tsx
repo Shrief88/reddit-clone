@@ -59,10 +59,10 @@ const PostComment = (props: PostCommentProps) => {
             image={props.comment.author.image}
           />
           <div className="ml-2 flex items-center gap-x-2">
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-foreground">
               u/{props.comment.author.username}
             </p>
-            <p className="max-h-40 truncate text-sm text-muted-foreground">
+            <p className="max-h-40 truncate   -sm text-muted-foreground">
               {formatTimeToNow(new Date(props.comment.createdAt))}
             </p>
           </div>
@@ -86,7 +86,7 @@ const PostComment = (props: PostCommentProps) => {
           )}
         </div>
       </div>
-      <p className="text-sm text-zinc-900 mt-2">{props.comment.text}</p>
+      <p className="text-sm text-foreground mt-2">{props.comment.text}</p>
       <div className="flex gap-2 justify-end items-center">
         <Button
           variant={"ghost"}

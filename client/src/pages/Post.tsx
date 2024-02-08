@@ -52,7 +52,7 @@ const Post = () => {
             </div>
 
             <div className="md:col-span-2 flex flex-col gap-8">
-              <div className="rounded-md bg-background shadow pb-3">
+              <div className="rounded-md bg-background shadow pb-6">
                 <div className="flex">
                   <Vote postId={post.id} votes={post.votes} />
                   <div className="w-0 flex-1 py-4 pl-3 pr-3">
@@ -83,7 +83,7 @@ const Post = () => {
                         )}
                       </div>
                     </div>
-                    <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
+                    <h1 className="text-xl font-semibold py-2 leading-6 text-foreground">
                       {post.title}
                     </h1>
 
@@ -101,7 +101,7 @@ const Post = () => {
                   </div>
                 </div>
 
-                <div className="text-sm p-2 sm:px-6 flex gap-2 border border-t-gray-200">
+                <div className="text-sm p-2 sm:px-6 flex gap-2 border-t border-input">
                   <MessageSquare />
                   {post.comments.length}
                   <span>Comments</span>

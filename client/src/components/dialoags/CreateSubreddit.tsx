@@ -88,7 +88,7 @@ const CreateSubreddit = () => {
               <Input
                 {...register("name")}
                 className={cn({
-                  "focus-visible:ring-red-500": errors.name,
+                  "focus-visible:ring": errors.name,
                 })}
                 id="name"
                 type="text"
@@ -109,7 +109,7 @@ const CreateSubreddit = () => {
                   {
                     "focus-visible:ring-red-500": errors.description,
                   },
-                  "w-full border-input border rounded-md p-3"
+                  "w-full border-input border rounded-md p-3 bg-background"
                 )}
               ></textarea>
             </div>

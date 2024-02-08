@@ -37,7 +37,7 @@ const UserAccountNav = (props: UserAccountNavProps) => {
           <UserAvatar username={user?.username} image={user?.image} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="bg-background">
         <DropdownMenuLabel className="flex items-center gap-2">
           <UserAvatar username={user?.username} image={user?.image} />
           {props.username}

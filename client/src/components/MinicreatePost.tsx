@@ -15,7 +15,7 @@ const MinicreatePost = () => {
   }
 
   return (
-    <div className="overflow-hidden rounded-md bg-white shadow">
+    <div className="overflow-hidden rounded-md bg-background shadow">
       <div className="h-full px-6 py-4 justify-between grid grid-col-1 grid-cols-9 gap-y-3">
         <div className="col-span-8 flex items-center gap-3">
           <UserAvatar username={user?.username} image={user?.image} />
@@ -23,7 +23,7 @@ const MinicreatePost = () => {
             readOnly
             placeholder="Create Post"
             onClick={() => navigator(`/post/create/r/${subredditName}`)}
-          ></Input>
+          />
         </div>
 
         <div className="flex justify-center">
