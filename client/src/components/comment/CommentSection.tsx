@@ -16,7 +16,7 @@ const CommentSection = (props: CommentSectionProps) => {
     <div className="flex flex-col px-2 md:px-4">
       
       <CreateComment username={user?.username as string} postId={props.postId} />
-      <div className="flex flex-col divide-y divide-gray-200">
+      <div className="flex flex-col divide-y divide-input">
         {props.comments
           .filter((comment) => comment.replyToId === null)
           .sort((a, b) => b.votes.length - a.votes.length)

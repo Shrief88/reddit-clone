@@ -9,8 +9,8 @@ export const Notification = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on("notification", () => {
-        toast.success("notification has been sent");
+      socket.on("notification", (sender: string, message: string) => {
+        toast.success(`${sender} ${message}`);
       });
     }
 

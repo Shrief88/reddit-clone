@@ -4,11 +4,17 @@ import { Server } from "socket.io";
 
 import allowedOrgins from "./allowedOrgins";
 import app from "../app";
+import prisma from "./prisma";
+import { type NotificationTypeNames } from "@prisma/client";
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: allowedOrgins,
+  },
+  connectionStateRecovery: {
+    // @ts-expect-error
+    ignoreKeepAlive: true,
   },
 });
 
@@ -37,14 +43,34 @@ io.on("connection", (socket) => {
     socket.to(socket.id).emit("hello");
   });
 
-  socket.on("notification", (senderName: string, recieverName: string) => {
-    if (senderName !== recieverName) {
-      const reciever = getUser(recieverName);
-      if (reciever) {
-        socket.to(reciever.socketId).emit("notification");
+  socket.on(
+    "notification",
+    async (
+      senderName: string,
+      recieverName: string,
+      notificationType: NotificationTypeNames,
+    ) => {
+      const notification = await prisma.notificationType.findUnique({
+        where: {
+          name: notificationType,
+        },
+      });
+
+      let message = "";
+      if (notification) {
+        message = notification.message;
       }
-    }
-  });
+
+      if (senderName !== recieverName) {
+        const reciever = getUser(recieverName);
+        if (reciever) {
+          socket
+            .to(reciever.socketId)
+            .emit("notification", senderName, message);
+        }
+      }
+    },
+  );
 
   socket.on("disconnect", () => {
     deleteUser(socket.id);

@@ -103,7 +103,11 @@ const PostComment = (props: PostCommentProps) => {
             <p>{props.replies.length > 0 ? props.replies.length : ""} </p>
           )}
         </Button>
-        <CommentVote commentId={props.comment.id} votes={props.comment.votes} />
+        <CommentVote
+          commentId={props.comment.id}
+          votes={props.comment.votes}
+          commentAuthor={props.comment.author.username}
+        />
       </div>
       {isReplying && (
         <CreateComment

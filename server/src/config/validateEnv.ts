@@ -8,6 +8,7 @@ const env = cleanEnv(process.env, {
   NODE_ENV: str({ choices: ["development", "test", "production"] }),
   BASE_URL: str(),
   DATABASE_URL: str(),
+  DATABASE_CLOUD: str(),
 
   GOOGLE_CLIENT_ID: str(),
   GOOGLE_CLIENT_SECRET: str(),

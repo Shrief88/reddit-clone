@@ -18,6 +18,7 @@ import IUser from "@/models/user";
 import UpdateUsername from "@/components/dialoags/UpdateUsername";
 import { Separator } from "@/components/ui/separator";
 import InfoSkeleton from "@/components/skeleton/InfoSkeleton";
+import { useSocket } from "@/context/Socket";
 
 enum followingState {
   FOLLOWING = "FOLLOWING",
@@ -30,6 +31,7 @@ const Profile = () => {
   const { user: currentUser } = useAuth();
   const [followState, setFollowState] = useState<followingState | null>(null);
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const { data: karma } = useQuery({
     queryKey: ["karma", username],
@@ -66,6 +68,12 @@ const Profile = () => {
       await axiosClientAuth.post(`follow/${user?.id}`);
     },
     onSuccess: () => {
+      socket?.emit(
+        "notification",
+        currentUser?.username,
+        user?.username,
+        "account_follow"
+      );
       toast.dismiss();
       toast.success("Followed");
       queryClient.invalidateQueries({ queryKey: ["user", user?.username] });

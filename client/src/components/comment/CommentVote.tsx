@@ -7,10 +7,12 @@ import useToken from "@/hooks/useToken";
 import { ICommentVote, VoteType } from "@/models/vote";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSocket } from "@/context/Socket";
 
 interface CommentVoteProps {
   votes: ICommentVote[];
   commentId: string;
+  commentAuthor: string;
 }
 
 const CommentVote = (props: CommentVoteProps) => {
@@ -19,6 +21,7 @@ const CommentVote = (props: CommentVoteProps) => {
   const [isUpvoted, setIsUpVoted] = useState(false);
   const [isDownVoted, setIsDownVoted] = useState(false);
   const [votesCount, setVotesCount] = useState(0);
+  const socket = useSocket();
 
   useEffect(() => {
     let count = 0;
@@ -42,6 +45,12 @@ const CommentVote = (props: CommentVoteProps) => {
       return res.data.data;
     },
     onSuccess: () => {
+      socket?.emit(
+        "notification",
+        user?.username,
+        props.commentAuthor,
+        "comment_upvote"
+      );
       setIsUpVoted(true);
       if (isDownVoted) {
         setIsDownVoted(false);

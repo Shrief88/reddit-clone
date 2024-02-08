@@ -138,3 +138,20 @@ model CommentVote {
 
   @@id([userId, commentId])
 }
+
+enum NotificationTypeNames {
+  post_upvote
+  post_comment
+  comment_upvote
+  comment_reply
+  account_follow 
+}
+
+model NotificationType {
+  id String @id @default(uuid())
+  name NotificationTypeNames @unique
+  message String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

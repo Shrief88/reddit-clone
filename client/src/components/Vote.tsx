@@ -45,7 +45,7 @@ const Vote = (props: VoteProps) => {
       return res.data.data;
     },
     onSuccess: () => {
-      socket?.emit("notification", user?.username, props.postAuthor);
+      socket?.emit("notification", user?.username, props.postAuthor,"post_upvote");
       setIsUpVoted(true);
       if (isDownVoted) {
         setIsDownVoted(false);
