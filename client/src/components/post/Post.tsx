@@ -22,7 +22,7 @@ const Post = ({ post, isHome }: PostProps) => {
           votes={post.votes}
           postId={post.id}
           postAuthor={post.author.username}
-          className="flex-col hidden md:flex border border-r-input"
+          className="flex-col hidden md:flex border-r border-r-input"
         />
         <div className="w-0 flex-1 py-4 pl-3">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
@@ -76,7 +76,7 @@ const Post = ({ post, isHome }: PostProps) => {
           </div>
         </div>
       </div>
-      <div className="text-sm flex gap-2 border p-1 md:p-3 border-t-input">
+      <div className="text-sm flex gap-2 border-t-input border-t p-1 md:p-3 ">
         <Vote
           votes={post.votes}
           postId={post.id}

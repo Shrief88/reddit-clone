@@ -18,6 +18,8 @@ import SavePost from "@/components/post/SavePost";
 import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
 import { formatTimeToNow } from "@/lib/utils";
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import InfoSkeleton from "@/components/skeleton/InfoSkeleton";
 
 const Post = () => {
   const { id } = useParams();
@@ -45,6 +47,16 @@ const Post = () => {
   return (
     <div className="flex-1 bg-muted">
       <MaxWidthWrapper>
+        {postLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+            <div className="md:col-span-2">
+              <PostSkeleton />
+            </div>
+            <div className="hidden md:block">
+              <InfoSkeleton />
+            </div>
+          </div>
+        )}
         {!postLoading && post && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
             <div className="hidden md:block md:col-span-1 md:order-last">
@@ -58,7 +70,7 @@ const Post = () => {
                     votes={post.votes}
                     postId={post.id}
                     postAuthor={post.author.username}
-                    className="flex-col hidden md:flex border border-r-input"
+                    className="flex-col hidden md:flex border-r border-r-input"
                   />
                   <div className="w-0 flex-1 py-4 pl-3 pr-3">
                     <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between">

@@ -8,6 +8,8 @@ import useToken from "@/hooks/useToken";
 import ISubreddit from "@/models/subreddit";
 import { IExtendedPost } from "@/models/post";
 import { useQuery } from "@tanstack/react-query";
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import InfoSkeleton from "@/components/skeleton/InfoSkeleton";
 
 const Subreddit = () => {
   const { subredditName } = useParams();
@@ -31,6 +33,16 @@ const Subreddit = () => {
   return (
     <div className="bg-muted flex-1">
       <MaxWidthWrapper>
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+            <div className="md:col-span-2">
+              <PostSkeleton />
+            </div>
+            <div className="hidden md:block">
+              <InfoSkeleton />
+            </div>
+          </div>
+        )}
         {!isLoading && subreddit && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
             <div className="hidden md:block md:col-span-1 md:order-last">

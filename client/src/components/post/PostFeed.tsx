@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { IExtendedPost } from "@/models/post";
 import Post from "./Post";
+import PostSkeleton from "../skeleton/PostSkeleton";
 
 interface PostFeedProps {
   isHome: boolean;
@@ -18,7 +19,7 @@ const PostFeed = (props: PostFeedProps) => {
     threshold: 1,
   });
 
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["posts", props.queryKey],
     queryFn: async ({
       pageParam = 1,
@@ -43,6 +44,7 @@ const PostFeed = (props: PostFeedProps) => {
 
   return (
     <ul className="flex flex-col space-y-6">
+      {isLoading && [1, 2, 3].map((i) => <PostSkeleton key={i} />)}
       {posts.length > 0 ? (
         posts.map((post, index) => {
           // I added posts.length > 1 to fix bug with last post when there is only 1 post
