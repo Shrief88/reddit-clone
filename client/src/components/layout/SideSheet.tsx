@@ -10,7 +10,7 @@ import useSubreddits from "@/hooks/useSubreddits";
 import { Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 
 export function SideSheet() {
   const { user } = useAuth();
@@ -61,9 +61,9 @@ export function SideSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="flex justify-center">
+        <Button variant={"ghost"} size={"icon"}>
           <Users className="h-5 w-5 cursor-pointer" />
-        </div>
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>

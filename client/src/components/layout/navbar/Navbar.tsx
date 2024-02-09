@@ -30,9 +30,9 @@ const Navbar = () => {
               {user && <SearchBar />}
             </div>
 
-            <div className="flex items-center justify-end gap-2 md:gap-4 col-span-2 md:col-span-1">
+            <div className="flex items-center justify-end col-span-2 md:col-span-1 gap-1">
               {user && (
-                <div className="flex items-center gap-2 md:gap-4">
+                <div className="flex items-center gap-1">
                   <UserAccountNav
                     image={user?.image || ""}
                     username={user?.username || ""}
