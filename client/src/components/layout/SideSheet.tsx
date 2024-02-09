@@ -62,7 +62,7 @@ export function SideSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <div className="flex justify-center">
-          <Users className="h-5 w-5" />
+          <Users className="h-5 w-5 cursor-pointer" />
         </div>
       </SheetTrigger>
       <SheetContent>
