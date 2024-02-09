@@ -45,11 +45,10 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           <div className="h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
-            <div className="bg-background px-6 py-4">
+            <div className="bg-card px-6 py-4">
               <div className="flex items-center gap-3">
                 <HomeIcon />
                 <p className="font-semibold text-3xl">Home</p>
@@ -58,7 +57,7 @@ const Home = () => {
 
             <Separator />
 
-            <div className="flex flex-col gap-3 px-6 py-6 bg-background ">
+            <div className="flex flex-col gap-3 px-6 py-6 bg-card ">
               <div className="flex justify-between py-2">
                 <p className="text-sm text-muted-foreground text-center">
                   Your personal Reddit frontpage. Come here to check in with
@@ -112,7 +111,6 @@ const Home = () => {
           </div>
         </div>
       </MaxWidthWrapper>
-    </div>
   );
 };
 

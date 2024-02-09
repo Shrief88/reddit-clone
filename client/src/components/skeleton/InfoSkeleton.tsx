@@ -3,7 +3,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const InfoSkeleton = () => {
   return (
-    <div className="h-fit rounded-lg border border-border shadow-md bg-background">
+    <div className="h-fit rounded-lg border border-border shadow-md bg-card">
       <div className="px-2 py-4 pl-6">
         <Skeleton className="w-2/3 h-8" />
       </div>

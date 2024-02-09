@@ -40,7 +40,7 @@ export const SearchBar = () => {
       />
 
       {input.length > 0 && (
-        <CommandList className="absolute bg-background top-full inset-x-0 shadow rounded-b-md">
+        <CommandList className="absolute bg-card top-full inset-x-0 shadow rounded-b-md">
           {filteredSubreddits.length === 0 ? (
             <CommandEmpty>No results found</CommandEmpty>
           ) : (

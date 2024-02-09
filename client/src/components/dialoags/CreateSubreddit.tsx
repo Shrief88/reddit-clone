@@ -109,7 +109,7 @@ const CreateSubreddit = () => {
                   {
                     "focus-visible:ring-red-500": errors.description,
                   },
-                  "w-full border-input border rounded-md p-3 bg-background"
+                  "w-full border-input border rounded-md p-3 bg-background "
                 )}
               ></textarea>
             </div>

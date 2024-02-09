@@ -100,7 +100,7 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
 
   return (
     <div className="h-fit rounded-lg border border-border shadow-md ">
-      <div className="bg-background px-2 py-4 pl-6">
+      <div className="bg-card px-2 py-4 pl-6">
         <div className="flex items-center gap-3">
           <p className="font-semibold text-xl ">
             About r/{props.subreddit?.name}
@@ -108,7 +108,7 @@ const SubriddetInfo = (props: SubriddetInfoProps) => {
         </div>
       </div>
       <Separator />
-      <div className="flex flex-col gap-3 px-6 py-6 bg-background ">
+      <div className="flex flex-col gap-3 px-6 py-6 bg-card ">
         <div className="flex justify-between">
           <p className="text-sm text-muted-foreground text-left">
             {props.subreddit?.description}

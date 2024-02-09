@@ -45,7 +45,6 @@ const Post = () => {
   }, [isLoading, subreddits, postLoading, post]);
 
   return (
-    <div className="flex-1 bg-muted">
       <MaxWidthWrapper>
         {postLoading && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
@@ -64,7 +63,7 @@ const Post = () => {
             </div>
 
             <div className="md:col-span-2 flex flex-col gap-8">
-              <div className="rounded-md bg-background shadow pb-6">
+              <div className="rounded-md bg-card shadow pb-6">
                 <div className="flex">
                   <Vote
                     votes={post.votes}
@@ -142,7 +141,6 @@ const Post = () => {
           </div>
         )}
       </MaxWidthWrapper>
-    </div>
   );
 };
 

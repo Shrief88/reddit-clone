@@ -93,7 +93,7 @@ const Editor = (props: EditorProps) => {
   };
 
   return (
-    <div className="w-full p-4 bg-background rounded-lg border border-border">
+    <div className="w-full p-4 bg-card rounded-lg border border-border">
       <form
         id="create-post"
         className="w-full"
@@ -121,14 +121,14 @@ const Editor = (props: EditorProps) => {
                   event.target.files ? event.target.files[0] : null
                 ),
             })}
-            className="file:text-foreground"
+            className="file:text-foreground bg-card"
             id="picture"
             type="file"
           />
         </div>
         {selectedFile && (
           <div className="mt-4 relative w-fit">
-            <div className="absolute top-0 right-0 m-2 p-0.5 rounded-full bg-background flex justify-center  ">
+            <div className="absolute top-0 right-0 m-2 p-0.5 rounded-full bg-card flex justify-center  ">
               <XCircle
                 className="cursor-pointer"
                 onClick={() => {

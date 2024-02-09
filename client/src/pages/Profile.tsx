@@ -54,7 +54,6 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           {isLoading && (
@@ -64,7 +63,7 @@ const Profile = () => {
           )}
           {!isLoading && (
             <div className="h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
-              <div className="bg-background px-6 py-4">
+              <div className="bg-card px-6 py-4">
                 <div className="flex items-center gap-3">
                   <CircleUserRound size={30} />
                   <p className="font-semibold text-2xl">u/{user?.username}</p>
@@ -72,7 +71,7 @@ const Profile = () => {
               </div>
 
               <Separator />
-              <div className="flex flex-col gap-3 px-6 py-6 bg-background text-muted-foreground">
+              <div className="flex flex-col gap-3 px-6 py-6 bg-card text-muted-foreground">
                 <p className="text-center font-bold">
                   your personal Breddit frontpage.
                 </p>
@@ -156,7 +155,6 @@ const Profile = () => {
           </div>
         </div>
       </MaxWidthWrapper>
-    </div>
   );
 };
 

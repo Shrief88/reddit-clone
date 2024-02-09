@@ -16,7 +16,7 @@ const Post = ({ post, isHome }: PostProps) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="rounded-md bg-background shadow">
+    <div className="rounded-md bg-card shadow">
       <div className="pr-6 flex justify-between">
         <Vote
           votes={post.votes}

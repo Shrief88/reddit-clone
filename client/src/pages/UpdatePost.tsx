@@ -21,7 +21,6 @@ const UpdatePost = () => {
   });
 
   return (
-    <div className="bg-muted flex-1">
       <MaxWidthWrapper className="py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
           <Rules />
@@ -57,7 +56,6 @@ const UpdatePost = () => {
           </div>
         </div>
       </MaxWidthWrapper>
-    </div>
   );
 };
 

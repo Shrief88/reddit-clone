@@ -24,9 +24,8 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-muted flex-1 flex flex-col justify-center items-center">
-      <MaxWidthWrapper>
-        <div className="bg-background rounded-3xl py-5 container sm:w-[400px]">
+      <MaxWidthWrapper className="flex flex-col justify-center">
+        <div className="bg-card rounded-3xl py-5 container sm:w-[400px]">
           <div className="mx-auto flex w-full flex-col justify-center ">
             <div className="flex flex-col items-center text-center space-y-4">
               <img src={logo} className="h-20 w-20" />
@@ -50,7 +49,6 @@ const Login = () => {
           </div>
         </div>
       </MaxWidthWrapper>
-    </div>
   );
 };
 

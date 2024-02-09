@@ -11,7 +11,9 @@ const Layout = () => {
       <SocketProvider>
         <div className="flex flex-col min-h-screen">
           <Navbar />
-          <Outlet />
+          <div className="bg-background flex-1">
+            <Outlet />
+          </div>
           <Toaster />
         </div>
       </SocketProvider>
