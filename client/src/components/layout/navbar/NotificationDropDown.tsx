@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { NavLink } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -10,18 +12,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { useSocket } from "@/context/Socket";
-import { useQuery } from "@tanstack/react-query";
-import useToken from "@/hooks/useToken";
 import { Button } from "@/components/ui/button";
 import { Bell, Loader2 } from "lucide-react";
-import { INotification } from "@/models/notification";
 import { cn } from "@/lib/utils";
-import { NavLink } from "react-router-dom";
-import Notification from "./Notification";
-import useAuth from "@/hooks/useAuth";
 
-const NotificationDropDown = () => {
+import { useSocket } from "@/context/Socket";
+import useToken from "@/hooks/useToken";
+import useAuth from "@/hooks/useAuth";
+import { INotification } from "@/models/notification";
+import NotificationDiv from "./NotificationDiv";
+
+interface NotificationDropDownProps {
+  notificationCounter: number | undefined;
+}
+
+const NotificationDropDown = (props: NotificationDropDownProps) => {
   const socket = useSocket();
   const [notificationCounter, setNotificationCounter] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -42,11 +47,10 @@ const NotificationDropDown = () => {
   }, [socket]);
 
   useEffect(() => {
-    const unReadNotifications = user?.receivedNotifications.filter(
-      (notification) => !notification.seen
-    );
-    setNotificationCounter(unReadNotifications?.length || 0);
-  }, [user]);
+    if (props.notificationCounter) {
+      setNotificationCounter(props.notificationCounter);
+    }
+  }, [props.notificationCounter]);
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
@@ -59,52 +63,59 @@ const NotificationDropDown = () => {
 
   const handleShowNotifications = () => {
     setShowNotifications((prev) => !prev);
+    setNotificationCounter(0);
   };
   return (
-    <DropdownMenu onOpenChange={handleShowNotifications}>
-      <DropdownMenuTrigger
-        asChild
-        className="overflow-visible font-semiboldbold text-md"
-      >
-        <Button variant={"ghost"} size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -top-2  md:-top-0.5 -right-1 md:-right-0.5 rounded-full py-0.5 px-1.5 text-xs bg-destructive text-destructive-foreground flex justify-center items-center">
-            {notificationCounter}
-          </span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-card w-[400px] p-0 dark:bg-black">
-        <DropdownMenuLabel className="flex items-center gap-2">
-          <h1 className="pt-2 px-2 text-lg">Notifications</h1>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator className="m-0" />
-        <DropdownMenuGroup>
-          {isLoading ? (
-            <DropdownMenuItem className="h-20 flex justify-center">
-              <Loader2 className="h-5 w-5 animate-spin" />
-            </DropdownMenuItem>
-          ) : (
-            notifications?.map((notification, index) => (
-              <DropdownMenuItem
-                key={notification.id}
-                className={cn(
-                  "p-0",
-                  index !== notifications.length - 1 && "border-b border-input"
-                )}
-              >
-                <Notification notification={notification} />
+    <div className="lg:block">
+      <DropdownMenu onOpenChange={handleShowNotifications}>
+        <DropdownMenuTrigger
+          asChild
+          className="overflow-visible font-semiboldbold text-md"
+        >
+          <Button variant={"ghost"} size="icon" className="relative">
+            <Bell className="h-5 w-5" />
+            <span className="absolute -top-2  md:-top-0.5 -right-1 md:-right-0.5 rounded-full py-0.5 px-1.5 text-xs bg-destructive text-destructive-foreground flex justify-center items-center">
+              {notificationCounter}
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-card w-[400px] p-0 dark:bg-black">
+          <DropdownMenuLabel className="flex items-center gap-2">
+            <h1 className="pt-2 px-2 text-lg">Notifications</h1>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator className="m-0" />
+          <DropdownMenuGroup>
+            {isLoading ? (
+              <DropdownMenuItem className="h-20 flex justify-center">
+                <Loader2 className="h-5 w-5 animate-spin" />
               </DropdownMenuItem>
-            ))
-          )}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <NavLink to={"/notifications"} className="flex justify-center w-full">
-            <p className="text-blue-500 hover:underline text-md">See all</p>
-          </NavLink>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            ) : (
+              notifications?.slice(0, 8).map((notification, index) => (
+                <DropdownMenuItem
+                  key={notification.id}
+                  className={cn(
+                    "p-0",
+                    index !== notifications.length - 1 &&
+                      "border-b border-input"
+                  )}
+                >
+                  <NotificationDiv notification={notification} />
+                </DropdownMenuItem>
+              ))
+            )}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <NavLink
+              to={"/u/" + user?.username + "/notification"}
+              className="flex justify-center w-full"
+            >
+              <p className="text-blue-500 hover:underline text-md">See all</p>
+            </NavLink>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 

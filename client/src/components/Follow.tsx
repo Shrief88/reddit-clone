@@ -57,10 +57,6 @@ const Follow = ({ user }: IFollowProps) => {
       toast.dismiss();
       toast.success("Followed");
       setFollowState(followingState.FOLLOWING);
-      // queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
-      // queryClient.invalidateQueries({
-      //   queryKey: ["user"],
-      // });
     },
   });
 
@@ -74,10 +70,6 @@ const Follow = ({ user }: IFollowProps) => {
       toast.dismiss();
       toast.success("Unfollowed");
       setFollowState(followingState.NOT_FOLLOWING);
-      // queryClient.invalidateQueries({ queryKey: ["user", user?.username] });
-      // queryClient.invalidateQueries({
-      //   queryKey: ["user"],
-      // });
     },
   });
 

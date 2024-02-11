@@ -26,6 +26,7 @@ const Post = () => {
   const { axiosClientAuth } = useToken();
   const { user } = useAuth();
   const [subreddit, setSubreddit] = useState<ISubreddit | undefined>(undefined);
+  const [isSaved, setIsSaved] = useState(false);
   const { subreddits, isLoading } = useSubreddits();
   const navigator = useNavigate();
 
@@ -43,6 +44,14 @@ const Post = () => {
       setSubreddit(sub);
     }
   }, [isLoading, subreddits, postLoading, post]);
+
+  useEffect(() => {
+    if (post?.savedBy.some((savedUser) => savedUser.userId === user?.id)) {
+      setIsSaved(true);
+    } else {
+      setIsSaved(false);
+    }
+  }, [post, user]);
 
   return (
     <MaxWidthWrapper>
@@ -81,7 +90,7 @@ const Post = () => {
                       </span>
                     </div>
                     <div className="flex gap-2">
-                      <SavePost id={id as string} />
+                      <SavePost isSaved={isSaved} id={id as string} />
                       {user?.id === post.author.id && (
                         <Edit
                           size={18}

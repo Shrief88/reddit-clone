@@ -149,6 +149,7 @@ export const getPost: RequestHandler = async (req, res, next) => {
         subreddit: true,
         comments: { include: { author: true, votes: true } },
         votes: true,
+        savedBy: true,
       },
     });
     if (!post) {

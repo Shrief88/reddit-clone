@@ -8,9 +8,20 @@ import SideSheet from "../SideSheet";
 import SearchBar from "@/components/layout/navbar/SearchBar";
 import NotificationDropDown from "./NotificationDropDown";
 import { ModeToggle } from "../mode-toggle";
+import { useQuery } from "@tanstack/react-query";
+import useToken from "@/hooks/useToken";
 
 const Navbar = () => {
   const { user } = useAuth();
+  const { axiosClientAuth } = useToken();
+
+  const { data: unreadNotificationsCounter } = useQuery({
+    queryKey: ["unreadNotifications"],
+    queryFn: async () => {
+      const res = await axiosClientAuth.get("/users/unreadedNotification");
+      return res.data.number as number;
+    },
+  });
 
   return (
     <div className="sticky z-50 top-0 inset-x-0 h-fit py-4 bg-card">
@@ -37,7 +48,7 @@ const Navbar = () => {
                     image={user?.image || ""}
                     username={user?.username || ""}
                   />
-                  <NotificationDropDown />
+                  <NotificationDropDown notificationCounter={unreadNotificationsCounter}/>
                   <SideSheet />
                 </div>
               )}

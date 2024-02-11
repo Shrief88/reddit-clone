@@ -1,16 +1,18 @@
-import UserAvatar from "@/components/UserAvatar";
-import { cn } from "@/lib/utils";
-import { INotification } from "@/models/notification";
 import { NavLink } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+
+import UserAvatar from "@/components/UserAvatar";
+import { cn } from "@/lib/utils";
+
+import { INotification } from "@/models/notification";
 import useToken from "@/hooks/useToken";
 import { formatTimeToNow } from "@/lib/utils";
 
-interface NotificationProps {
+interface NotificationDivProps {
   notification: INotification;
 }
 
-const Notification = ({ notification }: NotificationProps) => {
+const NotificationDiv = ({ notification }: NotificationDivProps) => {
   const { axiosClientAuth } = useToken();
 
   const { mutate } = useMutation({
@@ -45,10 +47,12 @@ const Notification = ({ notification }: NotificationProps) => {
           {notification.sender.username} {notification.type.message}
         </p>
 
-        <p className="text-muted-foreground text-xs ml-auto text-clip">{formatTimeToNow(new Date(notification.createdAt))}</p>
+        <p className="text-muted-foreground text-xs ml-auto text-clip">
+          {formatTimeToNow(new Date(notification.createdAt))}
+        </p>
       </div>
     </NavLink>
   );
 };
 
-export default Notification;
+export default NotificationDiv;

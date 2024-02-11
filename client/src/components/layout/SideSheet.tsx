@@ -20,16 +20,17 @@ export function SideSheet() {
 
   useEffect(() => {
     if (user && subreddits) {
-      const divs = user.subreddits.map((sub) => {
-        const subredditId = sub.subredditId;
-        const subreddit = subreddits?.find((sub) => sub.id === subredditId);
+      const userSubreddits = subreddits.filter((sub) =>
+        sub.subscribers.some((sub) => sub.userId === user?.id)
+      );
+      const divs = userSubreddits.map((sub) => {
         return (
           <NavLink
-            key={subredditId}
-            to={`r/${subreddit?.name}`}
+            key={sub.id}
+            to={`r/${sub?.name}`}
             className={buttonVariants({ variant: "ghost" })}
           >
-            r/{subreddit?.name}
+            r/{sub?.name}
           </NavLink>
         );
       });
@@ -40,8 +41,7 @@ export function SideSheet() {
   useEffect(() => {
     if (user && subreddits) {
       const otherSubs = subreddits.filter(
-        (sub) =>
-          !user.subreddits.some((userSub) => userSub.subredditId === sub.id)
+        (sub) => !sub.subscribers.some((sub) => sub.userId === user?.id)
       );
       const divs = otherSubs.map((sub) => {
         return (

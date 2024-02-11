@@ -6,22 +6,19 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 
 import useToken from "@/hooks/useToken";
 import responseError from "@/models/error";
-import useAuth from "@/hooks/useAuth";
 
 interface SavePostProps {
   id: string;
+  isSaved: boolean;
 }
 
 const SavePost = (props: SavePostProps) => {
   const { axiosClientAuth } = useToken();
   const [isSaved, setIsSaved] = useState(false);
-  const { user } = useAuth();
 
   useEffect(() => {
-    if (user?.savedPosts.some((post) => post.postId === props.id)) {
-      setIsSaved(true);
-    }
-  }, [user, props.id]);
+    props.isSaved ? setIsSaved(true) : setIsSaved(false);
+  }, [props.isSaved]);
 
   const { mutate: savePost } = useMutation({
     mutationKey: ["savePost", props.id],

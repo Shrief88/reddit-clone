@@ -79,6 +79,26 @@ export const getUserKarma: RequestHandler = async (
   }
 };
 
+export const getUnreadNotificationsNumber: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const userId = req.user.id;
+    const notifications = await prisma.notification.findMany({
+      where: {
+        receiverId: userId,
+        seen: false,
+      },
+    });
+
+    res.status(200).json({ number: notifications.length });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @PUT /api/v1/users/me/username
 export const updateUsername: RequestHandler = async (
   req: CustomRequest,

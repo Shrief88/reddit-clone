@@ -9,6 +9,7 @@ import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
 import UpdatePost from "./pages/UpdatePost";
+import Notification from "./pages/Notification";
 
 function App() {
   return (
@@ -27,9 +28,16 @@ function App() {
                     element={<CreatePost />}
                   />
                   <Route path="/post/create/r/" element={<CreatePost />} />
-                  <Route path="/post/update/r/:postId" element={<UpdatePost />} />
+                  <Route
+                    path="/post/update/r/:postId"
+                    element={<UpdatePost />}
+                  />
                   <Route path="/r/:subredditName/post/:id" element={<Post />} />
                   <Route path="/u/:username" element={<Profile />} />
+                  <Route
+                    path="/u/:username/notification"
+                    element={<Notification />}
+                  />
                 </Route>
               </Route>
             </Routes>

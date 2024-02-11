@@ -11,6 +11,11 @@ userRouter.get("/me", loggedUserHandler.getLoggedUser);
 
 userRouter.get("/karma/:username", loggedUserHandler.getUserKarma);
 
+userRouter.get(
+  "/unreadedNotification",
+  loggedUserHandler.getUnreadNotificationsNumber,
+);
+
 userRouter.get("/:username", loggedUserHandler.getUser);
 
 userRouter.put("/me/username", loggedUserHandler.updateUsername);
