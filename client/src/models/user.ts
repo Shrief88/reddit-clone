@@ -1,5 +1,6 @@
 import ISubreddit from "./subreddit";
 import ISubscription from "./subscription";
+import { INotification } from "./notification";
 
 interface SavedPosts {
   userId: string;
@@ -18,6 +19,7 @@ interface IUser {
   followers: IFollows[];
   following: IFollows[];
   savedPosts: SavedPosts[];
+  receivedNotifications: INotification[];
 }
 
 interface IFollows {

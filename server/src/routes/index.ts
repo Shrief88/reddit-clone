@@ -10,6 +10,7 @@ import voteRouter from "./vote";
 import commentVoteRouter from "./commentVote";
 import followRouter from "./follow";
 import savedPostRouter from "./savedPost";
+import notificationRouter from "./notificaiton";
 
 const mountRoutes = (app: Express): void => {
   app.use("/api/v1/auth", authRouter);
@@ -22,6 +23,7 @@ const mountRoutes = (app: Express): void => {
   app.use("/api/v1/commentVote", commentVoteRouter);
   app.use("/api/v1/follow", followRouter);
   app.use("/api/v1/savedPost", savedPostRouter);
+  app.use("/api/v1/notification", notificationRouter);
 };
 
 export default mountRoutes;

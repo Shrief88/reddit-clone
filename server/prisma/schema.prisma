@@ -161,6 +161,7 @@ model NotificationType {
 }
 
 model Notification{
+  id String @id @default(uuid())
   sender User @relation("NotificationSender",fields: [senderId], references: [id])
   senderId String
   receiver User @relation("NotificationReceiver",fields: [receiverId], references: [id])
@@ -171,6 +172,4 @@ model Notification{
   entityId String
   seen Boolean @default(false)
   createdAt DateTime @default(now())
-
-  @@id([senderId, receiverId, typeId, entityId])
 }

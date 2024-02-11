@@ -13,7 +13,7 @@ const UserAvatar = (props: UserAvatarProps) => {
       <AvatarFallback>
         {formatAvatarFallback(props.username as string)}
       </AvatarFallback>
-    </Avatar>
+    </Avatar> 
   );
 };
 

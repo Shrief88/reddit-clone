@@ -1,33 +1,54 @@
-import { useEffect, useState } from "react";
+import UserAvatar from "@/components/UserAvatar";
+import { cn } from "@/lib/utils";
+import { INotification } from "@/models/notification";
+import { NavLink } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import useToken from "@/hooks/useToken";
+import { formatTimeToNow } from "@/lib/utils";
 
-import { toast } from "sonner";
-import { useSocket } from "@/context/Socket";
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
+interface NotificationProps {
+  notification: INotification;
+}
 
-export const Notification = () => {
-  const socket = useSocket();
-  const [notificationCounter, setNotificationCounter] = useState(0);
+const Notification = ({ notification }: NotificationProps) => {
+  const { axiosClientAuth } = useToken();
 
-  useEffect(() => {
-    if (socket) {
-      socket.on("notification", (sender: string, message: string) => {
-        toast.success(`${sender} ${message}`);
-        setNotificationCounter((prev) => prev + 1);
-      });
-    }
+  const { mutate } = useMutation({
+    mutationKey: ["markAsRead", notification.id],
+    mutationFn: async () => {
+      await axiosClientAuth.put(`/notification/${notification.id}`);
+    },
+  });
 
-    return () => {
-      socket?.off("notification");
-    };
-  }, [socket]);
+  const handleMarkAsRead = () => {
+    mutate();
+    notification.seen = true;
+  };
 
   return (
-    <Button variant={"ghost"} size="icon" className="relative">
-      <Bell className="h-5 w-5" />
-      <span className="absolute -top-2  md:-top-0.5 -right-1 md:-right-0.5 rounded-full py-0.5 px-1.5 text-xs bg-destructive text-destructive-foreground flex justify-center items-center">
-        {notificationCounter}
-      </span>
-    </Button>
+    <NavLink
+      to={notification.url}
+      className="w-full"
+      onClick={handleMarkAsRead}
+    >
+      <div
+        className={cn(
+          "flex items-center gap-2 h-16 px-2",
+          !notification.seen && "bg-muted dark:bg-card"
+        )}
+      >
+        <UserAvatar
+          image={notification.sender.image}
+          username={notification.sender.username}
+        />
+        <p>
+          {notification.sender.username} {notification.type.message}
+        </p>
+
+        <p className="text-muted-foreground text-xs ml-auto text-clip">{formatTimeToNow(new Date(notification.createdAt))}</p>
+      </div>
+    </NavLink>
   );
 };
+
+export default Notification;

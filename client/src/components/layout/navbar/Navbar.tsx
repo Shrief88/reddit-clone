@@ -6,7 +6,7 @@ import useAuth from "@/hooks/useAuth";
 import UserAccountNav from "./UserAccountNav";
 import SideSheet from "../SideSheet";
 import SearchBar from "@/components/layout/navbar/SearchBar";
-import { Notification } from "./Notification";
+import NotificationDropDown from "./NotificationDropDown";
 import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
@@ -37,7 +37,7 @@ const Navbar = () => {
                     image={user?.image || ""}
                     username={user?.username || ""}
                   />
-                  <Notification />
+                  <NotificationDropDown />
                   <SideSheet />
                 </div>
               )}

@@ -13,6 +13,7 @@ import UpdateComment from "../dialoags/UpdateComment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useToken from "@/hooks/useToken";
 import { toast } from "sonner";
+import { NavLink } from "react-router-dom";
 
 interface PostCommentProps {
   comment: IComment;
@@ -60,9 +61,15 @@ const PostComment = (props: PostCommentProps) => {
             image={props.comment.author.image}
           />
           <div className="ml-2 flex items-center gap-x-2">
-            <p className="text-sm font-medium text-foreground">
-              u/{props.comment.author.username}
-            </p>
+            <NavLink
+              to={`/u/${props.comment.author.username}`}
+              className="cursor-pointer"
+            >
+              <p className="text-sm font-medium text-foreground">
+                u/{props.comment.author.username}
+              </p>
+            </NavLink>
+
             <p className="max-h-40 truncate text-sm text-muted-foreground">
               {formatTimeToNow(new Date(props.comment.createdAt))}
             </p>

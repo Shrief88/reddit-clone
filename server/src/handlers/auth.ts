@@ -60,6 +60,7 @@ export const protectRoute: RequestHandler = async (
             followers: true,
             following: true,
             savedPosts: true,
+            receivedNotifications: true,
           },
         });
 

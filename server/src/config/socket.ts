@@ -61,26 +61,36 @@ const saveNotification = async (
     return;
   }
 
-  await prisma.notification.upsert({
+  const notification = await prisma.notification.findFirst({
     where: {
-      senderId_receiverId_typeId_entityId: {
-        receiverId: reciever.id,
-        senderId: sender.id,
-        entityId,
-        typeId: notificationType?.id,
-      },
-    },
-    update: {
-      createdAt: new Date(),
-    },
-    create: {
-      senderId: sender.id,
       receiverId: reciever.id,
+      senderId: sender.id,
       typeId: notificationType?.id,
-      url,
       entityId,
     },
   });
+
+  if (notification) {
+    await prisma.notification.update({
+      where: {
+        id: notification.id,
+      },
+      data: {
+        createdAt: new Date(),
+        seen: false,
+      },
+    });
+  } else {
+    await prisma.notification.create({
+      data: {
+        receiverId: reciever.id,
+        senderId: sender.id,
+        typeId: notificationType?.id,
+        entityId,
+        url,
+      },
+    });
+  }
 };
 
 io.on("connection", (socket) => {

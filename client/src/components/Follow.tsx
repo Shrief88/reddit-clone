@@ -51,7 +51,7 @@ const Follow = ({ user }: IFollowProps) => {
         currentUser?.username,
         user?.username,
         "account_follow",
-        `/u/${user?.username}`,
+        `/u/${currentUser?.username}`,
         user.id
       );
       toast.dismiss();
