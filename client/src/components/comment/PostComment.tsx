@@ -18,6 +18,7 @@ interface PostCommentProps {
   comment: IComment;
   replies: IComment[];
   subredditOnwerId: string;
+  postUrl: string;
 }
 
 const PostComment = (props: PostCommentProps) => {
@@ -107,6 +108,7 @@ const PostComment = (props: PostCommentProps) => {
           commentId={props.comment.id}
           votes={props.comment.votes}
           commentAuthor={props.comment.author.username}
+          postUrl={props.postUrl}
         />
       </div>
       {isReplying && (
@@ -115,6 +117,7 @@ const PostComment = (props: PostCommentProps) => {
           postId={props.comment.postId}
           replyToId={props.comment.id}
           author={props.comment.author.username}
+          postUrl={props.postUrl}
         />
       )}
       {props.replies.length > 0 && isReplying && (
@@ -126,6 +129,7 @@ const PostComment = (props: PostCommentProps) => {
                 comment={reply}
                 replies={[]}
                 subredditOnwerId={props.subredditOnwerId}
+                postUrl={props.postUrl}
               />
             );
           })}

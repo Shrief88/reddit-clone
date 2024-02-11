@@ -32,6 +32,57 @@ const getUser = (username: string): OnlineUser | undefined => {
   return OnlineUsers.find((user) => user.username === username);
 };
 
+const saveNotification = async (
+  senderName: string,
+  recieverName: string,
+  notificationTypeName: NotificationTypeNames,
+  url: string,
+  entityId: string,
+): Promise<void> => {
+  const sender = await prisma.user.findUnique({
+    where: {
+      username: senderName,
+    },
+  });
+
+  const reciever = await prisma.user.findUnique({
+    where: {
+      username: recieverName,
+    },
+  });
+
+  const notificationType = await prisma.notificationType.findUnique({
+    where: {
+      name: notificationTypeName,
+    },
+  });
+
+  if (!sender || !reciever || !notificationType) {
+    return;
+  }
+
+  await prisma.notification.upsert({
+    where: {
+      senderId_receiverId_typeId_entityId: {
+        receiverId: reciever.id,
+        senderId: sender.id,
+        entityId,
+        typeId: notificationType?.id,
+      },
+    },
+    update: {
+      createdAt: new Date(),
+    },
+    create: {
+      senderId: sender.id,
+      receiverId: reciever.id,
+      typeId: notificationType?.id,
+      url,
+      entityId,
+    },
+  });
+};
+
 io.on("connection", (socket) => {
   socket.on("newUser", (username: string) => {
     console.log("new user", username);
@@ -45,13 +96,14 @@ io.on("connection", (socket) => {
       senderName: string,
       recieverName: string,
       notificationType: NotificationTypeNames,
+      url: string,
+      entityId: string,
     ) => {
       const notification = await prisma.notificationType.findUnique({
         where: {
           name: notificationType,
         },
       });
-      console.log(senderName, recieverName, notificationType);
       let message = "";
       if (notification) {
         message = notification.message;
@@ -64,6 +116,13 @@ io.on("connection", (socket) => {
             .to(reciever.socketId)
             .emit("notification", senderName, message);
         }
+        await saveNotification(
+          senderName,
+          recieverName,
+          notificationType,
+          url,
+          entityId,
+        );
       }
     },
   );

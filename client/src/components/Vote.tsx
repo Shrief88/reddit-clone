@@ -4,16 +4,14 @@ import { useMutation } from "@tanstack/react-query";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { IPostVote } from "@/models/vote";
 import { VoteType } from "@/models/vote";
 import useAuth from "@/hooks/useAuth";
 import useToken from "@/hooks/useToken";
 import { useSocket } from "@/context/Socket";
+import { IExtendedPost } from "@/models/post";
 
 interface VoteProps {
-  votes: IPostVote[];
-  postId: string;
-  postAuthor: string;
+  post: IExtendedPost;
   className?: string;
 }
 
@@ -27,7 +25,7 @@ const Vote = (props: VoteProps) => {
 
   useEffect(() => {
     let count = 0;
-    props.votes.map((vote) => {
+    props.post.votes.map((vote) => {
       vote.type === VoteType.UPVOTE ? count++ : count--;
       if (vote.userId === user?.id) {
         vote.type === VoteType.UPVOTE
@@ -36,16 +34,23 @@ const Vote = (props: VoteProps) => {
       }
     });
     setVotesCount(count);
-  }, [props.votes, user?.id]);
+  }, [props.post.votes, user?.id]);
 
   const { mutate: upVote } = useMutation({
     mutationKey: ["addUpVote"],
     mutationFn: async () => {
-      const res = await axiosClientAuth.post(`/vote/${props.postId}/upvote`);
+      const res = await axiosClientAuth.post(`/vote/${props.post.id}/upvote`);
       return res.data.data;
     },
     onSuccess: () => {
-      socket?.emit("notification", user?.username, props.postAuthor,"post_upvote");
+      socket?.emit(
+        "notification",
+        user?.username,
+        props.post.author.username,
+        "post_upvote",
+        `/r/${props.post.subreddit.name}/post/${props.post.id}`,
+        props.post.id,
+      );
       setIsUpVoted(true);
       if (isDownVoted) {
         setIsDownVoted(false);
@@ -59,7 +64,7 @@ const Vote = (props: VoteProps) => {
   const { mutate: downVote } = useMutation({
     mutationKey: ["addDownVote"],
     mutationFn: async () => {
-      const res = await axiosClientAuth.post(`/vote/${props.postId}/downVote`);
+      const res = await axiosClientAuth.post(`/vote/${props.post.id}/downVote`);
       return res.data.data;
     },
     onSuccess: () => {
@@ -76,7 +81,7 @@ const Vote = (props: VoteProps) => {
   const { mutate: removeVote } = useMutation({
     mutationKey: ["removeVote"],
     mutationFn: async (type: VoteType) => {
-      await axiosClientAuth.delete(`/vote/${props.postId}`);
+      await axiosClientAuth.delete(`/vote/${props.post.id}`);
       return type;
     },
     onSuccess: (type: VoteType) => {
@@ -107,12 +112,7 @@ const Vote = (props: VoteProps) => {
   };
 
   return (
-    <div
-      className={cn(
-        "flex p-2 gap-1 items-center",
-        props.className
-      )}
-    >
+    <div className={cn("flex p-2 gap-1 items-center", props.className)}>
       <ArrowBigUp
         onClick={addUpVote}
         className={cn(

@@ -19,9 +19,7 @@ const Post = ({ post, isHome }: PostProps) => {
     <div className="rounded-md bg-card shadow">
       <div className="pr-6 flex justify-between">
         <Vote
-          votes={post.votes}
-          postId={post.id}
-          postAuthor={post.author.username}
+          post={post}
           className="flex-col hidden md:flex border-r border-r-input"
         />
         <div className="w-0 flex-1 py-4 pl-3">
@@ -77,12 +75,7 @@ const Post = ({ post, isHome }: PostProps) => {
         </div>
       </div>
       <div className="text-sm flex gap-2 border-t-input border-t p-1 md:p-3 ">
-        <Vote
-          votes={post.votes}
-          postId={post.id}
-          postAuthor={post.author.username}
-          className="md:hidden"
-        />
+        <Vote post={post} className="md:hidden" />
         <NavLink
           to={"/r/" + post.subreddit?.name + "/post/" + post.id}
           className="w-fit flex items-center gap-2"

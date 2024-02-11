@@ -13,6 +13,7 @@ interface CommentVoteProps {
   votes: ICommentVote[];
   commentId: string;
   commentAuthor: string;
+  postUrl: string;
 }
 
 const CommentVote = (props: CommentVoteProps) => {
@@ -49,7 +50,9 @@ const CommentVote = (props: CommentVoteProps) => {
         "notification",
         user?.username,
         props.commentAuthor,
-        "comment_upvote"
+        "comment_upvote",
+        props.postUrl,
+        props.commentId
       );
       setIsUpVoted(true);
       if (isDownVoted) {

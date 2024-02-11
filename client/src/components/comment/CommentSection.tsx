@@ -8,6 +8,7 @@ interface CommentSectionProps {
   postId: string;
   subredditOnwerId: string;
   postAuthor: string;
+  postUrl: string;
 }
 
 const CommentSection = (props: CommentSectionProps) => {
@@ -19,6 +20,7 @@ const CommentSection = (props: CommentSectionProps) => {
         username={user?.username as string}
         postId={props.postId}
         author={props.postAuthor}
+        postUrl={props.postUrl}
       />
       <div className="flex flex-col divide-y divide-input">
         {props.comments
@@ -38,6 +40,7 @@ const CommentSection = (props: CommentSectionProps) => {
                   comment={topLevelcomment}
                   replies={replyies}
                   subredditOnwerId={props.subredditOnwerId}
+                  postUrl={props.postUrl}
                 />
               </div>
             );

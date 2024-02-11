@@ -30,6 +30,9 @@ model User {
 
   followers Follows[] @relation("following")
   following Follows[] @relation("follower")
+
+  sentNotifications  Notification[] @relation("NotificationSender")
+  receivedNotifications  Notification[] @relation("NotificationReceiver")
 }
 
 model Follows {
@@ -153,5 +156,21 @@ model NotificationType {
   message String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  nofications Notification[]
 }
 
+model Notification{
+  sender User @relation("NotificationSender",fields: [senderId], references: [id])
+  senderId String
+  receiver User @relation("NotificationReceiver",fields: [receiverId], references: [id])
+  receiverId String
+  type NotificationType @relation(fields: [typeId], references: [id])
+  typeId String
+  url String
+  entityId String
+  seen Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  @@id([senderId, receiverId, typeId, entityId])
+}

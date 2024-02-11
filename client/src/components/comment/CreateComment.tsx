@@ -17,6 +17,7 @@ interface CreateCommentProps {
   postId: string;
   replyToId?: string;
   author: string;
+  postUrl: string;
 }
 
 const CreateComment = (props: CreateCommentProps) => {
@@ -52,14 +53,18 @@ const CreateComment = (props: CreateCommentProps) => {
           "notification",
           props.username,
           props.author,
-          "comment_reply"
+          "comment_reply",
+          props.postUrl,
+          props.replyToId
         );
       } else {
         socket?.emit(
           "notification",
           props.username,
           props.author,
-          "post_comment"
+          "post_comment",
+          props.postUrl,
+          props.postId
         );
       }
 
