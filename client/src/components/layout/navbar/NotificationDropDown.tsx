@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -32,6 +32,7 @@ const NotificationDropDown = (props: NotificationDropDownProps) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const { axiosClientAuth } = useToken();
   const { user } = useAuth();
+  const navigator = useNavigate();
 
   useEffect(() => {
     if (socket) {
@@ -61,18 +62,34 @@ const NotificationDropDown = (props: NotificationDropDownProps) => {
     enabled: showNotifications,
   });
 
-  const handleShowNotifications = () => {
+  const handleShowNotificationsDesktop = () => {
     setShowNotifications((prev) => !prev);
     setNotificationCounter(0);
   };
+
+  const handleShowNotificationsMobile = () => {
+    setNotificationCounter(0);
+    navigator(`/u/${user?.username}/notification`);
+  };
   return (
     <div className="lg:block">
-      <DropdownMenu onOpenChange={handleShowNotifications}>
+      <Button
+        variant={"ghost"}
+        size="icon"
+        className="relative md:hidden"
+        onClick={handleShowNotificationsMobile}
+      >
+        <Bell className="h-5 w-5" />
+        <span className="absolute -top-2  md:-top-0.5 -right-1 md:-right-0.5 rounded-full py-0.5 px-1.5 text-xs bg-destructive text-destructive-foreground flex justify-center items-center">
+          {notificationCounter}
+        </span>
+      </Button>
+      <DropdownMenu onOpenChange={handleShowNotificationsDesktop}>
         <DropdownMenuTrigger
           asChild
-          className="overflow-visible font-semiboldbold text-md"
+          className="overflow-visible font-semiboldbold text-md hidden md:inline-flex"
         >
-          <Button variant={"ghost"} size="icon" className="relative">
+          <Button variant={"ghost"} size="icon" className="relative  ">
             <Bell className="h-5 w-5" />
             <span className="absolute -top-2  md:-top-0.5 -right-1 md:-right-0.5 rounded-full py-0.5 px-1.5 text-xs bg-destructive text-destructive-foreground flex justify-center items-center">
               {notificationCounter}

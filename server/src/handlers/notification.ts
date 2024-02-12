@@ -8,6 +8,9 @@ export const getUserNotification: RequestHandler = async (
   next,
 ) => {
   try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
     const notifications = await prisma.notification.findMany({
       orderBy: {
         createdAt: "desc",
@@ -15,6 +18,8 @@ export const getUserNotification: RequestHandler = async (
       where: {
         receiverId: req.user.id,
       },
+      take: limit,
+      skip: (page - 1) * limit,
       include: {
         sender: true,
         type: true,

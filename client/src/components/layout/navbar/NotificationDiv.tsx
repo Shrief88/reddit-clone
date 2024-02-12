@@ -43,7 +43,7 @@ const NotificationDiv = ({ notification }: NotificationDivProps) => {
           image={notification.sender.image}
           username={notification.sender.username}
         />
-        <p>
+        <p className="text-sm lg:text-md">
           {notification.sender.username} {notification.type.message}
         </p>
 
