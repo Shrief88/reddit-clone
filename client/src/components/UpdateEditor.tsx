@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import TextareaAutosize from "react-textarea-autosize";
@@ -30,7 +30,7 @@ const UpdateEditor = (props: UpdateEditorProps) => {
   const [isImage, setIsImage] = useState(false);
   const navigator = useNavigate();
   const { axiosClientAuth } = useToken();
-  const inputFileRef = createRef<HTMLInputElement>();
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     props.imageFile ? setIsImage(true) : setIsImage(false);
@@ -87,7 +87,7 @@ const UpdateEditor = (props: UpdateEditorProps) => {
 
     // user has selected a new image
     if (newFile) {
-      formData.append("image", data.image[0]);
+      formData.append("image", data.image);
     }
 
     // user has deleted the image without selecting a new one
@@ -138,10 +138,11 @@ const UpdateEditor = (props: UpdateEditorProps) => {
               onChange: (event) => {
                 setNewFile(event.target.files ? event.target.files[0] : null);
                 setIsImage(true);
+                setValue("image", event.target.files[0]);
               },
             })}
             className="hidden"
-            id="picture"
+            id="image"
             type="file"
             ref={inputFileRef}
           />

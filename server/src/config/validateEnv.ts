@@ -20,6 +20,7 @@ const env = cleanEnv(process.env, {
   CLOUD_NAME: str(),
   API_KEY: str(),
   API_SECRET: str(),
+  MEDIA_HOSTING_URL: str(),
 
   SOCKET_PORT: port(),
 });

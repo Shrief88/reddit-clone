@@ -2,6 +2,7 @@ import { type RequestHandler } from "express";
 import { type CustomRequest } from "./auth";
 import prisma from "../config/prisma";
 import createHttpError from "http-errors";
+import env from "../config/validateEnv";
 
 export const getLoggedUser: RequestHandler = async (
   req: CustomRequest,
@@ -149,7 +150,7 @@ export const updateImage: RequestHandler = async (
         id: userId,
       },
       data: {
-        image: newImage,
+        image: env.MEDIA_HOSTING_URL + newImage,
       },
     });
 

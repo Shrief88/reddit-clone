@@ -19,7 +19,6 @@ export const uploadToCloudinary = (
             if (error) {
               throw new Error(error.message);
             }
-            console.log(result);
           },
         );
         req.body[path] = fileName;

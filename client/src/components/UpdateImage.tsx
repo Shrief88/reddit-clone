@@ -1,4 +1,4 @@
-import { createRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 
@@ -12,6 +12,10 @@ import {
 } from "@/components/ui/dialog";
 import { XCircle } from "lucide-react";
 import { Input } from "./ui/input";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import useToken from "@/hooks/useToken";
+import { useNavigate } from "react-router-dom";
 
 interface InputSchema {
   image: File;
@@ -19,17 +23,36 @@ interface InputSchema {
 
 const UpdateImage = () => {
   const [open, setOpen] = useState(false);
-  const inputFileRef = createRef<HTMLInputElement>();
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<null | File>(null);
-  // const formRef = createRef<HTMLFormElement>();
-  // console.log(selectedFile);
+  const { axiosClientAuth } = useToken();
+  const navigator = useNavigate();
 
-  const { register, handleSubmit, reset,getValues } = useForm<InputSchema>();
+  const { register, handleSubmit, reset, setValue } = useForm<InputSchema>();
 
-  console.log(getValues());
+  const { mutate } = useMutation({
+    mutationKey: ["updateImage"],
+    mutationFn: async (data: InputSchema) => {
+      toast.loading("Updating image...");
+      await axiosClientAuth.put(`/users/me/image`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("Image updated");
+      navigator(0);
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Something went wrong , please try again");
+    },
+  });
 
   const onSubmit = (data: InputSchema) => {
-    console.log(data);
+    mutate(data);
   };
 
   return (
@@ -63,8 +86,10 @@ const UpdateImage = () => {
             <Input
               {...register("image", {
                 onChange: (event) => {
-                  // console.log(event.target.files)
-                  setSelectedFile(event.target.files ? event.target.files[0] : null);
+                  setValue("image", event.target.files[0]);
+                  setSelectedFile(
+                    event.target.files ? event.target.files[0] : null
+                  );
                 },
               })}
               className="hidden"
@@ -82,7 +107,8 @@ const UpdateImage = () => {
                   className="cursor-pointer"
                   onClick={() => {
                     setSelectedFile(null);
-                    reset({image:""});
+                    inputFileRef.current && (inputFileRef.current.value = "");
+                    reset();
                   }}
                 />
               </div>
