@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Bell, Loader2 } from "lucide-react";
+import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { useSocket } from "@/context/Socket";
@@ -21,6 +21,7 @@ import useToken from "@/hooks/useToken";
 import useAuth from "@/hooks/useAuth";
 import { INotification } from "@/models/notification";
 import NotificationDiv from "./NotificationDiv";
+import NotificationSkeleton from "@/components/skeleton/NotificationSkeleton";
 
 interface NotificationDropDownProps {
   notificationCounter: number | undefined;
@@ -102,24 +103,20 @@ const NotificationDropDown = (props: NotificationDropDownProps) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="m-0" />
           <DropdownMenuGroup>
-            {isLoading ? (
-              <DropdownMenuItem className="h-20 flex justify-center">
-                <Loader2 className="h-5 w-5 animate-spin" />
-              </DropdownMenuItem>
-            ) : (
-              notifications?.slice(0, 8).map((notification, index) => (
-                <DropdownMenuItem
-                  key={notification.id}
-                  className={cn(
-                    "p-0",
-                    index !== notifications.length - 1 &&
-                      "border-b border-input"
-                  )}
-                >
-                  <NotificationDiv notification={notification} />
-                </DropdownMenuItem>
-              ))
-            )}
+            {isLoading
+              ? [1, 2, 3].map((index) => <NotificationSkeleton key={index} />)
+              : notifications?.slice(0, 8).map((notification, index) => (
+                  <DropdownMenuItem
+                    key={notification.id}
+                    className={cn(
+                      "p-0",
+                      index !== notifications.length - 1 &&
+                        "border-b border-input"
+                    )}
+                  >
+                    <NotificationDiv notification={notification} />
+                  </DropdownMenuItem>
+                ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
