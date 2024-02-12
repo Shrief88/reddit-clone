@@ -116,7 +116,7 @@ export const updateUsername: RequestHandler = async (
     });
 
     if (userExists) {
-      throw createHttpError(409, "User already exists");
+      throw createHttpError(409, "User already Taken");
     }
 
     const user = await prisma.user.update({
@@ -125,6 +125,31 @@ export const updateUsername: RequestHandler = async (
       },
       data: {
         username,
+      },
+    });
+
+    res.status(200).json({ user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @PUT /api/v1/users/me/image
+export const updateImage: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const userId = req.user.id;
+    const newImage = req.body.image;
+
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        image: newImage,
       },
     });
 
