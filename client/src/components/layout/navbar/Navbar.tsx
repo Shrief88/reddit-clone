@@ -21,6 +21,7 @@ const Navbar = () => {
       const res = await axiosClientAuth.get("/users/unreadedNotification");
       return res.data.number as number;
     },
+    enabled: !!user,
   });
 
   return (
