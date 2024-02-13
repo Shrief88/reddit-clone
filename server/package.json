@@ -10,6 +10,9 @@
     "build": "tsc",
     "start": "cross-env NODE_ENV=production node dist/index.js"
   },
+  "engines": {
+    "node": "v18.18.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,6 +20,7 @@
     "@prisma/client": "^5.8.1",
     "cloudinary": "^2.0.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "express": "^4.18.2",
