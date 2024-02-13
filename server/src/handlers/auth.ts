@@ -34,7 +34,9 @@ export const googleLoginCallback: RequestHandler = (req, res, next) => {
           .json({ message: "Authentication failed", error: err });
       }
       const token = createToken({ user_id: user.id });
-      res.cookie("accessToken", token);
+      res.cookie("accessToken", token, {
+        sameSite: "none",
+      });
       res.redirect(env.CLIENT_URL);
     },
   )(req, res, next);
@@ -98,7 +100,9 @@ export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
     });
 
     const token = createToken({ user_id: user.id as string });
-    res.cookie("accessToken", token);
+    res.cookie("accessToken", token, {
+      sameSite: "none",
+    });
     res.sendStatus(201);
   } catch (err) {
     next(err);
@@ -106,13 +110,16 @@ export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
 };
 
 export const isDemo: RequestHandler = (req: CustomRequest, res, next) => {
-  try{
-    if(req.user.isDemo){
-      throw createHttpError(403, "Forbidden please login with your google account");
-    }else {
+  try {
+    if (req.user.isDemo) {
+      throw createHttpError(
+        403,
+        "Forbidden please login with your google account",
+      );
+    } else {
       next();
     }
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 };
