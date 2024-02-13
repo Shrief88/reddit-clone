@@ -15,9 +15,10 @@ model User {
   googleId String @unique
   username String @unique
   email String @unique
-  image String @unique
+  image String 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDemo Boolean @default(false)
 
   ownedSubreddits Subreddit[]
   subreddits Subscription[]
@@ -162,11 +163,11 @@ model NotificationType {
 
 model Notification{
   id String @id @default(uuid())
-  sender User @relation("NotificationSender",fields: [senderId], references: [id])
+  sender User @relation("NotificationSender",fields: [senderId], references: [id], onDelete: Cascade)
   senderId String
-  receiver User @relation("NotificationReceiver",fields: [receiverId], references: [id])
+  receiver User @relation("NotificationReceiver",fields: [receiverId], references: [id] , onDelete: Cascade)
   receiverId String
-  type NotificationType @relation(fields: [typeId], references: [id])
+  type NotificationType @relation(fields: [typeId], references: [id] , onDelete: Cascade)
   typeId String
   url String
   entityId String

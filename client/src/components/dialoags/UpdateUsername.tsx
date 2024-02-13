@@ -64,6 +64,8 @@ const UpdateUsername = (props: UpdateUsernameProps) => {
       toast.dismiss();
       if (err.response.status === 409) {
         toast.error("Username already exists");
+      } else if (err.response.status === 403) {
+        toast.error("Please login with ypur google account to have access to this feature");
       } else {
         toast.error("Error updating username: please try again");
       }

@@ -103,20 +103,28 @@ const NotificationDropDown = (props: NotificationDropDownProps) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="m-0" />
           <DropdownMenuGroup>
-            {isLoading
-              ? [1, 2, 3].map((index) => <NotificationSkeleton key={index} />)
-              : notifications?.slice(0, 8).map((notification, index) => (
-                  <DropdownMenuItem
-                    key={notification.id}
-                    className={cn(
-                      "p-0",
-                      index !== notifications.length - 1 &&
-                        "border-b border-input"
-                    )}
-                  >
-                    <NotificationDiv notification={notification} />
-                  </DropdownMenuItem>
-                ))}
+            {isLoading ? (
+              [1, 2, 3].map((index) => <NotificationSkeleton key={index} />)
+            ) : notifications?.length === 0 ? (
+              <DropdownMenuItem className="flex justify-center w-full h-16">
+                <p className="text-blue-500 hover:underline text-md">
+                  No notifications yet
+                </p>
+              </DropdownMenuItem>
+            ) : (
+              notifications?.slice(0, 8).map((notification, index) => (
+                <DropdownMenuItem
+                  key={notification.id}
+                  className={cn(
+                    "p-0",
+                    index !== notifications.length - 1 &&
+                      "border-b border-input"
+                  )}
+                >
+                  <NotificationDiv notification={notification} />
+                </DropdownMenuItem>
+              ))
+            )}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>

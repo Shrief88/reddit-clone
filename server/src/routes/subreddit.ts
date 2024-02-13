@@ -14,6 +14,7 @@ subredditRouter.get("/:name", subredditHandler.getSubreddit);
 
 subredditRouter.post(
   "/",
+  authHandler.isDemo,
   subredditValidator.createSubreddit,
   subredditHandler.createSubreddit,
 );

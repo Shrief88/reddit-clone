@@ -78,7 +78,8 @@ const Profile = () => {
                 <UserAvatar
                   image={user?.image}
                   username={user?.username}
-                  className="w-40 h-40 mb-3"
+                  className="w-40 h-40 mb-3 "
+                  textSize="text-7xl"
                 />
               </div>
 

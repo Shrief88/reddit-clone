@@ -52,8 +52,10 @@ const CreateSubreddit = () => {
       toast.dismiss();
       if (error.response.status === 409) {
         toast.error("Subreddit already exists");
+      } else if (error.response.status === 403) {
+        toast.error("Please login with ypur google account to have access to this feature");
       } else {
-        toast.error("Error creating Subreddit: please try again");
+        toast.error("Error while creating subreddit, please try again");
       }
     },
   });

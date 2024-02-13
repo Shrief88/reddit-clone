@@ -1,6 +1,7 @@
 import { Request, type RequestHandler } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 import { createToken } from "../utils/createToken";
 import env from "../config/validateEnv";
@@ -78,20 +79,40 @@ export const protectRoute: RequestHandler = async (
 
 export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
   try {
-    const user = await prisma.user.findUnique({
+    const usersCount = await prisma.user.count({
       where: {
-        username: "demoUser",
+        isDemo: true,
       },
     });
 
-    if (!user) {
-      throw createHttpError(404, "User not found");
-    }
+    const newUser = "demoUser" + usersCount;
+    console.log(newUser);
+    const user = await prisma.user.create({
+      data: {
+        username: newUser,
+        email: newUser + "@gmail.com",
+        googleId: uuidv4(),
+        image: "",
+        isDemo: true,
+      },
+    });
 
     const token = createToken({ user_id: user.id as string });
     res.cookie("accessToken", token);
-    res.sendStatus(200);
+    res.sendStatus(201);
   } catch (err) {
+    next(err);
+  }
+};
+
+export const isDemo: RequestHandler = (req: CustomRequest, res, next) => {
+  try{
+    if(req.user.isDemo){
+      throw createHttpError(403, "Forbidden please login with your google account");
+    }else {
+      next();
+    }
+  }catch(err){
     next(err);
   }
 };

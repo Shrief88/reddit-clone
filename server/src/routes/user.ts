@@ -20,10 +20,15 @@ userRouter.get(
 
 userRouter.get("/:username", loggedUserHandler.getUser);
 
-userRouter.put("/me/username", loggedUserHandler.updateUsername);
+userRouter.put(
+  "/me/username",
+  authHandler.isDemo,
+  loggedUserHandler.updateUsername,
+);
 
 userRouter.put(
   "/me/image",
+  authHandler.isDemo,
   uploadImage("image"),
   uploadToCloudinary("user", "image"),
   loggedUserHandler.updateImage,

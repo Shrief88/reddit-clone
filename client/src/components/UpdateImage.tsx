@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useToken from "@/hooks/useToken";
 import { useNavigate } from "react-router-dom";
+import responseError from "@/models/error";
 
 interface InputSchema {
   image: File;
@@ -45,9 +46,13 @@ const UpdateImage = () => {
       toast.success("Image updated");
       navigator(0);
     },
-    onError: () => {
+    onError: (err: responseError) => {
       toast.dismiss();
-      toast.error("Something went wrong , please try again");
+      if (err.response.status === 403) {
+        toast.error("Please login with ypur google account to have access to this feature");
+      } else {
+        toast.error("Something went wrong , please try again");
+      }
     },
   });
 
