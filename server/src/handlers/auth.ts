@@ -36,6 +36,7 @@ export const googleLoginCallback: RequestHandler = (req, res, next) => {
       const token = createToken({ user_id: user.id });
       res.cookie("accessToken", token, {
         sameSite: "none",
+        secure: true,
       });
       res.redirect(env.CLIENT_URL);
     },
@@ -102,6 +103,7 @@ export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
     const token = createToken({ user_id: user.id as string });
     res.cookie("accessToken", token, {
       sameSite: "none",
+      secure: true,
     });
     res.sendStatus(201);
   } catch (err) {
