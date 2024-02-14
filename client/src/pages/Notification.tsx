@@ -49,10 +49,10 @@ const Notification = () => {
           <div className="w-full p-4">
             <h1 className="text-xl font-bold pb-3">Notification Center</h1>
             <Separator />
-            {isLoading && [1, 2, 3, 4].map(() => <NotificationSkeleton />)}
-            {notifications.length > 0 ? (
+            {isLoading ? (
+              [1, 2, 3, 4].map((index) => <NotificationSkeleton key={index} />)
+            ) : notifications.length > 0 ? (
               notifications.map((notification, index) => {
-                // I added posts.length > 1 to fix bug with last post when there is only 1 post
                 if (
                   index === notifications.length - 1 &&
                   notifications.length > 9
