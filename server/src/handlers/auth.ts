@@ -8,6 +8,7 @@ import env from "../config/validateEnv";
 import prisma from "../config/prisma";
 import createHttpError from "http-errors";
 import { User } from "@prisma/client";
+import queryString from "querystring";
 
 export interface CustomRequest extends Request {
   user: User;
@@ -34,11 +35,10 @@ export const googleLoginCallback: RequestHandler = (req, res, next) => {
           .json({ message: "Authentication failed", error: err });
       }
       const token = createToken({ user_id: user.id });
-      res.cookie("accessToken", token, {
-        sameSite: "none",
-        secure: true,
-      });
-      res.redirect(env.CLIENT_URL);
+      const queryParms = queryString.stringify({
+        token,
+      })
+      res.redirect(`${env.CLIENT_URL}/?${queryParms}`);
     },
   )(req, res, next);
 };
@@ -101,11 +101,7 @@ export const loginAsDemoUser: RequestHandler = async (req, res, next) => {
     });
 
     const token = createToken({ user_id: user.id as string });
-    res.cookie("accessToken", token, {
-      sameSite: "none",
-      secure: true,
-    });
-    res.sendStatus(201);
+    res.status(201).json({ token });
   } catch (err) {
     next(err);
   }

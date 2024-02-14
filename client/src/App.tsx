@@ -12,6 +12,12 @@ import UpdatePost from "./pages/UpdatePost";
 import Notification from "./pages/Notification";
 
 function App() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  if (urlParams.get("token")) {
+    localStorage.setItem("token", urlParams.get("token") as string);
+  }
+
   return (
     <div className="h-full">
       <div className="relative h-full antialiased font-Inter">

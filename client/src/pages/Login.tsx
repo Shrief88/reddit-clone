@@ -19,7 +19,8 @@ const Login = () => {
   }, [user, navigate]);
 
   const loginDemo = async () => {
-    await axiosClient.get("/auth/demoUser");
+    const res =await axiosClient.get("/auth/demoUser");
+    localStorage.setItem("token", res.data.token);
     navigate("/");
   };
 

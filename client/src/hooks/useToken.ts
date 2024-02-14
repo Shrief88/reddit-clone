@@ -1,12 +1,9 @@
-import { useCookies } from "react-cookie";
-
 import { axiosClientWithToken } from "@/api/axios";
 
 const useToken = () => {
-  const [cookies] = useCookies(["accessToken"]);
-  const accessToken = cookies["accessToken"];
+  const token = localStorage.getItem("token");
 
-  const axiosClientAuth = axiosClientWithToken(accessToken);
+  const axiosClientAuth = axiosClientWithToken(token as string);
 
   return { axiosClientAuth };
 };

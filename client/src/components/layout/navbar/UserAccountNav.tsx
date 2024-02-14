@@ -1,4 +1,3 @@
-import { useCookies } from "react-cookie";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -21,9 +20,8 @@ interface UserAccountNavProps {
 
 const UserAccountNav = (props: UserAccountNavProps) => {
   const { user } = useAuth();
-  const [, , removeCookie] = useCookies(["accessToken"]);
   const logout = () => {
-    removeCookie("accessToken");
+    localStorage.removeItem("token");
     window.location.href = "/login";
   };
 
