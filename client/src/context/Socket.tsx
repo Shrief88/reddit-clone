@@ -20,7 +20,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      setSocket(io(import.meta.env.VITE_SOCKET_URI));
+      setSocket(io(import.meta.env.VITE_SOCKET_URI,{transports: ['websocket']}));
 
       return () => {
         socket?.close();
