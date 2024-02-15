@@ -14,7 +14,7 @@ A Social Media Fullstack app using PERN stack technologies based on reddit websi
 - Text Editor for writing posts.
 - Create and follow subreddits and other users.
 - Real time notification system.
-- Light and dark themes. 
+- Light and dark themes.
 - Awesome modern minimalist UI
 
 ## Technologies
@@ -31,7 +31,6 @@ A Social Media Fullstack app using PERN stack technologies based on reddit websi
 - [Socket.io](https://socket.io/)
 - [Prisma](https://www.prisma.io/)
 
-
 ### Frontend:
 
 - [React](https://react.dev/)
@@ -46,6 +45,61 @@ A Social Media Fullstack app using PERN stack technologies based on reddit websi
 - [React-router](https://reactrouter.com/en/main)
 - [Tanstack/react-query](https://tanstack.com/)
 
+## Installation
 
+First you need to have node and postgres installed on your machine
 
+then clone the repo and in the repo directory open terminal and type
 
+```bash
+  npm i -g db-migrate
+  npm install
+```
+
+## Project Configurations on localhost
+
+### **_Database config_**
+
+we will now start by creating our dev database and creating our super user.
+
+open terminal and type the following to create the databases
+
+```bash
+  psql postgres
+  CREATE USER brieddet_user WITH PASSWORD 'password123';
+  CREATE DATABASE briddit;
+  \c briddit
+  GRANT ALL PRIVILEGES ON DATABASE briddit TO brieddet_user;
+```
+
+Now you successfully created the necessary databases to start the project.
+
+### **_Environment Variables Config_**
+
+in terminal type
+
+```bash
+  touch .env
+```
+
+then add the following in your .env file
+
+```bash
+PORT = 3000
+NODE_ENV = development
+BASE_URL = http://localhost:3000
+DATABASE_URL = <database connection string>
+CLIENT_URL = <your frontend url>
+ACCESS_TOKEN_SECRET = xxxxxxxxx
+GOOGLE_CLIENT_ID = xxxxx
+GOOGLE_CLIENT_SECRET = xxxxxxxx
+```
+
+## Building
+
+```bash
+  db-migrate up
+  npm run dev
+```
+
+**_Now Express Server should be running on port 3000_**
