@@ -1,12 +1,9 @@
 import env from "./config/validateEnv";
-import app from "./app";
-import io from "./config/socket";
+import server from "./config/socket";
 
-const server = app.listen(env.PORT, () => {
+server.listen(env.PORT, () => {
   console.log(`Express app is running on: ${env.BASE_URL}:${env.PORT}`);
 });
-
-io.listen(env.PORT);
 
 interface Error {
   name: string;

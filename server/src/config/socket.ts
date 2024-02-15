@@ -143,4 +143,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export default io;
+export default server;
