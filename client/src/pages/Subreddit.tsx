@@ -31,36 +31,38 @@ const Subreddit = () => {
   };
 
   return (
-      <MaxWidthWrapper>
-        {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-            <div className="md:col-span-2">
-              <PostSkeleton />
-            </div>
-            <div className="hidden md:block">
-              <InfoSkeleton />
-            </div>
+    <MaxWidthWrapper>
+      {isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+          <div className="md:col-span-2">
+            {[1, 2, 3].map((i) => (
+              <PostSkeleton key={i} />
+            ))}
+          </div>
+          <div className="hidden md:block">
+            <InfoSkeleton />
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+        {!isLoading && subreddit && (
+          <div className="hidden md:block md:col-span-1 md:order-last">
+            <SubriddetInfo subreddit={subreddit} />
           </div>
         )}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-          {!isLoading && subreddit && (
-            <div className="hidden md:block md:col-span-1 md:order-last">
-              <SubriddetInfo subreddit={subreddit} />
-            </div>
-          )}
-          {subreddit && (
-            <div className="md:col-span-2 flex flex-col gap-8">
-              <MinicreatePost />
-              <PostFeed
-                isHome={false}
-                queryFn={getPosts}
-                queryKey={subredditName as string}
-              />
-            </div>
-          )}
-        </div>
-      </MaxWidthWrapper>
+        {subreddit && (
+          <div className="md:col-span-2 flex flex-col gap-8">
+            <MinicreatePost />
+            <PostFeed
+              isHome={false}
+              queryFn={getPosts}
+              queryKey={subredditName as string}
+            />
+          </div>
+        )}
+      </div>
+    </MaxWidthWrapper>
   );
 };
 

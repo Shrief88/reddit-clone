@@ -44,8 +44,9 @@ const PostFeed = (props: PostFeedProps) => {
 
   return (
     <ul className="flex flex-col space-y-6">
-      {isLoading && [1, 2, 3].map((i) => <PostSkeleton key={i} />)}
-      {posts.length > 0 ? (
+      {isLoading ? (
+        [1, 2, 3].map((i) => <PostSkeleton key={i} />)
+      ) : posts.length > 0 ? (
         posts.map((post, index) => {
           // I added posts.length > 1 to fix bug with last post when there is only 1 post
           if (index === posts.length - 1 && posts.length > 1) {
