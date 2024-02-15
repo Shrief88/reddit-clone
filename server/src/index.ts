@@ -6,7 +6,7 @@ const server = app.listen(env.PORT, () => {
   console.log(`Express app is running on: ${env.BASE_URL}:${env.PORT}`);
 });
 
-io.listen(env.SOCKET_PORT);
+io.listen(env.PORT);
 
 interface Error {
   name: string;
