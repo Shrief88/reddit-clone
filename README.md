@@ -45,18 +45,19 @@ A Social Media Fullstack app using PERN stack technologies based on reddit websi
 - [React-router](https://reactrouter.com/en/main)
 - [Tanstack/react-query](https://tanstack.com/)
 
-## Installation
+## Server installation
 
 First you need to have node and postgres installed on your machine
 
 then clone the repo and in the repo directory open terminal and type
 
 ```bash
+  cd server
   npm i -g db-migrate
   npm install
 ```
 
-## Project Configurations on localhost
+## Server Configurations on localhost
 
 ### **_Database config_**
 
@@ -103,3 +104,37 @@ GOOGLE_CLIENT_SECRET = xxxxxxxx
 ```
 
 **_Now Express Server should be running on port 3000_**
+
+## Server installation
+
+After finishing installing the server go back to the root of the repo to open terminal and type
+
+```bash
+  cd client
+  npm install
+```
+
+## CLinet Configurations on localhost
+
+### **_Environment Variables Config_**
+
+in terminal type
+
+```bash
+  touch .env
+```
+
+then add the following in your .env file
+
+```bash
+VITE_API_URI = <your api url>
+VITE_SOCKET_URI = <your server url>
+```
+
+## Building
+
+```bash
+  npm run dev
+```
+
+**_Now React app should be running on port 5173_**
