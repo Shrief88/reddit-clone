@@ -51,26 +51,39 @@ export const getUserKarma: RequestHandler = async (
         username: req.params.username,
       },
       include: {
-        votes: true,
-        commentsVotes: true,
+        posts: {
+          include: {
+            votes: true,
+          },
+        },
+        comments: {
+          include: {
+            votes: true,
+          },
+        },
       },
     });
 
-    if (!user) {
-      throw createHttpError(404, "User not found");
-    }
-
     let karma = 0;
-
     if (user) {
-      user.votes.forEach((vote) => {
-        if (vote.type === "upvote") karma++;
-        else karma--;
+      user.posts.forEach((post) => {
+        post.votes.forEach((vote) => {
+          if (vote.type === "upvote") {
+            karma += 1;
+          } else if (vote.type === "downvote") {
+            karma -= 1;
+          }
+        });
       });
 
-      user.commentsVotes.forEach((vote) => {
-        if (vote.type === "upvote") karma++;
-        else karma--;
+      user.comments.forEach((comment) => {
+        comment.votes.forEach((vote) => {
+          if (vote.type === "upvote") {
+            karma += 1;
+          } else if (vote.type === "downvote") {
+            karma -= 1;
+          }
+        });
       });
 
       res.status(200).json({ karma });
