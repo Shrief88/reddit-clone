@@ -89,3 +89,19 @@ ul {
 .ql-snow .ql-stroke {
   @apply stroke-foreground;
 }
+
+.ql-container{
+  @apply h-28
+}
+
+.ql-formats:first-child{
+  @apply hidden
+}
+
+.ql-formats:last-child{
+  @apply hidden
+}
+
+.ql-editor p, .ql-editor ol, .ql-editor ul{
+  @apply text-lg
+}
