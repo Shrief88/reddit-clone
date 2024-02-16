@@ -17,7 +17,7 @@ import UpdateUsername from "@/components/dialoags/UpdateUsername";
 import { Separator } from "@/components/ui/separator";
 import InfoSkeleton from "@/components/skeleton/InfoSkeleton";
 import Follow from "@/components/Follow";
-import UpdateImage from "@/components/UpdateImage";
+import UpdateImage from "@/components/dialoags/UpdateImage";
 import UserAvatar from "@/components/UserAvatar";
 
 const Profile = () => {

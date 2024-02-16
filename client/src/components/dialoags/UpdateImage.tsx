@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 
 import {
@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { XCircle } from "lucide-react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useToken from "@/hooks/useToken";
@@ -71,7 +71,7 @@ const UpdateImage = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update Username</DialogTitle>
+          <DialogTitle>Update Image</DialogTitle>
         </DialogHeader>
         <div>
           <form
