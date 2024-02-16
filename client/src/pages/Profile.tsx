@@ -25,7 +25,7 @@ const Profile = () => {
   const { username } = useParams();
   const { user: currentUser } = useAuth();
 
-  const { data: karma, isLoading: karmaLoading } = useQuery({
+  const { data: karma } = useQuery({
     queryKey: ["karma", username],
     queryFn: async () => {
       const res = await axiosClientAuth.get(`users/karma/${username}`);
@@ -63,7 +63,7 @@ const Profile = () => {
             <InfoSkeleton />
           </div>
         )}
-        {(!isLoading && !karmaLoading) && (
+        {!isLoading  && (
           <div className="h-fit rounded-lg border border-border shadow-md md:col-span-1 md:order-last">
             <div className="bg-card px-6 py-4">
               <div className="flex items-center gap-3">

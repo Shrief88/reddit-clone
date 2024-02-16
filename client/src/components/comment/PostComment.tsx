@@ -20,6 +20,7 @@ interface PostCommentProps {
   replies: IComment[];
   subredditOnwerId: string;
   postUrl: string;
+  isReply?: boolean;
 }
 
 const PostComment = (props: PostCommentProps) => {
@@ -96,21 +97,23 @@ const PostComment = (props: PostCommentProps) => {
       </div>
       <p className="text-sm text-foreground mt-2">{props.comment.text}</p>
       <div className="flex  justify-end items-center">
-        <Button
-          variant={"ghost"}
-          className="flex gap-1"
-          onClick={() => setIsReplying((prev) => !prev)}
-        >
-          {isReplying ? (
-            <XCircle size={20} />
-          ) : (
-            <MessageCircleReply size={20} />
-          )}
-          <p className="text-bold">{isReplying ? "Cancel" : "Reply"}</p>
-          {!isReplying && (
-            <p>{props.replies.length > 0 ? props.replies.length : ""} </p>
-          )}
-        </Button>
+        {!props.isReply && (
+          <Button
+            variant={"ghost"}
+            className="flex gap-1"
+            onClick={() => setIsReplying((prev) => !prev)}
+          >
+            {isReplying ? (
+              <XCircle size={20} />
+            ) : (
+              <MessageCircleReply size={20} />
+            )}
+            <p className="text-bold">{isReplying ? "Cancel" : "Reply"}</p>
+            {!isReplying && (
+              <p>{props.replies.length > 0 ? props.replies.length : ""} </p>
+            )}
+          </Button>
+        )}
         <CommentVote
           commentId={props.comment.id}
           votes={props.comment.votes}
@@ -137,6 +140,7 @@ const PostComment = (props: PostCommentProps) => {
                 replies={[]}
                 subredditOnwerId={props.subredditOnwerId}
                 postUrl={props.postUrl}
+                isReply={true}
               />
             );
           })}
